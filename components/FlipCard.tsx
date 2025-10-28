@@ -53,12 +53,12 @@ export default function FlipCard({
 
   return (
     <div 
-      className={`relative ${className}`}
+      className={`group relative ${className}`}
       style={{ perspective: '1000px' }}
       onClick={handleClick}
     >
       <div 
-        className={`relative w-full h-full transition-transform duration-700 ${
+        className={`relative w-full h-full transition-all duration-700 ${
           !autoFlip && !isFlipped ? 'cursor-pointer hover:scale-105' : ''
         }`}
         style={{
@@ -96,12 +96,19 @@ export default function FlipCard({
         </div>
       </div>
       
-      {/* 翻牌提示 */}
+      {/* 翻牌提示 - 改进版 */}
       {!autoFlip && !isFlipped && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="bg-black/50 text-white text-xs px-2 py-1 rounded opacity-0 hover:opacity-100 transition-opacity">
+          <div className="bg-purple-600/90 text-white text-[10px] px-3 py-1.5 rounded-full opacity-0 transition-opacity group-hover:opacity-100 font-medium shadow-[0_8px_25px_rgba(124,58,237,0.5)] backdrop-blur">
             点击翻牌
           </div>
+        </div>
+      )}
+      
+      {/* 翻牌时的光效 */}
+      {showAnimation && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-400/30 to-transparent animate-shimmer" />
         </div>
       )}
     </div>

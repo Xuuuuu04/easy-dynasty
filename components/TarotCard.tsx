@@ -26,12 +26,13 @@ export default function TarotCard({
   
   return (
     <div 
-      className={`relative transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105' : ''} ${className}`}
+      className={`group relative transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-[1.06]' : ''} ${className}`}
       onClick={onClick}
     >
       <div className={`relative ${isReversed && isRevealed ? 'transform rotate-180' : ''}`}>
         {/* 固定尺寸的图片容器 */}
-        <div className="relative w-full aspect-[2/3.5] overflow-hidden rounded-lg shadow-lg border border-white/20 bg-gray-800">
+        <div className="relative w-full aspect-[2/3.5] overflow-hidden rounded-xl shadow-[0_10px_35px_rgba(0,0,0,0.5)] border border-white/20 bg-gray-800 transition-shadow duration-300 group-hover:shadow-[0_15px_45px_rgba(124,58,237,0.4)]">
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-purple-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none z-10" />
           <Image
             src={imageUrl}
             alt={isRevealed ? `${cardName} - ${englishName}` : '塔罗牌背面'}
@@ -44,14 +45,14 @@ export default function TarotCard({
         
         {/* 逆位指示器 */}
         {isReversed && isRevealed && (
-          <div className="absolute top-2 right-2 bg-orange-500/80 text-white text-xs px-2 py-1 rounded transform rotate-180 z-10">
+          <div className="absolute top-2 right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] px-2.5 py-1 rounded-full transform rotate-180 z-20 font-semibold shadow-[0_5px_20px_rgba(245,158,11,0.4)]">
             逆位
           </div>
         )}
         
         {/* 正位指示器 */}
         {!isReversed && isRevealed && (
-          <div className="absolute top-2 right-2 bg-green-500/80 text-white text-xs px-2 py-1 rounded z-10">
+          <div className="absolute top-2 right-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] px-2.5 py-1 rounded-full z-20 font-semibold shadow-[0_5px_20px_rgba(16,185,129,0.4)]">
             正位
           </div>
         )}
@@ -59,10 +60,10 @@ export default function TarotCard({
       
       {/* 卡牌信息 */}
       {isRevealed && cardName && (
-        <div className="mt-2 text-center">
-          <div className="text-white font-medium text-sm">{cardName}</div>
+        <div className="mt-3 text-center">
+          <div className="text-white font-semibold text-sm mb-0.5">{cardName}</div>
           {englishName && (
-            <div className="text-gray-400 text-xs">{englishName}</div>
+            <div className="text-purple-200/70 text-xs">{englishName}</div>
           )}
         </div>
       )}

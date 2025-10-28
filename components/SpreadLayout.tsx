@@ -44,25 +44,39 @@ export default function SpreadLayout({
     const isCurrentlyDrawing = drawingPositionId === position.id
 
     return (
-      <div key={position.id} className={`relative ${className}`}>
+      <div
+        key={position.id}
+        className={`group relative flex flex-col items-center pt-14 ${className}`}
+      >
         {/* 位置标签 */}
-        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 z-10">
-          <div className="bg-purple-600/80 text-white text-xs px-3 py-1 rounded whitespace-nowrap">
+        <div className="absolute top-0 left-1/2 z-10 -translate-x-1/2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-purple-200/40 bg-purple-500/25 px-4 py-1 text-[11px] uppercase tracking-[0.3em] text-purple-100 shadow-[0_12px_35px_rgba(124,58,237,0.45)] backdrop-blur">
+            <span className="text-xs">✦</span>
             {position.name}
           </div>
         </div>
 
-        {/* 卡牌位置 - 调大尺寸 */}
-        <div 
-          className={`w-32 h-48 border-2 border-dashed border-purple-400/50 rounded-lg flex items-center justify-center transition-all duration-300 ${
-            canDraw ? 'cursor-pointer hover:border-purple-400 hover:bg-purple-500/10' : ''
-          } ${isCurrentlyDrawing ? 'border-purple-400 bg-purple-500/20 animate-pulse' : ''}`}
+        {/* 卡牌位置 */}
+        <div
+          className={`relative flex h-48 w-32 items-center justify-center rounded-2xl border border-dashed border-purple-300/40 bg-black/30 transition-all duration-300 ${
+            canDraw
+              ? 'cursor-pointer hover:border-purple-200/70 hover:shadow-[0_18px_45px_rgba(124,58,237,0.35)] hover:bg-purple-500/10'
+              : 'opacity-90'
+          } ${
+            isCurrentlyDrawing
+              ? 'border-purple-200/80 bg-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.6)]'
+              : ''
+          }`}
           onClick={() => canDraw && onPositionClick(position.id)}
         >
+          <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-70">
+            <div className="animate-mystical-gradient h-full w-full rounded-2xl bg-[radial-gradient(circle_at_top,_rgba(192,132,252,0.22),transparent_65%)]" />
+          </div>
+
           {drawnCard ? (
             <FlipCard
               cardId={drawnCard.card.id}
-              cardName="" // 不在卡牌组件内显示名称
+              cardName=""
               englishName=""
               isReversed={drawnCard.isReversed}
               autoFlip={true}
@@ -70,25 +84,35 @@ export default function SpreadLayout({
               className="w-full h-full"
             />
           ) : (
-            <div className="text-center text-purple-300">
+            <div className="relative flex flex-col items-center gap-2 text-center text-sm">
               {isCurrentlyDrawing ? (
-                <div className="text-sm">抽牌中...</div>
+                <span className="text-purple-200">抽牌中...</span>
               ) : canDraw ? (
-                <div className="text-sm">点击抽牌</div>
+                <span className="text-purple-100/80">点击抽牌</span>
               ) : (
-                <div className="text-sm opacity-50">等待</div>
+                <span className="text-slate-300/70">等待</span>
               )}
+              <span className="w-24 text-[11px] leading-relaxed text-slate-300/70">
+                {position.description}
+              </span>
             </div>
           )}
         </div>
 
-        {/* 只显示已抽牌的牌名，不显示位置描述 */}
         {drawnCard && (
-          <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-36">
-            <div className="text-center">
-              <div className="text-white font-medium text-sm mb-1">{drawnCard.card.name}</div>
-              <div className="text-gray-400 text-xs">{drawnCard.card.englishName}</div>
+          <div className="mt-6 w-36 text-center">
+            <div className="text-sm font-semibold text-white">
+              {drawnCard.card.name}
             </div>
+            <div className="text-xs text-purple-200/70">
+              {drawnCard.card.englishName}
+            </div>
+          </div>
+        )}
+
+        {!drawnCard && (
+          <div className="mt-4 w-32 text-center text-[11px] leading-relaxed text-slate-300/70">
+            {position.description}
           </div>
         )}
       </div>

@@ -210,106 +210,149 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
 
   if (!spread || drawnCards.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-xl">加载中...</div>
+      <div className="relative min-h-screen overflow-hidden bg-[#050311] flex items-center justify-center">
+        <div className="stars-bg" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(139,92,246,0.28),transparent_60%)]" />
+        <div className="relative text-center space-y-4">
+          <div className="relative mx-auto h-20 w-20">
+            <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-purple-400 border-r-pink-400"></div>
+          </div>
+          <div className="text-xl font-semibold text-white font-[var(--font-display)]">
+            正在汇聚塔罗能量...
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">🔮 塔罗解读</h1>
-            <p className="text-gray-300 mb-2">您的问题：{question}</p>
-            <p className="text-purple-300">牌阵：{spread.name}</p>
-          </div>
+    <div className="relative min-h-screen overflow-hidden bg-[#050311] text-slate-100">
+      <div className="stars-bg" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.28),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(56,189,248,0.18),transparent_60%)]" />
+      <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-purple-500/25 blur-[140px] animate-mystical-gradient" />
+      <div className="absolute bottom-[-180px] right-[-120px] h-[520px] w-[520px] rounded-full bg-indigo-500/20 blur-[180px] animate-mystical-gradient" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            
-            {/* Cards Display */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 flex flex-col">
-              <h2 className="text-xl font-bold text-white mb-6 text-center">抽到的牌</h2>
-              <div className="flex-1 space-y-6">
-                {drawnCards.map((drawnCard, index) => (
-                  <div key={index} className="bg-white/10 rounded-lg p-4 border border-white/20">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-purple-300 font-medium">
-                        {drawnCard.position.name}
-                      </div>
-                      <div className={`text-xs px-2 py-1 rounded ${
-                        drawnCard.isReversed 
-                          ? 'bg-orange-500/20 text-orange-300' 
-                          : 'bg-green-500/20 text-green-300'
-                      }`}>
-                        {drawnCard.isReversed ? '逆位' : '正位'}
-                      </div>
-                    </div>
-                    
-                    {/* 卡牌图片和信息 */}
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-20">
-                        <TarotCard
-                          cardId={drawnCard.card.id}
-                          cardName={drawnCard.card.name}
-                          englishName={drawnCard.card.englishName}
-                          isReversed={drawnCard.isReversed}
-                          isRevealed={true}
-                          className="w-full"
-                        />
-                      </div>
-                      
-                      <div className="flex-1">
-                        <div className="text-white font-bold text-lg mb-1">
-                          {drawnCard.card.name}
+      <div className="relative z-10">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-10 space-y-4">
+              <div className="inline-flex items-center justify-center gap-3">
+                <span className="text-4xl">🔮</span>
+                <h1 className="text-3xl md:text-4xl font-semibold font-[var(--font-display)] text-transparent bg-clip-text bg-gradient-to-r from-purple-100 via-violet-200 to-pink-200 drop-shadow-[0_10px_40px_rgba(124,58,237,0.45)]">
+                  塔罗解读
+                </h1>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-xl shadow-[0_20px_60px_rgba(76,29,149,0.35)] max-w-3xl mx-auto">
+                <p className="text-slate-200/90 text-sm mb-2">
+                  <span className="text-purple-200 font-medium">您的问题：</span>
+                  {question}
+                </p>
+                <p className="text-purple-200/80 text-sm">
+                  <span className="text-pink-200 font-medium">牌阵：</span>
+                  {spread.name}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              {/* Cards Display */}
+              <div className="rounded-3xl border border-white/15 bg-white/5 p-6 shadow-[0_35px_120px_rgba(76,29,149,0.45)] backdrop-blur-xl flex flex-col lg:sticky lg:top-8">
+                <h2 className="text-xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-100 to-pink-100 mb-6 font-[var(--font-display)]">
+                  抽到的牌
+                </h2>
+                <div className="flex-1 space-y-5 max-h-[calc(100vh-250px)] overflow-y-auto pr-2">
+                  {drawnCards.map((drawnCard, index) => (
+                    <div
+                      key={index}
+                      className="group rounded-2xl border border-white/10 bg-black/20 p-4 transition-all hover:border-purple-300/40 hover:shadow-[0_15px_45px_rgba(124,58,237,0.3)]"
+                    >
+                      <div className="mb-3 flex items-center justify-between">
+                        <div className="text-sm font-medium text-purple-200">
+                          {drawnCard.position.name}
                         </div>
-                        <div className="text-gray-300 text-sm mb-2">
-                          {drawnCard.card.englishName}
+                        <div
+                          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                            drawnCard.isReversed
+                              ? 'bg-amber-500/20 text-amber-200'
+                              : 'bg-emerald-500/20 text-emerald-200'
+                          }`}
+                        >
+                          {drawnCard.isReversed ? '逆位' : '正位'}
                         </div>
-                        <div className="text-gray-400 text-xs mb-3">
-                          {drawnCard.position.description}
+                      </div>
+
+                      <div className="flex items-start gap-4">
+                        <div className="w-20 flex-shrink-0">
+                          <TarotCard
+                            cardId={drawnCard.card.id}
+                            cardName={drawnCard.card.name}
+                            englishName={drawnCard.card.englishName}
+                            isReversed={drawnCard.isReversed}
+                            isRevealed={true}
+                            className="w-full"
+                          />
                         </div>
-                        
-                        {/* Keywords */}
-                        <div>
-                          <div className="text-xs text-gray-400 mb-1">关键词：</div>
-                          <div className="flex flex-wrap gap-1">
-                            {(drawnCard.isReversed 
-                              ? drawnCard.card.reversedKeywords 
-                              : drawnCard.card.uprightKeywords
-                            ).slice(0, 3).map((keyword, i) => (
-                              <span key={i} className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded">
-                                {keyword}
-                              </span>
-                            ))}
+
+                        <div className="flex-1">
+                          <div className="mb-1 text-base font-bold text-white">
+                            {drawnCard.card.name}
+                          </div>
+                          <div className="mb-2 text-xs text-purple-200/70">
+                            {drawnCard.card.englishName}
+                          </div>
+                          <div className="mb-3 text-xs leading-relaxed text-slate-300/70">
+                            {drawnCard.position.description}
+                          </div>
+
+                          <div>
+                            <div className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-slate-400">
+                              关键词
+                            </div>
+                            <div className="flex flex-wrap gap-1.5">
+                              {(drawnCard.isReversed
+                                ? drawnCard.card.reversedKeywords
+                                : drawnCard.card.uprightKeywords
+                              )
+                                .slice(0, 3)
+                                .map((keyword, i) => (
+                                  <span
+                                    key={i}
+                                    className="rounded-full bg-purple-500/20 px-2.5 py-0.5 text-[11px] text-purple-200"
+                                  >
+                                    {keyword}
+                                  </span>
+                                ))}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
             </div>
 
             {/* Analysis Display */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 flex flex-col">
-              <h2 className="text-xl font-bold text-white mb-6 text-center">塔罗解读</h2>
-              
-              {/* 内容容器，高度自适应，填充剩余空间 */}
-              <div 
+            <div className="rounded-3xl border border-white/15 bg-white/5 p-6 shadow-[0_35px_120px_rgba(76,29,149,0.45)] backdrop-blur-xl flex flex-col">
+              <h2 className="text-xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-100 to-pink-100 mb-6 font-[var(--font-display)]">
+                塔罗解读
+              </h2>
+
+              <div
                 ref={analysisContainerRef}
-                className="flex-1 overflow-y-auto scroll-smooth"
+                className="flex-1 overflow-y-auto scroll-smooth pr-2"
               >
                 {error && (
-                  <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6">
-                    <div className="text-red-300 font-medium mb-2">分析失败</div>
-                    <div className="text-red-200 text-sm">{error}</div>
+                  <div className="mb-6 rounded-2xl border border-red-400/40 bg-red-500/10 p-4 shadow-[0_15px_40px_rgba(220,38,38,0.3)]">
+                    <div className="mb-2 text-sm font-semibold text-red-200">
+                      分析失败
+                    </div>
+                    <div className="text-sm text-red-100/80">{error}</div>
                     <button
                       onClick={() => router.push('/settings')}
-                      className="mt-3 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm transition-colors"
+                      className="mt-3 inline-flex rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-4 py-2 text-sm font-medium text-white shadow-[0_10px_25px_rgba(220,38,38,0.35)] transition-transform hover:scale-[1.03]"
                     >
                       检查设置
                     </button>
@@ -317,29 +360,67 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
                 )}
 
                 {isLoading && (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto mb-4"></div>
-                    <div className="text-white">塔罗大师正在为您解读...</div>
-                    <div className="text-gray-400 text-sm mt-2">这可能需要几十秒时间</div>
+                  <div className="py-12 text-center">
+                    <div className="relative mx-auto mb-6 h-16 w-16">
+                      <div className="absolute inset-0 rounded-full border-4 border-purple-500/20"></div>
+                      <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-purple-400 border-r-pink-400"></div>
+                    </div>
+                    <div className="mb-2 text-base font-semibold text-white">
+                      塔罗大师正在为您解读...
+                    </div>
+                    <div className="text-sm text-slate-300/70">
+                      这可能需要几十秒时间
+                    </div>
                   </div>
                 )}
 
                 {analysis && (
-                  <div className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-gray-200 prose-strong:text-white prose-em:text-purple-300 prose-ul:text-gray-200 prose-ol:text-gray-200 prose-li:text-gray-200">
+                  <div className="prose prose-invert max-w-none prose-headings:font-[var(--font-display)] prose-headings:text-white prose-p:text-slate-200 prose-p:leading-relaxed prose-strong:text-white prose-em:text-purple-300 prose-ul:text-slate-200 prose-ol:text-slate-200 prose-li:text-slate-200">
                     <ReactMarkdown
                       components={{
-                        // 自定义样式组件
-                        h1: ({children}) => <h1 className="text-2xl font-bold text-white mb-4">{children}</h1>,
-                        h2: ({children}) => <h2 className="text-xl font-bold text-white mb-3 mt-6">{children}</h2>,
-                        h3: ({children}) => <h3 className="text-lg font-semibold text-white mb-2 mt-4">{children}</h3>,
-                        p: ({children}) => <p className="text-gray-200 leading-relaxed mb-4">{children}</p>,
-                        strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
-                        em: ({children}) => <em className="text-purple-300">{children}</em>,
-                        ul: ({children}) => <ul className="text-gray-200 mb-4 pl-6 space-y-1">{children}</ul>,
-                        ol: ({children}) => <ol className="text-gray-200 mb-4 pl-6 space-y-1">{children}</ol>,
-                        li: ({children}) => <li className="text-gray-200">{children}</li>,
-                        blockquote: ({children}) => (
-                          <blockquote className="border-l-4 border-purple-400 pl-4 italic text-purple-200 my-4">
+                        h1: ({ children }) => (
+                          <h1 className="mb-4 text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-100 to-pink-100">
+                            {children}
+                          </h1>
+                        ),
+                        h2: ({ children }) => (
+                          <h2 className="mb-3 mt-6 text-xl font-bold text-white">
+                            {children}
+                          </h2>
+                        ),
+                        h3: ({ children }) => (
+                          <h3 className="mb-2 mt-4 text-lg font-semibold text-purple-100">
+                            {children}
+                          </h3>
+                        ),
+                        p: ({ children }) => (
+                          <p className="mb-4 leading-relaxed text-slate-200">
+                            {children}
+                          </p>
+                        ),
+                        strong: ({ children }) => (
+                          <strong className="font-semibold text-white">
+                            {children}
+                          </strong>
+                        ),
+                        em: ({ children }) => (
+                          <em className="text-purple-300">{children}</em>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="mb-4 space-y-1 pl-6 text-slate-200">
+                            {children}
+                          </ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="mb-4 space-y-1 pl-6 text-slate-200">
+                            {children}
+                          </ol>
+                        ),
+                        li: ({ children }) => (
+                          <li className="text-slate-200">{children}</li>
+                        ),
+                        blockquote: ({ children }) => (
+                          <blockquote className="my-4 border-l-4 border-purple-400/60 bg-purple-500/10 py-2 pl-4 italic text-purple-200 rounded-r-lg">
                             {children}
                           </blockquote>
                         ),
@@ -351,7 +432,7 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
                 )}
 
                 {!isLoading && !error && !analysis && (
-                  <div className="text-center py-8 text-gray-400">
+                  <div className="py-12 text-center text-slate-400">
                     等待分析开始...
                   </div>
                 )}
@@ -360,23 +441,26 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
           </div>
 
           {/* Action Buttons */}
-          <div className="text-center mt-8 space-x-4">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={handleNewReading}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-amber-400 px-8 py-3 text-base font-semibold text-white shadow-[0_25px_65px_rgba(232,121,249,0.45)] transition-all duration-300 hover:scale-[1.04]"
             >
-              🔮 新的占卜
+              <span className="text-lg">🔮</span>
+              新的占卜
             </button>
-            
+
             <button
               onClick={() => router.push('/settings')}
-              className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-full transition-colors duration-200"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3 text-base font-medium text-slate-200 backdrop-blur transition-all hover:border-white/40 hover:bg-white/10"
             >
-              ⚙️ 设置
+              <span className="text-lg">⚙️</span>
+              设置
             </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
   )
 }
