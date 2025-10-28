@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import spreadsData from '../../data/spreads.json'
 import TarotCard from '../../components/TarotCard'
+import { getDefaultLlmConfig, isDefaultLlmUsable } from '@/utils/llmConfig'
 
 interface TarotCard {
   id: string | number
@@ -87,14 +88,38 @@ export default function AnalysisPage() {
 
     try {
       // 从 localStorage 获取 API 配置
-      const baseUrl = localStorage.getItem('tarot_api_base_url')
-      const apiKey = localStorage.getItem('tarot_api_key')
-      const model = localStorage.getItem('tarot_api_model') || 'gpt-4o-mini'
+      const localBaseUrl = localStorage.getItem('tarot_api_base_url')?.trim() || null
+      const localApiKey = localStorage.getItem('tarot_api_key')?.trim() || null
+      const localModel = localStorage.getItem('tarot_api_model')?.trim() || null
+
+      const hasLocalConfig = Boolean(localBaseUrl && localApiKey)
+      const defaultConfig = getDefaultLlmConfig()
+      const useDefaultConfig = !hasLocalConfig && isDefaultLlmUsable()
+
+      const baseUrl = hasLocalConfig
+        ? localBaseUrl
+        : useDefaultConfig
+        ? defaultConfig.baseUrl
+        : null
+
+      const apiKey = hasLocalConfig
+        ? localApiKey
+        : useDefaultConfig
+        ? defaultConfig.apiKey
+        : null
+
+      const model =
+        (hasLocalConfig ? localModel : null) ??
+        (useDefaultConfig ? defaultConfig.model : null) ??
+        'gpt-4o-mini'
 
       if (!baseUrl || !apiKey) {
         setError('API 配置缺失，请前往设置页面配置')
         return
       }
+
+      const resolvedBaseUrl = baseUrl
+      const resolvedApiKey = apiKey
 
       // 构建系统提示词
       const systemPrompt = `你是一位经验丰富、富有同情心和洞察力的塔罗牌占卜大师。
@@ -130,14 +155,14 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
 请根据以上所有信息，为我提供详细的解读和建议。`
 
       // 调用 API
-      const response = await fetch(`${baseUrl}/chat/completions`, {
+      const response = await fetch(`${resolvedBaseUrl}/chat/completions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
+          'Authorization': `Bearer ${resolvedApiKey}`
         },
         body: JSON.stringify({
-          model: model,
+          model,
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt }

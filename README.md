@@ -43,6 +43,19 @@ npm run dev
 3. 点击"测试连接"验证配置
 4. 点击"保存设置"
 
+#### 使用环境变量预设默认 LLM（可选）
+
+TarotWhisper 支持通过环境变量提供一个可选的默认 LLM 配置：
+
+- `NEXT_PUBLIC_DEFAULT_LLM_ENABLED`：设置为 `true`、`1`、`yes` 或 `on` 时启用默认 LLM；设为其它值或缺省时默认禁用。
+- `NEXT_PUBLIC_DEFAULT_LLM_BASE_URL`：默认 LLM 的基础请求地址。
+- `NEXT_PUBLIC_DEFAULT_LLM_API_KEY`：默认 LLM 的 API 密钥。
+- `NEXT_PUBLIC_DEFAULT_LLM_MODEL`：默认使用的模型名称（可选，默认 `gpt-4o-mini`）。
+
+当默认 LLM 被启用且配置完整时，未填写自定义端点的用户将自动使用该配置；当默认 LLM 被禁用或未配置完整时，首页会提示用户必须完成自己的端点设置。
+
+> 注意：由于这是前端应用，`NEXT_PUBLIC_*` 环境变量会打包到客户端，请仅在信任的环境中使用默认密钥。
+
 ### 4. 开始占卜
 
 1. 在主页输入您的问题
