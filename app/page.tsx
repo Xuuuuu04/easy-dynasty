@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import spreadsData from '../data/spreads.json'
+import { isDefaultLlmUsable } from '@/utils/llmConfig'
 
 interface Spread {
   id: string
@@ -17,20 +18,20 @@ export default function Home() {
   const [selectedSpread, setSelectedSpread] = useState<string>('')
   const [showApiWarning, setShowApiWarning] = useState(false)
   const router = useRouter()
+  const defaultLlmUsable = isDefaultLlmUsable()
 
   useEffect(() => {
     // 检查是否已配置 API
     const checkApiConfig = () => {
       const apiKey = localStorage.getItem('tarot_api_key')
       const baseUrl = localStorage.getItem('tarot_api_base_url')
-      
-      if (!apiKey || !baseUrl) {
-        setShowApiWarning(true)
-      }
+      const hasLocalConfig = Boolean(apiKey && baseUrl)
+
+      setShowApiWarning(!hasLocalConfig && !defaultLlmUsable)
     }
-    
+
     checkApiConfig()
-  }, [])
+  }, [defaultLlmUsable])
 
   const handleStartReading = () => {
     if (!question.trim()) {
@@ -46,8 +47,9 @@ export default function Home() {
     // 检查 API 配置
     const apiKey = localStorage.getItem('tarot_api_key')
     const baseUrl = localStorage.getItem('tarot_api_base_url')
-    
-    if (!apiKey || !baseUrl) {
+    const hasLocalConfig = Boolean(apiKey && baseUrl)
+
+    if (!hasLocalConfig && !defaultLlmUsable) {
       alert('请先在设置页面配置您的 API')
       router.push('/settings')
       return

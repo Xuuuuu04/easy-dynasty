@@ -2,14 +2,23 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { getDefaultLlmConfig, getDefaultLlmModel, isDefaultLlmUsable } from '@/utils/llmConfig'
 
 export default function SettingsPage() {
   const [baseUrl, setBaseUrl] = useState('')
   const [apiKey, setApiKey] = useState('')
-  const [model, setModel] = useState('gpt-4o-mini')
+  const [model, setModel] = useState(() => getDefaultLlmModel())
   const [isLoading, setSaveLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
+  const defaultConfig = getDefaultLlmConfig()
+  const defaultLlmUsable = isDefaultLlmUsable()
+  const trimmedBaseUrl = baseUrl.trim()
+  const trimmedApiKey = apiKey.trim()
+  const hasCustomConfig = Boolean(trimmedBaseUrl && trimmedApiKey)
+  const defaultConfigured = Boolean(defaultConfig.baseUrl && defaultConfig.apiKey)
+  const showDefaultActiveNotice = defaultLlmUsable && !hasCustomConfig
+  const showDefaultDisabledNotice = defaultConfigured && !defaultConfig.enabled && !hasCustomConfig
 
   useEffect(() => {
     // 从 localStorage 加载现有设置
@@ -105,6 +114,28 @@ export default function SettingsPage() {
 
             <div className="rounded-3xl border border-white/15 bg-white/5 p-8 shadow-[0_35px_120px_rgba(76,29,149,0.45)] backdrop-blur-xl">
               <div className="space-y-8">
+                {showDefaultDisabledNotice && (
+                  <div className="rounded-2xl border border-amber-400/40 bg-amber-500/10 p-5 shadow-[0_18px_45px_rgba(245,158,11,0.28)]">
+                    <div className="mb-1 text-sm font-semibold text-amber-200">
+                      ⚠️ 默认 LLM 已禁用
+                    </div>
+                    <p className="text-xs leading-relaxed text-amber-100/80">
+                      管理员暂时禁用了默认的 LLM 配置，请在下方填写您自己的端点信息才能继续使用占卜功能。
+                    </p>
+                  </div>
+                )}
+
+                {showDefaultActiveNotice && (
+                  <div className="rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-5 shadow-[0_18px_45px_rgba(16,185,129,0.25)]">
+                    <div className="mb-1 text-sm font-semibold text-emerald-200">
+                      🌟 默认 LLM 已启用
+                    </div>
+                    <p className="text-xs leading-relaxed text-emerald-100/80">
+                      当前环境提供了预设的 LLM 配置，您可以直接开始占卜，或在下方填写信息以覆盖默认设置。
+                    </p>
+                  </div>
+                )}
+
                 <div>
                   <label htmlFor="baseUrl" className="mb-3 block text-xs font-semibold uppercase tracking-[0.35em] text-purple-200/80">
                     API Base URL
