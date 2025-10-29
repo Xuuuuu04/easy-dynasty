@@ -11,14 +11,11 @@ export default function SettingsPage() {
   const [isLoading, setSaveLoading] = useState(false)
   const [message, setMessage] = useState('')
   const router = useRouter()
-  const defaultConfig = getDefaultLlmConfig()
   const defaultLlmUsable = isDefaultLlmUsable()
   const trimmedBaseUrl = baseUrl.trim()
   const trimmedApiKey = apiKey.trim()
   const hasCustomConfig = Boolean(trimmedBaseUrl && trimmedApiKey)
-  const defaultConfigured = Boolean(defaultConfig.baseUrl && defaultConfig.apiKey)
   const showDefaultActiveNotice = defaultLlmUsable && !hasCustomConfig
-  const showDefaultDisabledNotice = defaultConfigured && !defaultConfig.enabled && !hasCustomConfig
 
   useEffect(() => {
     // 从 localStorage 加载现有设置
@@ -114,17 +111,6 @@ export default function SettingsPage() {
 
             <div className="rounded-3xl border border-white/15 bg-white/5 p-8 shadow-[0_35px_120px_rgba(76,29,149,0.45)] backdrop-blur-xl">
               <div className="space-y-8">
-                {showDefaultDisabledNotice && (
-                  <div className="rounded-2xl border border-amber-400/40 bg-amber-500/10 p-5 shadow-[0_18px_45px_rgba(245,158,11,0.28)]">
-                    <div className="mb-1 text-sm font-semibold text-amber-200">
-                      ⚠️ 默认 LLM 已禁用
-                    </div>
-                    <p className="text-xs leading-relaxed text-amber-100/80">
-                      管理员暂时禁用了默认的 LLM 配置，请在下方填写您自己的端点信息才能继续使用占卜功能。
-                    </p>
-                  </div>
-                )}
-
                 {showDefaultActiveNotice && (
                   <div className="rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-5 shadow-[0_18px_45px_rgba(16,185,129,0.25)]">
                     <div className="mb-1 text-sm font-semibold text-emerald-200">
@@ -221,10 +207,10 @@ export default function SettingsPage() {
 
                 <div className="rounded-2xl border border-amber-400/40 bg-amber-500/10 p-5 shadow-[0_18px_45px_rgba(245,158,11,0.28)]">
                   <h3 className="mb-2 text-sm font-semibold text-amber-200">
-                    🔒 安全提示
+                    🔒 安全与隐私
                   </h3>
                   <p className="text-xs leading-relaxed text-amber-100/80">
-                    您的 API 密钥仅保存在本地浏览器中，不会上传到任何服务器。请勿在公共电脑上使用，并定期更换您的 API 密钥以确保安全。
+                    如果您填写自己的 API 配置，所有请求将直接从您的浏览器发送到您指定的端点，密钥仅保存在本地浏览器中。如果使用默认配置，请求将通过我们的服务器代理以保护服务端密钥安全。
                   </p>
                 </div>
               </div>

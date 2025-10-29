@@ -1,8 +1,6 @@
 export interface DefaultLlmConfig {
-  baseUrl: string | null
-  apiKey: string | null
+  available: boolean
   model: string | null
-  enabled: boolean
 }
 
 const normalize = (value: string | undefined | null): string | null => {
@@ -19,18 +17,23 @@ const parseBoolean = (value: string | undefined | null): boolean => {
   return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on'
 }
 
+const isServer = typeof window === 'undefined'
+
 const config: DefaultLlmConfig = {
-  baseUrl: normalize(process.env.NEXT_PUBLIC_DEFAULT_LLM_BASE_URL),
-  apiKey: normalize(process.env.NEXT_PUBLIC_DEFAULT_LLM_API_KEY),
-  model: normalize(process.env.NEXT_PUBLIC_DEFAULT_LLM_MODEL),
-  enabled: parseBoolean(process.env.NEXT_PUBLIC_DEFAULT_LLM_ENABLED),
+  available: isServer 
+    ? parseBoolean(process.env.DEFAULT_LLM_ENABLED) && 
+      !!normalize(process.env.DEFAULT_LLM_BASE_URL) && 
+      !!normalize(process.env.DEFAULT_LLM_API_KEY)
+    : parseBoolean(process.env.NEXT_PUBLIC_DEFAULT_LLM_AVAILABLE),
+  model: isServer 
+    ? normalize(process.env.DEFAULT_LLM_MODEL)
+    : normalize(process.env.NEXT_PUBLIC_DEFAULT_LLM_MODEL),
 }
 
 export const getDefaultLlmConfig = (): DefaultLlmConfig => ({
   ...config,
 })
 
-export const isDefaultLlmUsable = (): boolean =>
-  config.enabled && !!config.baseUrl && !!config.apiKey
+export const isDefaultLlmUsable = (): boolean => config.available
 
 export const getDefaultLlmModel = (): string => config.model ?? 'gpt-4o-mini'
