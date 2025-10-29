@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import spreadsData from '../../data/spreads.json'
 import TarotCard from '../../components/TarotCard'
 import { getDefaultLlmConfig, isDefaultLlmUsable } from '@/utils/llmConfig'
+import { historyManager } from '@/utils/historyManager'
 
 interface TarotCard {
   id: string | number
@@ -226,6 +227,21 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
               // 忽略解析错误
             }
           }
+        }
+      }
+
+      // 分析完成后保存到历史记录
+      if (analysisText) {
+        try {
+          historyManager.saveReading(
+            question,
+            spread.name,
+            spread.id,
+            cards,
+            analysisText
+          )
+        } catch (error) {
+          console.error('保存历史记录失败:', error)
         }
       }
 
@@ -485,6 +501,14 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
             >
               <span className="text-lg">🔮</span>
               新的占卜
+            </button>
+
+            <button
+              onClick={() => router.push('/history')}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-3 text-base font-medium text-slate-200 backdrop-blur transition-all hover:border-white/40 hover:bg-white/10"
+            >
+              <span className="text-lg">📜</span>
+              占卜历史
             </button>
 
             <button

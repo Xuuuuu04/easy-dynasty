@@ -202,7 +202,14 @@ export default function Home() {
             </div>
 
             {/* Navigation */}
-            <div className="mt-10 text-center">
+            <div className="mt-10 flex items-center justify-center gap-6 text-center">
+              <button
+                onClick={() => router.push('/history')}
+                className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition-colors hover:text-white"
+              >
+                <span className="text-base">📜</span>
+                占卜历史
+              </button>
               <button
                 onClick={() => router.push('/settings')}
                 className="inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition-colors hover:text-white"

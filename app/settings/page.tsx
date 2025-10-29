@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { getDefaultLlmConfig, getDefaultLlmModel, isDefaultLlmUsable } from '@/utils/llmConfig'
+import { getDefaultLlmModel, isDefaultLlmUsable } from '@/utils/llmConfig'
 
 export default function SettingsPage() {
   const [baseUrl, setBaseUrl] = useState('')
