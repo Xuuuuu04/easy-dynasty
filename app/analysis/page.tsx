@@ -96,30 +96,15 @@ export default function AnalysisPage() {
       const defaultConfig = getDefaultLlmConfig()
       const useDefaultConfig = !hasLocalConfig && isDefaultLlmUsable()
 
-      const baseUrl = hasLocalConfig
-        ? localBaseUrl
-        : useDefaultConfig
-        ? defaultConfig.baseUrl
-        : null
-
-      const apiKey = hasLocalConfig
-        ? localApiKey
-        : useDefaultConfig
-        ? defaultConfig.apiKey
-        : null
+      if (!hasLocalConfig && !useDefaultConfig) {
+        setError('API 配置缺失，请前往设置页面配置')
+        return
+      }
 
       const model =
         (hasLocalConfig ? localModel : null) ??
         (useDefaultConfig ? defaultConfig.model : null) ??
         'gpt-4o-mini'
-
-      if (!baseUrl || !apiKey) {
-        setError('API 配置缺失，请前往设置页面配置')
-        return
-      }
-
-      const resolvedBaseUrl = baseUrl
-      const resolvedApiKey = apiKey
 
       // 构建系统提示词
       const systemPrompt = `你是一位经验丰富、富有同情心和洞察力的塔罗牌占卜大师。
@@ -154,22 +139,37 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
 
 请根据以上所有信息，为我提供详细的解读和建议。`
 
-      // 调用 API
-      const response = await fetch(`${resolvedBaseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${resolvedApiKey}`
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-          ],
-          stream: true
+      const requestBody = {
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        stream: true
+      }
+
+      let response: Response
+
+      if (hasLocalConfig) {
+        // 用户使用自己的配置，直接从客户端请求
+        response = await fetch(`${localBaseUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localApiKey}`
+          },
+          body: JSON.stringify(requestBody)
         })
-      })
+      } else {
+        // 使用默认配置，通过服务器代理
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        })
+      }
 
       if (!response.ok) {
         throw new Error(`API 请求失败: ${response.status} ${response.statusText}`)
