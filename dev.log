@@ -1,0 +1,16 @@
+
+> tarot-whisper@0.1.0 dev
+> next dev
+
+   ▲ Next.js 16.0.0 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.10.0.125:3000
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 896ms
+[?25h
