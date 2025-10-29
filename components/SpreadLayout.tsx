@@ -50,15 +50,15 @@ export default function SpreadLayout({
       >
         {/* 位置标签 */}
         <div className="absolute top-0 left-1/2 z-10 -translate-x-1/2">
-          <div className="inline-flex items-center gap-2 rounded-full border border-purple-200/40 bg-purple-500/25 px-4 py-1 text-[11px] uppercase tracking-[0.3em] text-purple-100 shadow-[0_12px_35px_rgba(124,58,237,0.45)] backdrop-blur">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-purple-200/40 bg-purple-500/25 px-3 py-1 text-xs text-purple-100 shadow-[0_12px_35px_rgba(124,58,237,0.45)] backdrop-blur whitespace-nowrap">
             <span className="text-xs">✦</span>
-            {position.name}
+            <span>{position.name}</span>
           </div>
         </div>
 
         {/* 卡牌位置 */}
         <div
-          className={`relative flex h-48 w-32 items-center justify-center rounded-2xl border border-dashed border-purple-300/40 bg-black/30 transition-all duration-300 ${
+          className={`relative flex w-32 items-center justify-center rounded-2xl border border-dashed border-purple-300/40 bg-black/30 transition-all duration-300 ${
             canDraw
               ? 'cursor-pointer hover:border-purple-200/70 hover:shadow-[0_18px_45px_rgba(124,58,237,0.35)] hover:bg-purple-500/10'
               : 'opacity-90'
@@ -67,6 +67,7 @@ export default function SpreadLayout({
               ? 'border-purple-200/80 bg-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.6)]'
               : ''
           }`}
+          style={{ aspectRatio: '2/3.5' }}
           onClick={() => canDraw && onPositionClick(position.id)}
         >
           <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-70">
