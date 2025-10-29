@@ -367,7 +367,7 @@ ${JSON.stringify({ cards: cardsData }, null, 2)}
 
               <div
                 ref={analysisContainerRef}
-                className="flex-1 overflow-y-auto scroll-smooth pr-2"
+                className="flex-1 max-h-[calc(100vh-250px)] overflow-y-auto scroll-smooth pr-2"
               >
                 {error && (
                   <div className="mb-6 rounded-2xl border border-red-400/40 bg-red-500/10 p-4 shadow-[0_15px_40px_rgba(220,38,38,0.3)]">
