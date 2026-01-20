@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/Toast";
+import NavBar from "@/components/NavBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +32,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "TarotWhisper | Mystical Tarot & Astrology Insights",
+  title: "EasyDynasty | Mystical Tarot & Astrology Insights",
   description:
-    "TarotWhisper 将塔罗与占星的灵感融合，为你带来沉浸式的神秘占卜体验。",
+    "EasyDynasty 将塔罗与占星的灵感融合，为你带来沉浸式的神秘占卜体验。",
 };
 
 export default function RootLayout({
@@ -47,7 +48,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${playfair.variable} antialiased`}
       >
         <ToastProvider>
-          {children}
+          <NavBar />
+          <main className="pt-16">
+            {children}
+          </main>
         </ToastProvider>
       </body>
     </html>
