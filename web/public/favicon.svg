@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <filter id="rough-paper" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
+      <feDiffuseLighting in="noise" lighting-color="#fff" surfaceScale="2">
+        <feDistantLight azimuth="45" elevation="60" />
+      </feDiffuseLighting>
+    </filter>
+  </defs>
+
+  <!-- Background Circle (Seal Ink Style) -->
+  <circle cx="256" cy="256" r="240" fill="#9a2b2b" />
+  
+  <!-- Inner Ring (Rough Edge) -->
+  <circle cx="256" cy="256" r="225" fill="none" stroke="#f5f5f0" stroke-width="12" stroke-dasharray="400 20 100 40 200 30" stroke-linecap="round" opacity="0.9" />
+
+  <!-- Character "易" (Yi - Change) Stylized -->
+  <!-- Top Sun part (Ri) -->
+  <path d="M180 140 h152 v80 h-152 z M180 180 h152" fill="none" stroke="#f5f5f0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Bottom Moon/Change part (Wu/Moon derivative) -->
+  <path d="M190 260 h100 c50 0 90 40 90 90 c0 50 -40 90 -90 90 h-60 c-40 0 -70 -20 -90 -50" fill="none" stroke="#f5f5f0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M220 260 v60 M260 260 v60" fill="none" stroke="#f5f5f0" stroke-width="24" stroke-linecap="round" opacity="0.9" />
+  <path d="M150 280 l-40 60" fill="none" stroke="#f5f5f0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Texture Overlay to look like stamped ink -->
+  <rect width="100%" height="100%" filter="url(#rough-paper)" opacity="0.15" style="mix-blend-mode: multiply;" />
+</svg>

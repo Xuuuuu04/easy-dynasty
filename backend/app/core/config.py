@@ -4,16 +4,24 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     PROJECT_NAME: str = "EasyDynasty API"
     API_V1_STR: str = "/api/v1"
-    
+
     # Database
     DB_USER: str = "root"
     DB_PASSWORD: str = "xsy19507"
     DB_HOST: str = "localhost"
     DB_PORT: str = "3306"
     DB_NAME: str = "easydynasty"
-    
+
     # External APIs
     AMAP_API_KEY: str = ""
+
+    # LLM Configuration
+    DEFAULT_LLM_ENABLED: str = "false"
+    DEFAULT_LLM_BASE_URL: str = ""
+    DEFAULT_LLM_API_KEY: str = ""
+    DEFAULT_LLM_MODEL: str = ""
+    NEXT_PUBLIC_DEFAULT_LLM_AVAILABLE: str = "false"
+    NEXT_PUBLIC_DEFAULT_LLM_MODEL: str = ""
     
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
@@ -22,5 +30,6 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
+        extra = "ignore"  # 忽略额外的环境变量
 
 settings = Settings()

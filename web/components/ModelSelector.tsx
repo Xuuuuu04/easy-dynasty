@@ -12,6 +12,22 @@ interface ModelSelectorProps {
   onReinterpret: (model: string) => Promise<boolean>
 }
 
+const ReinterpretIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+    <path d="M16 21h5v-5" />
+  </svg>
+)
+
+const StartIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14" />
+    <path d="M12 5l7 7-7 7" />
+  </svg>
+)
+
 export default function ModelSelector({
   hasCustomApiConfig,
   customApiBaseUrl,
@@ -112,14 +128,14 @@ export default function ModelSelector({
   if (!hasCustomApiConfig) return null
 
   return (
-    <div className="mt-8 rounded-2xl border border-primary/20 bg-primary/5 p-6">
-      <div className="mb-4 flex items-center gap-3">
-        <span className="text-xl">🔄</span>
+    <div className="mt-8 rounded-sm border border-stone-200 bg-stone-50 p-6">
+      <div className="mb-4 flex items-center gap-3 text-stone-700">
+        <ReinterpretIcon />
         <div>
-          <h3 className="text-sm font-bold text-white">
+          <h3 className="text-sm font-bold text-ink">
             重新解读
           </h3>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-stone-500">
             尝试使用其他模型获取不同的视角
           </p>
         </div>
@@ -127,11 +143,11 @@ export default function ModelSelector({
 
       {modelMessage && (
         <div
-          className={`mb-4 rounded-xl border p-3 text-xs font-medium ${modelMessage.includes('成功') || modelMessage.includes('✅')
-              ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+          className={`mb-4 rounded-sm border p-3 text-xs font-medium ${modelMessage.includes('成功') || modelMessage.includes('✅')
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
               : modelMessage.includes('❌') || modelMessage.includes('失败')
-                ? 'border-red-500/30 bg-red-500/10 text-red-400'
-                : 'border-sky-500/30 bg-sky-500/10 text-sky-400'
+                ? 'border-red-200 bg-red-50 text-red-700'
+                : 'border-sky-200 bg-sky-50 text-sky-700'
             }`}
         >
           {modelMessage}
@@ -142,7 +158,7 @@ export default function ModelSelector({
         <button
           onClick={handleFetchModels}
           disabled={isFetchingModels || isAnalysisLoading}
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200 hover:bg-white/10 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-sm border border-stone-300 bg-white px-4 py-3 text-sm font-medium text-stone-600 hover:bg-stone-50 transition-all disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isFetchingModels
             ? '获取中...'
@@ -159,11 +175,11 @@ export default function ModelSelector({
                 value={selectedModel}
                 onChange={(e) => onModelChange(e.target.value)}
                 disabled={isAnalysisLoading}
-                className="w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/50 appearance-none cursor-pointer"
+                className="w-full rounded-sm bg-white border border-stone-300 px-4 py-3 text-sm text-stone-800 focus:border-[#9a2b2b] focus:outline-none focus:ring-1 focus:ring-[#9a2b2b]/50 appearance-none cursor-pointer"
               >
                 <option value="">请选择模型</option>
                 {availableModels.map((modelId) => (
-                  <option key={modelId} value={modelId} className="bg-slate-900">
+                  <option key={modelId} value={modelId}>
                     {modelId}
                   </option>
                 ))}
@@ -174,9 +190,9 @@ export default function ModelSelector({
               <button
                 onClick={handleReinterpret}
                 disabled={!selectedModel || isAnalysisLoading}
-                className="flex-1 rounded-xl bg-primary hover:bg-primary/90 px-4 py-3 text-sm font-bold text-white transition-all disabled:opacity-50"
+                className="flex-1 btn-seal text-sm py-3"
               >
-                {isAnalysisLoading ? '解读中...' : '✨ 开始解读'}
+                {isAnalysisLoading ? '解读中...' : <span className="flex items-center gap-2"><StartIcon /> 开始解读</span>}
               </button>
               <button
                 onClick={() => {
@@ -184,7 +200,7 @@ export default function ModelSelector({
                   setModelMessage('')
                 }}
                 disabled={isAnalysisLoading}
-                className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white transition-all disabled:opacity-50"
+                className="rounded-sm border border-stone-300 bg-white px-4 py-3 text-sm font-medium text-stone-500 hover:text-stone-700 transition-all disabled:opacity-50"
               >
                 隐藏
               </button>

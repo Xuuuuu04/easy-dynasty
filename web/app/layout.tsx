@@ -32,9 +32,12 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "EasyDynasty | Mystical Tarot & Astrology Insights",
+  title: "易 · 启示录 | EasyDynasty",
   description:
-    "EasyDynasty 将塔罗与占星的灵感融合，为你带来沉浸式的神秘占卜体验。",
+    "EasyDynasty 融合东方命理与西方塔罗，在水墨纸境中为您开启沉浸式的神秘占卜体验。",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -36,4 +36,4 @@ export const getDefaultLlmConfig = (): DefaultLlmConfig => ({
 
 export const isDefaultLlmUsable = (): boolean => config.available
 
-export const getDefaultLlmModel = (): string => config.model ?? 'gpt-4o-mini'
+export const getDefaultLlmModel = (): string => config.model ?? 'moonshotai/Kimi-K2-Instruct-0905'

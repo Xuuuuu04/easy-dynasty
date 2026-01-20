@@ -1,496 +1,350 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import tarotCardsData from '../../data/tarot-cards.json'
+import ReactMarkdown from 'react-markdown'
+import FanDeck from '@/components/FanDeck'
+import SpreadLayout from '@/components/SpreadLayout'
+import TarotChat from '@/components/TarotChat'
+import { useToast } from '@/components/Toast'
 import spreadsData from '../../data/spreads.json'
-import FanDeck from '../../components/FanDeck'
-import FlyingCard from '../../components/FlyingCard'
-import FlipCard from '../../components/FlipCard'
-import type { TarotCard, DrawnCard, Spread } from '@/types/tarot'
-
-// 扩展 TarotCard 类型，包含预先决定的正逆位
-interface ShuffledCard extends TarotCard {
-  isReversed: boolean
-}
-
-interface FlyingCardData {
-  card: TarotCard
-  isReversed: boolean
-  positionId: number
-  startPosition: { x: number; y: number }
-  endPosition: { x: number; y: number }
-}
+import tarotCardsData from '../../data/tarot-cards.json'
+import type { TarotCard, Spread, DrawnCard, ChatMessage, ApiConfig } from '@/types/tarot'
+import { analyzeTarotReading } from '@/hooks/useTarotAnalysis'
+import { constructTarotPrompts } from '@/utils/prompts'
 
 export default function DrawPage() {
+  const router = useRouter()
+  const { showToast } = useToast()
+  
   const [question, setQuestion] = useState('')
   const [spread, setSpread] = useState<Spread | null>(null)
+  const [deck, setDeck] = useState<TarotCard[]>([])
   const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([])
-  const [shuffledDeck, setShuffledDeck] = useState<ShuffledCard[]>([])
-  const [selectedCardIndices, setSelectedCardIndices] = useState<number[]>([])
-  const [currentPositionIndex, setCurrentPositionIndex] = useState(0)
-  const [flyingCard, setFlyingCard] = useState<FlyingCardData | null>(null)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const positionRefs = useRef<Map<number, HTMLDivElement>>(new Map())
-  const router = useRouter()
+  const [drawnIndices, setDrawnIndices] = useState<number[]>([])
+  const [isDrawingComplete, setIsDrawingComplete] = useState(false)
+  const [isAnalysing, setIsAnalysing] = useState(false)
+  const [analysis, setAnalysis] = useState('')
+  const [user, setUser] = useState<any>(null)
+  const analysisContainerRef = useRef<HTMLDivElement>(null)
+
+  // Chat State
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
+  const [apiConfig, setApiConfig] = useState<ApiConfig>({
+      baseUrl: null,
+      apiKey: null,
+      model: 'moonshotai/Kimi-K2-Instruct-0905'
+  })
+
+  const fetchUser = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/auth/users/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setUser(data);
+    } catch (err) {
+        console.error(err);
+    }
+  };
+
+  // Auth Guard
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        router.push('/');
+        return;
+    }
+    fetchUser();
+  }, [router]);
 
   useEffect(() => {
-    // 从 sessionStorage 获取问题和牌阵
-    const savedQuestion = sessionStorage.getItem('tarot_question')
-    const savedSpreadId = sessionStorage.getItem('tarot_spread')
+    // 1. Recover state
+    const storedQuestion = sessionStorage.getItem('tarot_question')
+    const storedSpreadId = sessionStorage.getItem('tarot_spread')
 
-    if (!savedQuestion || !savedSpreadId) {
-      router.push('/')
+    if (!storedQuestion || !storedSpreadId) {
+      router.push('/dashboard')
       return
     }
 
-    setTimeout(() => {
-      setQuestion(savedQuestion)
+    setQuestion(storedQuestion)
+    const foundSpread = spreadsData.spreads.find(s => s.id === storedSpreadId)
+    if (foundSpread) {
+      setSpread(foundSpread)
+    }
 
-      // 找到对应的牌阵
-      const selectedSpread = spreadsData.spreads.find(s => s.id === savedSpreadId)
-      if (!selectedSpread) {
-        router.push('/')
-        return
-      }
-      setSpread(selectedSpread)
+    // Load API Config
+    const localBaseUrl = localStorage.getItem('tarot_api_base_url')?.trim() || null
+    const localApiKey = localStorage.getItem('tarot_api_key')?.trim() || null
+    const localModel = localStorage.getItem('tarot_api_model')?.trim() || 'Qwen/Qwen3-Next-80B-A3B-Instruct'
+    setApiConfig({
+        baseUrl: localBaseUrl,
+        apiKey: localApiKey,
+        model: localModel
+    })
 
-      // 恢复已抽取的牌
-      const savedDrawnCards = sessionStorage.getItem('tarot_drawn_cards')
-      if (savedDrawnCards) {
-        try {
-          const cards = JSON.parse(savedDrawnCards) as DrawnCard[]
-          if (cards.length > 0) {
-            setDrawnCards(cards)
-            setCurrentPositionIndex(cards.length)
-            // 标记已选择的牌的索引（用于在牌堆中隐藏已选的牌）
-            // 注意：由于洗牌是随机的，恢复时无法精确还原已选牌的索引
-            // 但这不影响功能，因为已抽的牌已经显示在牌阵中
-          }
-        } catch (e) {
-          console.error('恢复抽牌数据失败:', e)
-        }
-      }
-
-      // 准备所有塔罗牌数据
-      const cards: TarotCard[] = []
-
-      // 添加大阿尔卡那
-      tarotCardsData.majorArcana.forEach(card => {
-        cards.push({
-          id: card.id,
-          name: card.name,
-          englishName: card.englishName,
-          suit: card.suit,
-          uprightKeywords: card.uprightKeywords,
-          reversedKeywords: card.reversedKeywords
-        })
-      })
-
-      // 添加小阿尔卡那
-      Object.entries(tarotCardsData.minorArcana).forEach(([, suitCards]) => {
-        suitCards.forEach(card => {
-          cards.push({
-            id: card.id,
-            name: card.name,
-            englishName: card.englishName,
-            suit: card.suit,
-            uprightKeywords: card.uprightKeywords,
-            reversedKeywords: card.reversedKeywords
-          })
-        })
-      })
-
-      // 洗牌 - Fisher-Yates 算法，同时为每张牌预先决定正逆位
-      const shuffled: ShuffledCard[] = cards.map(card => ({
-        ...card,
-        isReversed: Math.random() < 0.5  // 在洗牌时就决定正逆位
-      }))
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-      }
-      setShuffledDeck(shuffled)
-    }, 0)
+    // 2. Shuffle Deck
+    const allCards = [
+      ...tarotCardsData.majorArcana,
+      ...tarotCardsData.minorArcana.wands,
+      ...tarotCardsData.minorArcana.cups,
+      ...tarotCardsData.minorArcana.swords,
+      ...tarotCardsData.minorArcana.pentacles
+    ]
+    const shuffled = [...allCards].sort(() => Math.random() - 0.5)
+    setDeck(shuffled)
   }, [router])
 
-  // 获取位置元素的中心坐标
-  const getPositionCenter = useCallback((positionId: number) => {
-    const element = positionRefs.current.get(positionId)
-    if (element) {
-      const rect = element.getBoundingClientRect()
-      return {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2
-      }
+  // Auto scroll effect
+  useEffect(() => {
+    if (analysis && analysisContainerRef.current) {
+       analysisContainerRef.current.scrollTop = analysisContainerRef.current.scrollHeight
     }
-    return { x: window.innerWidth / 2, y: 200 }
-  }, [])
+  }, [analysis])
 
-  // 处理从扇形牌堆选牌
-  const handleCardSelect = useCallback((cardIndex: number) => {
-    if (!spread || isAnimating || currentPositionIndex >= spread.cardCount) return
+  const handleCardDraw = (cardIndex: number) => {
+    if (!spread || drawnCards.length >= spread.cardCount) return
+    if (drawnIndices.includes(cardIndex)) return
 
-    setIsAnimating(true)
-    setSelectedCardIndices(prev => [...prev, cardIndex])
+    const selectedCard = deck[cardIndex]
 
-    const shuffledCard = shuffledDeck[cardIndex]
-    // 从洗牌时预先决定的正逆位中获取，而不是此时随机决定
-    const { isReversed, ...card } = shuffledCard
-    const currentPosition = spread.positions[currentPositionIndex]
+    const isReversed = Math.random() > 0.8 // 20% chance reversed
+    const positionInfo = spread.positions[drawnCards.length]
 
-    // 计算起始位置（扇形牌堆的大致中心）
-    const startPosition = {
-      x: window.innerWidth / 2,
-      y: window.innerHeight - 200
-    }
-
-    // 计算目标位置
-    const endPosition = getPositionCenter(currentPosition.id)
-
-    // 设置飞行中的牌
-    setFlyingCard({
-      card,
+    const newDrawnCard: DrawnCard = {
+      card: selectedCard,
       isReversed,
-      positionId: currentPosition.id,
-      startPosition,
-      endPosition
-    })
-  }, [spread, isAnimating, currentPositionIndex, shuffledDeck, getPositionCenter])
-
-  // 飞行动画完成后的处理
-  const handleFlyingComplete = useCallback(() => {
-    if (!flyingCard || !spread) return
-
-    const position = spread.positions.find(p => p.id === flyingCard.positionId)!
-    
-    const drawnCard: DrawnCard = {
-      card: flyingCard.card,
-      isReversed: flyingCard.isReversed,
-      position
+      position: positionInfo
     }
 
-    const newDrawnCards = [...drawnCards, drawnCard]
+    const newDrawnCards = [...drawnCards, newDrawnCard]
     setDrawnCards(newDrawnCards)
-    setCurrentPositionIndex(prev => prev + 1)
-    setFlyingCard(null)
-    setIsAnimating(false)
-    
-    // 实时保存到 sessionStorage，防止页面刷新或跳转后丢失
-    sessionStorage.setItem('tarot_drawn_cards', JSON.stringify(newDrawnCards))
-  }, [flyingCard, spread, drawnCards])
+    setDrawnIndices([...drawnIndices, cardIndex])
 
-  // 获取指定位置的已抽牌
-  const getCardAtPosition = (positionId: number): DrawnCard | null => {
-    return drawnCards.find(card => card.position.id === positionId) || null
-  }
-
-  const handleAnalyze = () => {
-    sessionStorage.setItem('tarot_drawn_cards', JSON.stringify(drawnCards))
-    router.push('/analysis')
-  }
-
-  // 渲染牌阵位置
-  const renderPosition = (position: { id: number; name: string; description: string }, className: string = '') => {
-    const drawnCard = getCardAtPosition(position.id)
-    const isNextPosition = currentPositionIndex < (spread?.cardCount || 0) && 
-                          spread?.positions[currentPositionIndex]?.id === position.id
-
-    return (
-      <div
-        key={position.id}
-        className={`group relative flex flex-col items-center pt-14 ${className}`}
-      >
-        {/* Position Label */}
-        <div className="absolute top-0 left-1/2 z-10 -translate-x-1/2">
-          <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(124,58,237,0.3)] backdrop-blur whitespace-nowrap transition-all ${
-            isNextPosition 
-              ? 'border-primary bg-primary/30 text-white animate-pulse' 
-              : 'border-primary/30 bg-black/60 text-primary-foreground'
-          }`}>
-            <span className="text-[10px]">✦</span>
-            <span>{position.name}</span>
-            {isNextPosition && <span className="ml-1">← 下一张</span>}
-          </div>
-        </div>
-
-        {/* Card Slot - 固定尺寸避免抖动 */}
-        <div
-          ref={(el) => {
-            if (el) positionRefs.current.set(position.id, el)
-          }}
-          className={`relative flex w-32 items-center justify-center rounded-xl border ${
-            isNextPosition
-              ? 'border-primary border-2 bg-primary/20 shadow-[0_0_40px_rgba(124,58,237,0.5)] animate-pulse-glow'
-              : drawnCard
-              ? 'border-white/20 bg-black/20'
-              : 'border-dashed border-white/10 bg-black/20'
-          }`}
-          style={{
-            aspectRatio: '2/3.5',
-            // 只对边框和阴影应用过渡，不对所有属性
-            transition: 'border-color 0.3s, box-shadow 0.3s, background-color 0.3s'
-          }}
-        >
-          {/* 内容容器 - 绝对定位避免布局变化 */}
-          <div className="absolute inset-0">
-            {drawnCard ? (
-              <FlipCard
-                cardId={drawnCard.card.id}
-                cardName=""
-                englishName=""
-                isReversed={drawnCard.isReversed}
-                autoFlip={true}
-                flipDelay={100}
-                className="w-full h-full"
-              />
-            ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-sm z-10 px-2">
-                {isNextPosition ? (
-                  <span className="text-primary font-bold">等待选牌...</span>
-                ) : (
-                  <span className="text-slate-500 text-xs uppercase tracking-widest">
-                    {currentPositionIndex > spread!.positions.findIndex(p => p.id === position.id) ? '已跳过' : '等待中'}
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Card Name (After Drawn) */}
-        {drawnCard && (
-          <div className="mt-4 w-36 text-center animate-fade-in">
-            <div className="text-sm font-bold text-white mb-0.5">
-              {drawnCard.card.name}
-            </div>
-            <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
-              {drawnCard.card.englishName}
-            </div>
-            {drawnCard.isReversed && (
-              <div className="text-[10px] text-amber-400 mt-1">逆位</div>
-            )}
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  // 渲染牌阵布局
-  const renderSpreadLayout = () => {
-    if (!spread) return null
-
-    switch (spread.id) {
-      case 'single_card':
-        return (
-          <div className="flex justify-center items-center min-h-[300px]">
-            {renderPosition(spread.positions[0])}
-          </div>
-        )
-
-      case 'three_card_time':
-      case 'three_card_mind_body_spirit':
-        return (
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 min-h-[300px]">
-            {spread.positions.map((position, index) =>
-              renderPosition(position, index === 1 ? 'md:-mt-12' : '')
-            )}
-          </div>
-        )
-
-      case 'celtic_cross':
-        return (
-          <div className="min-h-[700px] max-w-6xl mx-auto px-4 py-8 overflow-x-auto">
-            <div className="min-w-[700px] grid grid-cols-7 gap-6 max-w-5xl mx-auto">
-              {/* Center Cross & Surrounding */}
-              <div className="col-span-5 grid grid-cols-5 grid-rows-3 gap-4">
-                {/* Top: Possible Future */}
-                <div className="col-start-3 row-start-1 flex justify-center">
-                  {renderPosition(spread.positions[4])}
-                </div>
-
-                {/* Middle Row */}
-                <div className="col-start-2 row-start-2 flex justify-center items-center">
-                  {renderPosition(spread.positions[3])}
-                </div>
-                <div className="col-start-3 row-start-2 flex justify-center items-center relative">
-                  <div className="absolute z-0">
-                    {renderPosition(spread.positions[0])}
-                  </div>
-                  <div className="absolute z-10 rotate-90 opacity-90">
-                    {renderPosition(spread.positions[1])}
-                  </div>
-                </div>
-                <div className="col-start-4 row-start-2 flex justify-center items-center">
-                  {renderPosition(spread.positions[5])}
-                </div>
-
-                {/* Bottom: Foundation */}
-                <div className="col-start-3 row-start-3 flex justify-center">
-                  {renderPosition(spread.positions[2])}
-                </div>
-              </div>
-
-              {/* Right Staff */}
-              <div className="col-span-2 flex flex-col justify-center gap-4 pl-6 border-l border-white/5">
-                {renderPosition(spread.positions[9])}
-                {renderPosition(spread.positions[8])}
-                {renderPosition(spread.positions[7])}
-                {renderPosition(spread.positions[6])}
-              </div>
-            </div>
-          </div>
-        )
-
-      default:
-        return (
-          <div className="flex flex-wrap justify-center gap-8 min-h-[300px]">
-            {spread.positions.map((position) => renderPosition(position))}
-          </div>
-        )
+    if (newDrawnCards.length === spread.cardCount) {
+      setTimeout(() => {
+        setIsDrawingComplete(true)
+        startAnalysis(newDrawnCards)
+      }, 1000)
     }
   }
 
-  if (!spread) {
-    return (
-      <div className="relative min-h-screen overflow-hidden bg-background flex items-center justify-center">
-        <div className="stars-bg" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(139,92,246,0.28),transparent_60%)]" />
-        <div className="relative text-center space-y-4 animate-pulse">
-          <div className="relative mx-auto h-20 w-20">
-            <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-primary border-r-secondary"></div>
-          </div>
-          <div className="text-xl font-semibold text-white font-display">
-            正在准备牌阵...
-          </div>
-        </div>
-      </div>
-    )
+  const startAnalysis = async (cards: DrawnCard[]) => {
+    setIsAnalysing(true)
+    setAnalysis('')
+    try {
+      // Create initial history base prompts
+      const { systemPrompt, userPrompt } = constructTarotPrompts(
+        question,
+        spread!.name,
+        spread!.id,
+        cards
+      )
+      
+      const fullAnalysis = await analyzeTarotReading(question, spread!, cards, (chunk) => {
+          setAnalysis(chunk)
+      });
+      
+      setAnalysis(fullAnalysis)
+      
+      // Update chat history with the initial analysis
+      setChatHistory([
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+          { role: 'assistant', content: fullAnalysis }
+      ])
+      
+      // Refresh user info to update quota
+      fetchUser();
+      
+    } catch (err) {
+      console.error(err)
+      showToast('解读服务暂时繁忙，请稍后再试', 'error')
+      setAnalysis("抱歉，天机混沌，暂无法获取详细解读。请静心片刻，感受牌面传达的直觉。")
+    } finally {
+      setIsAnalysing(false)
+    }
   }
 
-  const isComplete = drawnCards.length === spread.cardCount
+  const handleRestart = () => {
+    router.push('/dashboard')
+  }
+
+  if (!spread) return null
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-foreground selection:bg-primary/30">
-      <div className="stars-bg" />
+    <div className="min-h-screen pt-24 pb-12 px-4 relative overflow-hidden">
+      
+      {/* Background Atmosphere */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-50 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-2.png')]"></div>
 
-      {/* Ambient Background Effects */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[128px] animate-pulse-glow" />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[128px] animate-pulse-glow delay-1000" />
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-12">
+        
+        {/* Header Question */}
+        <div className="text-center space-y-4 animate-fade-in">
+           <div className="inline-block border-b-2 border-[#9a2b2b] pb-2 px-8">
+              <h2 className="text-xl md:text-2xl font-serif font-bold text-stone-800 tracking-widest">
+                 {question}
+              </h2>
+           </div>
+           <p className="text-stone-600 text-sm font-serif">
+              {spread.name} · {isDrawingComplete ? '解读中' : `请抽取 ${spread.cardCount - drawnCards.length} 张牌`}
+           </p>
+           {user && (
+               <div className="flex justify-center gap-4 mt-2">
+                   <span className="text-[10px] text-stone-400 font-bold uppercase tracking-widest bg-white/50 px-3 py-1 rounded-full border border-stone-200">
+                       今日剩余次数: {user.tarot_limit - user.tarot_used_today} / {user.tarot_limit}
+                   </span>
+               </div>
+           )}
+        </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-6">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-6 space-y-4 animate-slide-up">
-            <div className="inline-flex items-center justify-center gap-3">
-              <span className="text-3xl animate-float">🔮</span>
-              <h1 className="text-3xl md:text-4xl font-bold font-display tracking-tight">
-                <span className="text-gradient-mystic">神秘抽牌</span>
-              </h1>
-            </div>
-
-            <div className="glass-panel rounded-2xl px-6 py-4 max-w-2xl mx-auto">
-              <div className="space-y-2">
-                <p className="text-slate-200 text-sm">
-                  <span className="text-primary font-bold uppercase tracking-wider text-xs mr-2">问题</span>
-                  {question}
-                </p>
-                <div className="h-px w-full bg-white/5" />
-                <p className="text-slate-300 text-xs">
-                  <span className="text-secondary font-bold uppercase tracking-wider text-xs mr-2">牌阵</span>
-                  {spread.name} <span className="text-slate-500">({spread.cardCount} 张牌)</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Progress */}
-          <div className="mb-6 max-w-xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <div className="flex justify-between items-end mb-2 px-2">
-              <span className="text-primary/80 text-xs font-bold uppercase tracking-widest">进度</span>
-              <div className="text-white text-lg font-bold font-display">
-                {drawnCards.length} <span className="text-slate-500 text-sm font-normal">/ {spread.cardCount}</span>
-              </div>
-            </div>
-            <div className="relative w-full h-2 bg-white/5 rounded-full overflow-hidden">
-              <div
-                className="relative h-full rounded-full bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-[0_0_20px_rgba(124,58,237,0.5)] transition-all duration-700 ease-out"
-                style={{ width: `${(drawnCards.length / spread.cardCount) * 100}%` }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent animate-shimmer" />
-              </div>
-            </div>
-          </div>
-
-          {/* 牌阵布局 */}
-          <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            {renderSpreadLayout()}
-          </div>
-
-          {/* 扇形牌堆 - 只在未完成时显示 */}
-          {!isComplete && (
-            <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
-              <div className="text-center mb-4">
-                <div className="inline-flex flex-col gap-1 rounded-2xl border border-primary/30 bg-primary/10 px-8 py-4 shadow-[0_0_40px_rgba(124,58,237,0.2)] backdrop-blur-sm">
-                  <div className="text-lg font-bold text-white font-display">
-                    {isAnimating ? '✨ 牌正在飞向牌阵...' : '💫 从下方牌堆中选择一张牌'}
-                  </div>
-                  <p className="text-primary-foreground/80 text-xs">
-                    将鼠标悬停在牌上感应，点击选择你心仪的那一张
-                  </p>
+        {/* Main Interaction Area */}
+        <div className="relative min-h-[60vh] flex flex-col items-center justify-start gap-12">
+            
+            {/* 1. Deck Area (Visible when drawing) */}
+            {!isDrawingComplete && (
+                <div className="w-full flex justify-center animate-fade-in">
+                    <FanDeck 
+                        totalCards={deck.length} 
+                        selectedCards={drawnIndices}
+                        onCardSelect={handleCardDraw} 
+                        disabled={drawnCards.length >= spread.cardCount}
+                    />
                 </div>
-              </div>
-              
-              <FanDeck
-                totalCards={shuffledDeck.length}
-                selectedCards={selectedCardIndices}
-                onCardSelect={handleCardSelect}
-                disabled={isAnimating}
-                className="mt-4"
-              />
-            </div>
-          )}
+            )}
 
-          {/* Complete Button */}
-          {isComplete && (
-            <div className="text-center animate-float mt-8">
-              <button
-                onClick={handleAnalyze}
-                className="group relative px-12 py-4 rounded-full bg-gradient-to-r from-primary via-purple-500 to-secondary text-white font-bold text-lg tracking-wide shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:shadow-[0_0_50px_rgba(124,58,237,0.7)] hover:scale-105 transition-all duration-300"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  ✨ 开始分析 <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </span>
-                <div className="absolute inset-0 rounded-full bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
-              </button>
+            {/* 2. Spread Display (Cards placed on table) */}
+            <div className={`transition-all duration-1000 ${isDrawingComplete ? 'scale-100' : 'scale-90 opacity-90'}`}>
+                <SpreadLayout 
+                    spreadId={spread.id}
+                    positions={spread.positions}
+                    drawnCards={drawnCards}
+                    onPositionClick={() => {}}
+                    canDrawAtPosition={() => false}
+                    isDrawing={false}
+                    drawingPositionId={null}
+                />
             </div>
-          )}
 
-          {/* Back Button */}
-          <div className="text-center mt-12">
-            <button
-              onClick={() => router.push('/')}
-              className="px-6 py-2 rounded-full glass-button text-sm font-medium text-slate-400 hover:text-white flex items-center gap-2 mx-auto"
-            >
-              <span>←</span> 返回首页
-            </button>
-          </div>
+            {/* 3. Analysis Panel (Appears after drawing) */}
+            {isDrawingComplete && (
+                <div className="w-full max-w-4xl animate-slide-up space-y-8">
+                    
+                    {/* AI Interpretation Box */}
+                    <div className="ink-card p-8 md:p-12 bg-white/90 border-t-4 border-[#9a2b2b] shadow-lg relative min-h-[300px]">
+                        {/* Header */}
+                        <div className="flex items-center gap-3 mb-8 border-b border-stone-200 pb-4">
+                            {/* Custom Ink Icon */}
+                            <svg className="w-6 h-6 text-[#9a2b2b]" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-1.07 3.97-2.9 5.39z"/>
+                            </svg>
+                            <h3 className="text-xl font-serif font-bold text-ink tracking-widest">
+                                易 · 启示
+                            </h3>
+                        </div>
+
+                        {/* Content */}
+                        <div 
+                            ref={analysisContainerRef}
+                            className="prose prose-stone max-w-none font-serif text-lg leading-loose text-stone-800 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar"
+                        >
+                            {!analysis && isAnalysing ? (
+                                <div className="flex items-center justify-center h-20 gap-3 text-stone-500">
+                                    <div className="w-2 h-2 bg-[#9a2b2b] rounded-full animate-bounce"></div>
+                                    <div className="w-2 h-2 bg-[#9a2b2b] rounded-full animate-bounce delay-75"></div>
+                                    <div className="w-2 h-2 bg-[#9a2b2b] rounded-full animate-bounce delay-150"></div>
+                                    <span>星象推演中...</span>
+                                </div>
+                            ) : (
+                                <ReactMarkdown
+                                    components={{
+                                        h1: ({ children }) => (
+                                          <h1 className="mb-6 text-2xl font-bold font-display text-ink border-b-2 border-[#9a2b2b] pb-2 inline-block">
+                                            {children}
+                                          </h1>
+                                        ),
+                                        h2: ({ children }) => (
+                                          <h2 className="mb-4 mt-8 text-xl font-bold text-ink border-b border-stone-300 pb-2">
+                                            {children}
+                                          </h2>
+                                        ),
+                                        h3: ({ children }) => (
+                                          <h3 className="mb-3 mt-6 text-lg font-bold text-[#9a2b2b]">
+                                            {children}
+                                          </h3>
+                                        ),
+                                        p: ({ children }) => (
+                                          <p className="mb-4 leading-relaxed text-stone-700">
+                                            {children}
+                                          </p>
+                                        ),
+                                        strong: ({ children }) => (
+                                          <strong className="font-bold text-ink">
+                                            {children}
+                                          </strong>
+                                        ),
+                                        em: ({ children }) => (
+                                          <em className="text-[#9a2b2b] not-italic font-medium">{children}</em>
+                                        ),
+                                        ul: ({ children }) => (
+                                          <ul className="mb-4 space-y-2 pl-6 text-stone-700 list-disc marker:text-[#9a2b2b]">
+                                            {children}
+                                          </ul>
+                                        ),
+                                        ol: ({ children }) => (
+                                          <ol className="mb-4 space-y-2 pl-6 text-stone-700 list-decimal marker:text-[#9a2b2b]">
+                                            {children}
+                                          </ol>
+                                        ),
+                                        li: ({ children }) => (
+                                          <li className="pl-1">{children}</li>
+                                        ),
+                                        blockquote: ({ children }) => (
+                                          <blockquote className="my-6 border-l-4 border-[#9a2b2b] bg-stone-100/50 py-4 pl-6 italic text-stone-600 rounded-r-lg">
+                                            {children}
+                                          </blockquote>
+                                        ),
+                                      }}
+                                >
+                                    {analysis}
+                                </ReactMarkdown>
+                            )}
+                        </div>
+
+                        {/* Chat Interface */}
+                        {!isAnalysing && analysis && (
+                          (!user || user.tier === 'free') ? (
+                            <div className="mt-8 border-t border-stone-200 pt-8 text-center">
+                                <p className="text-stone-400 text-sm">进一步提问功能仅限 VIP/SVIP 用户使用</p>
+                                <a href="/vip" className="text-[#9a2b2b] text-xs font-bold hover:underline">去升级会员等级 →</a>
+                            </div>
+                          ) : (
+                            <TarotChat 
+                               initialHistory={chatHistory}
+                               apiConfig={apiConfig}
+                            />
+                          )
+                        )}
+                    </div>
+
+                    {/* Action */}
+                    <div className="flex justify-center pt-8">
+                        <button 
+                            onClick={handleRestart}
+                            className="btn-seal text-lg px-10 py-3 shadow-xl"
+                        >
+                            新的占卜
+                        </button>
+                    </div>
+
+                </div>
+            )}
         </div>
       </div>
-
-      {/* Flying Card Animation */}
-      {flyingCard && (
-        <FlyingCard
-          cardId={flyingCard.card.id}
-          cardName={flyingCard.card.name}
-          englishName={flyingCard.card.englishName}
-          isReversed={flyingCard.isReversed}
-          startPosition={flyingCard.startPosition}
-          endPosition={flyingCard.endPosition}
-          onAnimationComplete={handleFlyingComplete}
-        />
-      )}
     </div>
   )
 }

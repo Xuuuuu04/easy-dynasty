@@ -1,185 +1,92 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
-  /* Ink & Wash Palette */
-  
-  /* Background: Rice Paper / Parchment */
-  --background: #f5f5f0; 
-  /* Foreground: Ink Black */
-  --foreground: #1a1a1a;
-  
-  /* Primary - Cinnabar Red (Seal Color) */
-  --primary: #9a2b2b;
-  --primary-foreground: #ffffff;
-  
-  /* Secondary - Ink Grey */
-  --secondary: #4a4a4a;
-  --secondary-foreground: #ffffff;
-  
-  /* Accent - Warm Gold (for subtle highlights) */
-  --accent: #b4a078;
-  --accent-foreground: #2c2c2c;
-  
-  /* Surface Colors - Translucent White Paper */
-  --card: rgba(255, 255, 255, 0.7);
-  --card-hover: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(0, 0, 0, 0.1);
-  
-  /* Status */
-  --success: #3f6212; /* Dark Green */
-  --warning: #854d0e; /* Brownish Gold */
-  --error: #7f1d1d;   /* Dark Red */
+  --ink-primary: #1c1917;
+  --ink-secondary: #44403c;
+  --paper-bg: #f5f5f0;
+  --seal-red: #9a2b2b;
+  --gold: #b4a078;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-card: var(--card);
-  --color-card-hover: var(--card-hover);
-  --color-card-border: var(--card-border);
-  
-  /* Typography - Prioritize Classical Chinese Serifs */
-  --font-sans: "Noto Serif SC", "Songti SC", "SimSun", "Times New Roman", serif;
-  --font-serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
-  --font-display: "Ma Shan Zheng", "Kaiti SC", "STKaiti", cursive; /* Calligraphy style if available, fallback to Kaiti */
-  
-  --animate-ink-spread: inkSpread 1.5s ease-out forwards;
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-fade-in: fadeIn 1s ease-out forwards;
-  --animate-slide-up: slideUp 0.8s ease-out forwards;
-  
-  @keyframes inkSpread {
-    0% { opacity: 0; transform: scale(0.8); filter: blur(10px); }
-    100% { opacity: 1; transform: scale(1); filter: blur(0); }
-  }
-  
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-}
-
+/* Base Styles */
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  overflow-x: hidden;
-  min-height: 100vh;
-  /* Rice Paper Texture Effect via CSS Pattern */
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)),
-    url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  background-color: #f5f5f0;
+  color: #1c1917;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  -webkit-font-smoothing: antialiased;
+  background-image: url("/rice-paper-2.png");
+  background-blend-mode: multiply;
 }
 
-/* Ink Wash Utilities */
-
-/* The "Card" style - Rice paper patch */
-.ink-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 4px;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(4px);
-  transition: all 0.4s ease;
-  position: relative;
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+  font-weight: 700;
 }
 
-.ink-card:hover {
-  background: var(--card-hover);
-  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-  border-color: rgba(0,0,0,0.2);
+/* Utilities / Components */
+@layer components {
+  .ink-input {
+    @apply w-full bg-transparent border-b-2 border-stone-300 py-3 text-lg 
+           focus:outline-none focus:border-stone-800 transition-all duration-500
+           placeholder:text-stone-300 text-stone-800 font-serif;
+  }
+  
+  .ink-card {
+    @apply bg-white/60 backdrop-blur-sm border border-stone-200/50 shadow-sm
+           rounded-sm transition-all duration-500 hover:shadow-md hover:bg-white/80;
+  }
+
+  .btn-seal {
+    @apply relative px-8 py-3 bg-[#9a2b2b] text-[#f5f5f0] font-bold tracking-widest
+           transition-all duration-300 hover:bg-[#852222] hover:scale-105 shadow-md
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+           flex items-center justify-center gap-2 rounded-sm;
+  }
 }
 
-/* The "Button" style - Seal or Ink Block */
-.ink-button {
-  background-color: var(--foreground); /* Black ink */
-  color: #fff;
-  border-radius: 2px;
-  padding: 0.5rem 1.5rem;
-  font-family: var(--font-serif);
-  letter-spacing: 0.1em;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
-}
-
-.ink-button:hover {
-  background-color: #333;
-  transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.ink-button-outline {
-  background: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--foreground);
-  border-radius: 2px;
-}
-
-.ink-button-outline:hover {
-  background: rgba(0,0,0,0.05);
-}
-
-.seal-button {
-  background-color: var(--primary); /* Red seal */
-  color: white;
-  border-radius: 4px; /* Slightly rounded square */
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(154, 43, 43, 0.3);
-}
-
-.seal-button:hover {
-  background-color: #822222;
-}
-
-/* Text Styles */
+/* Custom Utilities */
 .text-ink {
-  color: var(--foreground);
+  color: var(--ink-primary);
+}
+.bg-paper {
+  background-color: var(--paper-bg);
 }
 
-.text-ink-muted {
-  color: #666;
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
 }
 
-/* Ink Stain Decoration */
-.ink-stain {
-  position: absolute;
-  background: radial-gradient(circle, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0) 70%);
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
+.animate-ink-spread {
+  animation: inkSpread 1.5s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes inkSpread {
+  0% { transform: scale(0.95); opacity: 0; filter: blur(10px); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #f0f0f0;
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: #d6d3d1;
   border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #999;
+  background: #a8a29e;
 }

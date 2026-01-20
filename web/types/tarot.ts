@@ -71,3 +71,23 @@ export interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
   content: string
 }
+
+/**
+ * 八字 - 流年信息
+ */
+export interface LiuNianInfo {
+  year: number
+  age: number
+  gan_zhi: string
+}
+
+/**
+ * 八字 - 大运信息
+ */
+export interface DaYunInfo {
+  start_year: number
+  end_year: number
+  gan_zhi: string
+  start_age: number
+  liunian_list?: LiuNianInfo[]
+}

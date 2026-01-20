@@ -106,7 +106,7 @@ export function useTarotAnalysis() {
         overrideCandidate ??
         (hasLocalConfig ? localModel : null) ??
         (useDefaultConfig ? defaultConfig.model : null) ??
-        'gpt-4o-mini'
+        'Qwen/Qwen3-Next-80B-A3B-Instruct'
 
       if (hasLocalConfig && effectiveModel) {
         localStorage.setItem('tarot_api_model', effectiveModel)
@@ -121,39 +121,28 @@ export function useTarotAnalysis() {
         cards
       )
 
-      const requestBody = {
-        model: effectiveModel,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-        stream: true
-      }
-
-      let response: Response
-
-      if (hasLocalConfig) {
-        const normalizedBaseUrl = (localBaseUrl ?? '').replace(/\/+$/, '')
-        response = await fetch(`${normalizedBaseUrl}/chat/completions`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localApiKey}`
-          },
-          body: JSON.stringify(requestBody)
+      const token = localStorage.getItem('token')
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/tarot/analyze`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          question,
+          spreadName: spread.name,
+          spreadId: spread.id,
+          drawnCards: cards.map(c => ({
+              card: { id: String(c.card.id), name: c.card.name, englishName: c.card.englishName },
+              isReversed: c.isReversed,
+              position: c.position
+          }))
         })
-      } else {
-        response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody)
-        })
-      }
+      })
 
       if (!response.ok) {
-        throw new Error(`API 请求失败: ${response.status} ${response.statusText}`)
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.detail || `API 请求失败: ${response.status}`)
       }
 
       const reader = response.body?.getReader()
@@ -219,4 +208,54 @@ export function useTarotAnalysis() {
     setSelectedModel,
     performAnalysis
   }
+}
+
+export async function analyzeTarotReading(
+  question: string,
+  spread: Spread,
+  cards: DrawnCard[],
+  onStream?: (chunk: string) => void
+): Promise<string> {
+  const token = localStorage.getItem('token')
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/tarot/analyze`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      question,
+      spreadName: spread.name,
+      spreadId: spread.id,
+      drawnCards: cards.map(c => ({
+          card: { id: String(c.card.id), name: c.card.name, englishName: c.card.englishName },
+          isReversed: c.isReversed,
+          position: c.position
+      }))
+    })
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}))
+    throw new Error(errorData.detail || `API 请求失败: ${response.status}`)
+  }
+
+  const reader = response.body?.getReader()
+  if (!reader) {
+    throw new Error('无法读取响应流')
+  }
+
+  let analysisText = ''
+
+  for await (const chunk of parseSSEStream(reader)) {
+    const content = chunk.choices?.[0]?.delta?.content
+    if (content) {
+      analysisText += content
+      if (onStream) {
+        onStream(analysisText)
+      }
+    }
+  }
+
+  return analysisText
 }

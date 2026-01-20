@@ -8,6 +8,7 @@ class ShenShaInfo(BaseModel):
     level: int  # 重要程度: 1-5
     color: str  # Tailwind CSS颜色类
     bg: str  # 背景颜色类
+    border_color: str = "border-gray-200" # 边框颜色类
     desc: str  # 简短描述
 
 class BaziRequest(BaseModel):
@@ -20,6 +21,7 @@ class BaziRequest(BaseModel):
     birth_minute: int = 0
     birth_place: Optional[str] = None # e.g. "北京"
     is_true_solar_time: bool = False # If true, skip corrections
+    query: Optional[str] = None # For AI analysis
 
     
 class PillarInfo(BaseModel):
@@ -47,11 +49,17 @@ class WuxingAnalysis(BaseModel):
     missing: List[str]
     strongest: str
 
+class LiuNianInfo(BaseModel):
+    year: int
+    age: int
+    gan_zhi: str
+    
 class DaYunInfo(BaseModel):
     start_year: int
     end_year: int
     gan_zhi: str
     start_age: int
+    liunian_list: List[LiuNianInfo] = []
 
 class BaziResponse(BaseModel):
     solar_date: str # The input/standard time

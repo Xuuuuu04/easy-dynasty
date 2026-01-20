@@ -1,5 +1,5 @@
 from lunar_python import Solar, Lunar, EightChar
-from app.schemas.bazi import BaziRequest, BaziResponse, BaziChart, PillarInfo, WuxingAnalysis, DaYunInfo
+from app.schemas.bazi import BaziRequest, BaziResponse, BaziChart, PillarInfo, WuxingAnalysis, DaYunInfo, ShenShaInfo, LiuNianInfo
 from app.services.location_service import get_coordinates_by_address
 from app.services.shensha_engine import ShenShaEngine
 from typing import List
@@ -164,6 +164,7 @@ def calculate_pillar_info(gan_zhi: str, day_gan: str = None, day_zhi: str = None
                 level=attrs["level"],
                 color=attrs["color"],
                 bg=attrs["bg"],
+                border_color=attrs.get("border_color", "border-gray-200"),
                 desc=attrs["desc"]
             ))
 
@@ -180,7 +181,8 @@ def calculate_pillar_info(gan_zhi: str, day_gan: str = None, day_zhi: str = None
         nayim=nayin_str,
         xingyun=xingyun,
         kongwang=kongwang,
-        shensha=shensha
+        shensha=shensha,
+        shensha_info=shensha_info
     )
 
 def calculate_equation_of_time(dt: datetime.datetime) -> float:
@@ -376,11 +378,26 @@ async def analyze_bazi(req: BaziRequest) -> BaziResponse:
         for i in range(1, 9): 
             if i < len(da_yun_arr):
                 dy = da_yun_arr[i]
+                
+                # Calculate LiuNian (Flowing Years) for this DaYun
+                liunian_data = []
+                try:
+                    ln_arr = dy.getLiuNian()
+                    for ln in ln_arr:
+                        liunian_data.append(LiuNianInfo(
+                            year=ln.getYear(),
+                            age=ln.getAge(),
+                            gan_zhi=ln.getGanZhi()
+                        ))
+                except Exception as e:
+                    print(f"Error calculating LiuNian for DaYun {i}: {e}")
+                
                 dayun_list.append(DaYunInfo(
                     start_year=dy.getStartYear(),
                     end_year=dy.getEndYear(),
                     gan_zhi=dy.getGanZhi(),
-                    start_age=dy.getStartAge()
+                    start_age=dy.getStartAge(),
+                    liunian_list=liunian_data
                 ))
 
         # Format True Solar Time for display if correction was applied

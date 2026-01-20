@@ -16,6 +16,8 @@ export interface SSEChunk {
     }
     finish_reason?: string | null
   }>
+  content?: string // Added for custom backend streams
+  type?: 'thought' | 'action' | 'content' // Added for Agentic workflow
   id?: string
   object?: string
   created?: number

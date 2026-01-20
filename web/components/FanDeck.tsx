@@ -104,13 +104,13 @@ export default function FanDeck({
       {/* 扇形牌堆容器 */}
       <div className="relative h-[420px] w-full flex items-end justify-center overflow-hidden">
         {/* 底部装饰光效 */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gradient-radial from-primary/20 via-primary/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gradient-radial from-[#9a2b2b]/10 via-[#9a2b2b]/5 to-transparent rounded-full blur-2xl pointer-events-none" />
         
         {/* 左旋转按钮 */}
         <button
           onClick={rotateLeft}
           disabled={disabled}
-          className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 z-[300] w-14 h-14 rounded-full bg-black/70 backdrop-blur-md border border-primary/40 text-primary hover:bg-primary/30 hover:border-primary hover:scale-110 transition-all duration-300 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+          className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 z-[300] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-stone-300 text-stone-600 hover:text-[#9a2b2b] hover:border-[#9a2b2b] hover:scale-110 transition-all duration-300 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
           aria-label="向左旋转"
         >
           <svg className="w-7 h-7 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +122,7 @@ export default function FanDeck({
         <button
           onClick={rotateRight}
           disabled={disabled}
-          className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 z-[300] w-14 h-14 rounded-full bg-black/70 backdrop-blur-md border border-primary/40 text-primary hover:bg-primary/30 hover:border-primary hover:scale-110 transition-all duration-300 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+          className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 z-[300] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-stone-300 text-stone-600 hover:text-[#9a2b2b] hover:border-[#9a2b2b] hover:scale-110 transition-all duration-300 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
           aria-label="向右旋转"
         >
           <svg className="w-7 h-7 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@ export default function FanDeck({
                   className={`
                     relative w-full h-full rounded-lg overflow-hidden
                     transition-shadow duration-300
-                    ${isHovered ? 'shadow-[0_0_35px_rgba(124,58,237,0.7)]' : 'shadow-[0_4px_15px_rgba(0,0,0,0.4)]'}
+                    ${isHovered ? 'shadow-[0_0_25px_rgba(154,43,43,0.4)]' : 'shadow-[0_4px_15px_rgba(0,0,0,0.2)]'}
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
                 >
@@ -180,7 +180,7 @@ export default function FanDeck({
                   {/* 悬停光效 */}
                   <div 
                     className={`
-                      absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-white/30
+                      absolute inset-0 bg-gradient-to-t from-[#9a2b2b]/40 via-transparent to-white/20
                       transition-opacity duration-200
                       ${isHovered ? 'opacity-100' : 'opacity-0'}
                     `}
@@ -190,15 +190,15 @@ export default function FanDeck({
                   <div 
                     className={`
                       absolute inset-0 rounded-lg border-2 transition-colors duration-200
-                      ${isHovered ? 'border-primary' : 'border-white/5'}
+                      ${isHovered ? 'border-[#9a2b2b]' : 'border-black/5'}
                     `}
                   />
                   
                   {/* 选择提示 */}
                   {isHovered && !disabled && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-black/80 backdrop-blur-sm text-white text-[10px] px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-lg">
-                        ✨ 选择
+                      <div className="bg-white/90 backdrop-blur-sm text-[#9a2b2b] text-[10px] px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-sm border border-[#9a2b2b]/20">
+                        选择
                       </div>
                     </div>
                   )}
@@ -209,16 +209,16 @@ export default function FanDeck({
         </div>
         
         {/* 剩余牌数提示 */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-md border border-primary/30 px-5 py-2 rounded-full z-[250] shadow-lg">
-          <span className="text-primary font-bold text-lg">{availableCards.length}</span>
-          <span className="text-slate-400 text-sm ml-1.5">张牌可选</span>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md border border-stone-300 px-5 py-2 rounded-full z-[250] shadow-sm">
+          <span className="text-[#9a2b2b] font-bold text-lg">{availableCards.length}</span>
+          <span className="text-stone-500 text-sm ml-1.5">张牌可选</span>
         </div>
       </div>
       
       {/* 提示文字 */}
       {!disabled && availableCards.length > 0 && (
         <div className="text-center mt-3">
-          <p className="text-slate-400 text-xs">
+          <p className="text-stone-500 text-xs">
             ← → 点击箭头旋转牌堆，选择你感应到的那一张
           </p>
         </div>
