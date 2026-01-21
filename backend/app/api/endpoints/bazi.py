@@ -76,6 +76,7 @@ async def analyze_bazi_ai(request: BaziRequest, current_user: User = Depends(get
 *具体的趋吉避凶建议。*
 
 注意：你的分析应通俗易懂，虽然不要求引经据典，但逻辑必须严密。
+如果使用表格，请务必保证标准 Markdown 格式，每一行必须换行。
 """
 
         async def stream_basic():

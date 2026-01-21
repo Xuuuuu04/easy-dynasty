@@ -5,7 +5,7 @@ import json
 import datetime
 from typing import List, AsyncGenerator, Optional
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -130,15 +130,22 @@ class BaziRAGService:
 请直接输出指令。"""
 
             try:
-                plan_resp = await self._llm.ainvoke(planner_prompt)
-                plan_text = plan_resp.content
+                plan_text_accumulator = ""
+                yield f"data: {json.dumps({'type': 'thought_stream', 'content': f'第{round_idx}轮推演：'})}\n\n"
+                
+                async for chunk in self._llm.astream(planner_prompt):
+                    token = chunk.content if hasattr(chunk, 'content') else str(chunk)
+                    plan_text_accumulator += token
+                    yield f"data: {json.dumps({'type': 'thought_stream', 'content': token})}\n\n"
+                
+                plan_text = plan_text_accumulator
 
                 if "[SEARCH]" in plan_text:
                     parts = plan_text.split("[SEARCH]")
-                    thought = parts[0].replace("[THOUGHT]", "").strip()
+                    # thought = parts[0].replace("[THOUGHT]", "").strip() # Already streamed
                     search_query = parts[1].strip()
 
-                    yield f"data: {json.dumps({'type': 'thought', 'content': f'第{round_idx}轮推演：{thought}'})}\n\n"
+                    # yield f"data: {json.dumps({'type': 'thought', 'content': f'第{round_idx}轮推演：{thought}'})}\n\n"
                     yield f"data: {json.dumps({'type': 'action', 'content': f'查阅古籍：{search_query}'})}\n\n"
 
                     new_context = await self.hybrid_retrieve(search_query, top_n=5)
@@ -186,10 +193,16 @@ class BaziRAGService:
 ## 四、行动指南
 提供切实可行的趋吉避凶建议。如流年不利，如何化解；如流年有利，如何把握。
 
-请输出 Markdown 格式，层次清晰，论述严谨，避免空洞。"""
+请输出 Markdown 格式，层次清晰，论述严谨，避免空洞。
+特别注意：如果使用表格，必须确保每一行数据独占一行，禁止多行合并。格式示例：
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |"""
 
         # Streaming final response
-        async for chunk in self._llm.stream(final_prompt):
+        from langchain_core.messages import SystemMessage
+        async for chunk in self._llm.astream([SystemMessage(content=final_prompt)]):
             content = chunk.content if hasattr(chunk, 'content') else str(chunk)
             yield f"data: {json.dumps({'type': 'content', 'content': content})}\n\n"
 

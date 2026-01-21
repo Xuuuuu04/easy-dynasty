@@ -1,6 +1,6 @@
 /**
  * Preprocesses markdown content to ensure better rendering compatibility.
- * Specifically targets common AI output issues like missing newlines before tables.
+ * Specifically targets common AI output issues like missing newlines before tables and merged rows.
  */
 export function preprocessMarkdown(content: string): string {
   if (!content) return '';
@@ -9,20 +9,45 @@ export function preprocessMarkdown(content: string): string {
 
   // 1. Ensure a blank line before a table header (row starting with |)
   // Look for a newline, followed by a pipe, but NOT preceded by a newline (i.e., single newline)
-  // We use a negative lookbehind (or simulated) to check it's not already \n\n
-  // simpler: replace `\n|` with `\n\n|` if it follows a non-newline char.
+  processed = processed.replace(/([^\n])\n(\|.*\|.*\|)/g, '\n\n$2');
 
-  // Actually, we can just strictly enforce double newline before a table block.
-  
-  // Regex: find a line starting with |, which is NOT inside a code block (hard to detect with simple regex)
-  // But generally, for our use case, ensuring \n\n| for the header row is safe enough if we assume AI doesn't write pipe-starting lines in normal text often.
-  
-  // Pattern: (non-newline char) \n (pipe)
-  processed = processed.replace(/([^\n])\n(\|.*\|.*\|)/g, '$1\n\n$2');
+  // 2. Fix Header -> Separator newline
+  // Pattern: | Header | |---|
+  processed = processed.replace(/(\|\s*)\s+(\|[:\-])/g, '\n$2');
 
-  // 2. Fix cases where AI puts the table separator on the same line (rare but possible)
-  // e.g. | Header | |---| 
-  // processed = processed.replace(/(\|)\s*(\|[:\-])/g, '$1\n$2');
+  // 3. Fix Separator -> Body newline
+  // Pattern: |---| | Body |
+  // Look for separator chars followed by pipe, then space, then pipe
+  processed = processed.replace(/([-:]\s*\|)\s+(\|)/g, '\n$2');
+
+  // 4. Aggressively split body rows that are merged on one line
+  // Pattern: | text | | text | (where | | implies new row)
+  // We use a lookbehind-ish approach: | followed by space followed by |
+  // This might break empty cells like | | but it's a necessary tradeoff if AI outputs broken tables.
+  // To be safer, we only do this if the preceding char is NOT a pipe (so | | | | is safe-ish)
+  // Actually, standard empty cell is | |. Broken row is | content | | content |.
+  // So: Pipe + Space + Pipe.
+  // We replace " | | " with " |\n| "
+  // Warning: This breaks empty cells containing a single space.
+  // But given the user's issue, this is the most likely fix for the "minified" table.
+  
+  // Refined regex: Replace `| |` with `|\n|` ONLY IF it's likely a row separator.
+  // In the user's example: `...忌辞职。 | | 庚寅...`
+  // We can look for a pipe that has content before it, then space, then pipe.
+  processed = processed.replace(/([^|])\s*(\|\s*\|)\s*([^|])/g, '\n$2$3');
+  
+  // Also handle the specific case of `| |` exactly
+  processed = processed.replace(/\|\s+\|\s*\|/g, (match) => {
+      // If we see 3 pipes `| | |`, it might be `| empty_cell |`.
+      // If we see `| |`, it might be end of row + start of row.
+      // Let's rely on the prompt fix primarily, but this helper adds newlines for | | patterns
+      // that look suspicious.
+      return match; 
+  });
+  
+  // Final aggressive fix for the specific user artifact `| |`
+  // Replace `| |` with `|\n|`
+  processed = processed.replace(/\|\s+\|\s*(?=[^|\n])/g, '|\n|');
 
   return processed;
 }

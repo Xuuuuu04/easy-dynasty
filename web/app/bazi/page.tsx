@@ -273,7 +273,26 @@ export default function BaziPage() {
         if (!reader) throw new Error('流读取失败');
         let fullText = '';
         for await (const chunk of parseSSEStream(reader)) {
-            if (chunk.type === 'thought' || chunk.type === 'action') { setAiSteps(prev => [...prev, { type: chunk.type as any, content: chunk.content || '' }]); continue; }
+            if (chunk.type === 'action') {
+                setAiSteps(prev => [...prev, { type: 'action', content: chunk.content || '' }]);
+                continue;
+            }
+            if (chunk.type === 'thought' || chunk.type === 'thought_stream') {
+                setAiSteps(prev => {
+                    const last = prev[prev.length - 1];
+                    if (last && last.type === 'thought' && chunk.type === 'thought_stream') {
+                        // 追加到最后一条 thought
+                        const newSteps = [...prev];
+                        newSteps[newSteps.length - 1] = { ...last, content: last.content + (chunk.content || '') };
+                        return newSteps;
+                    } else if (chunk.type === 'thought') {
+                        // 新的 thought 步骤
+                        return [...prev, { type: 'thought', content: chunk.content || '' }];
+                    }
+                    return prev;
+                });
+                continue;
+            }
             const content = chunk.choices?.[0]?.delta?.content || chunk.content;
             if (content) { fullText += content; setAiAnalysis(fullText); if (aiContainerRef.current) aiContainerRef.current.scrollTop = aiContainerRef.current.scrollHeight; }
         }
