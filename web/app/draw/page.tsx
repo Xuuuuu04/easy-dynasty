@@ -6,13 +6,18 @@ import ReactMarkdown from 'react-markdown'
 import FanDeck from '@/components/FanDeck'
 import SpreadLayout from '@/components/SpreadLayout'
 import TarotChat from '@/components/TarotChat'
+import ExportReportModal from '@/components/ExportReportModal'
 import { useToast } from '@/components/Toast'
 import spreadsData from '../../data/spreads.json'
 import tarotCardsData from '../../data/tarot-cards.json'
 import type { TarotCard, Spread, DrawnCard, ChatMessage, ApiConfig } from '@/types/tarot'
 import { analyzeTarotReading } from '@/hooks/useTarotAnalysis'
 import { constructTarotPrompts } from '@/utils/prompts'
+import { preprocessMarkdown } from '@/utils/markdown'
 import { TarotIcon, ChartIcon } from '@/components/Icons'
+
+// 清理 AI 响应中的 markdown 代码块符号
+const cleanAiResponse = (text: string) => text.replace(/^```markdown\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '')
 
 export default function DrawPage() {
   const router = useRouter()
@@ -27,6 +32,7 @@ export default function DrawPage() {
   const [isAnalysing, setIsAnalysing] = useState(false)
   const [analysis, setAnalysis] = useState('')
   const [user, setUser] = useState<any>(null)
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
   const analysisContainerRef = useRef<HTMLDivElement>(null)
 
   // Chat State
@@ -158,6 +164,14 @@ export default function DrawPage() {
     }
   }
 
+  const handleExportClick = () => {
+    if (user?.tier === 'svip') {
+      setIsExportModalOpen(true)
+    } else {
+      showToast('导出精美报告仅限 SVIP 用户使用，请升级解锁。', 'error')
+    }
+  }
+
   const handleRestart = () => router.push('/dashboard')
 
   if (!spread) return null
@@ -212,11 +226,29 @@ export default function DrawPage() {
                 <div className="w-full max-w-4xl animate-slide-up space-y-8 px-2">
                     
                     <div className="ink-card p-6 md:p-12 bg-white/95 relative min-h-[300px] border-stone-300">
-                        <div className="flex items-center gap-3 mb-6 md:mb-8 border-b border-stone-100 pb-4">
-                            <ChartIcon className="w-5 h-5 text-[#9a2b2b]" />
-                            <h3 className="text-lg md:text-xl font-serif font-bold text-ink tracking-widest">
-                                易朝 · 启示录
-                            </h3>
+                        <div className="flex items-center justify-between mb-6 md:mb-8 border-b border-stone-100 pb-4">
+                            <div className="flex items-center gap-3">
+                                <ChartIcon className="w-5 h-5 text-[#9a2b2b]" />
+                                <h3 className="text-lg md:text-xl font-serif font-bold text-ink tracking-widest">
+                                    易朝 · 启示录
+                                </h3>
+                            </div>
+                            {analysis && user && (
+                                <button
+                                    onClick={handleExportClick}
+                                    className={`px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition-all
+                                        ${user?.tier === 'svip'
+                                            ? 'bg-amber-50 border-amber-500/50 text-amber-700 hover:bg-amber-100'
+                                            : 'bg-stone-100 border-stone-200 text-stone-400 hover:bg-stone-200'}
+                                    `}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="7 10 12 15 15 17 14" />
+                                    </svg>
+                                    <span>{user?.tier === 'svip' ? '导出' : 'SVIP'}</span>
+                                </button>
+                            )}
                         </div>
 
                         <div 
@@ -238,7 +270,7 @@ export default function DrawPage() {
                                         blockquote: ({ children }) => <blockquote className="my-6 border-l-2 border-[#9a2b2b] bg-stone-50 py-3 pl-5 italic text-stone-600 rounded-sm">{children}</blockquote>,
                                       }}
                                 >
-                                    {analysis}
+                                    {preprocessMarkdown(analysis)}
                                 </ReactMarkdown>
                             )}
                         </div>
@@ -268,6 +300,19 @@ export default function DrawPage() {
             )}
         </div>
       </div>
+
+      <ExportReportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        type="tarot"
+        data={{
+            question,
+            spreadName: spread?.name || '',
+            drawnCards,
+            analysis: cleanAiResponse(preprocessMarkdown(analysis))
+        }}
+        userName={user?.username || 'Guest'}
+      />
     </div>
   )
 }
