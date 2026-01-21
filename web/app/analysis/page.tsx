@@ -10,6 +10,10 @@ import type { DrawnCard, Spread } from '@/types/tarot'
 
 import ExportReportModal from '../../components/ExportReportModal'
 import { useToast } from '@/components/Toast'
+import { preprocessMarkdown } from '@/utils/markdown'
+
+// 清理 AI 响应中的 markdown 代码块符号
+const cleanAiResponse = (text: string) => text.replace(/^```markdown\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '')
 
 // Custom Icons
 const CrystalIcon = () => (
@@ -272,7 +276,7 @@ export default function AnalysisPage() {
             question,
             spreadName: spread?.name || '',
             drawnCards,
-            analysis
+            analysis: cleanAiResponse(analysis)
         }}
         userName={user?.username || 'Guest'}
       />

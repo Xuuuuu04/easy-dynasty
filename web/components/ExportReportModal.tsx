@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useToast } from '@/components/Toast';
+import { preprocessMarkdown } from '@/utils/markdown';
 import type { DrawnCard } from '@/types/tarot';
 
 interface ExportReportModalProps {
@@ -168,7 +169,7 @@ export default function ExportReportModal({ isOpen, onClose, type, data, userNam
                     AI Interpretation
                 </div>
                 <div className="prose prose-sm max-w-none font-serif leading-relaxed whitespace-pre-wrap text-justify text-[11px] md:text-xs" style={{ color: colors.textSub }}>
-                    {data.analysis.replace(/[#*`]/g, '')}
+                    {preprocessMarkdown(data.analysis.replace(/[#*`]/g, ''))}
                 </div>
             </div>
         </div>
@@ -233,7 +234,7 @@ export default function ExportReportModal({ isOpen, onClose, type, data, userNam
                     大师批语
                 </div>
                 <div className="prose prose-sm max-w-none font-serif leading-relaxed whitespace-pre-wrap text-justify text-[11px] md:text-xs" style={{ color: colors.textSub }}>
-                     {data.analysis.replace(/[#*`]/g, '')}
+                     {preprocessMarkdown(data.analysis.replace(/[#*`]/g, ''))}
                 </div>
             </div>
         </div>
