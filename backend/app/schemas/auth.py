@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 class Token(BaseModel):
@@ -27,4 +27,14 @@ class UserInDB(User):
 class UserCreate(BaseModel):
     username: str
     password: str
-    email: Optional[str] = None
+    email: EmailStr
+    code: str
+
+class VerificationRequest(BaseModel):
+    email: EmailStr
+    type: str = "register" # register, reset
+
+class PasswordReset(BaseModel):
+    email: EmailStr
+    code: str
+    new_password: str

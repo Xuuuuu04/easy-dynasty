@@ -83,7 +83,7 @@ export default function ModelSelector({
         } else {
           setAvailableModels([])
           onModelChange('')
-          setModelMessage('⚠️ 未找到可用模型')
+          setModelMessage('[!] 未找到可用模型')
         }
       } else {
         setAvailableModels([])

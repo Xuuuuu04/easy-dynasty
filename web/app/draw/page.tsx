@@ -12,6 +12,7 @@ import tarotCardsData from '../../data/tarot-cards.json'
 import type { TarotCard, Spread, DrawnCard, ChatMessage, ApiConfig } from '@/types/tarot'
 import { analyzeTarotReading } from '@/hooks/useTarotAnalysis'
 import { constructTarotPrompts } from '@/utils/prompts'
+import { TarotIcon, ChartIcon } from '@/components/Icons'
 
 export default function DrawPage() {
   const router = useRouter()
@@ -50,7 +51,6 @@ export default function DrawPage() {
     }
   };
 
-  // Auth Guard
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -61,7 +61,6 @@ export default function DrawPage() {
   }, [router]);
 
   useEffect(() => {
-    // 1. Recover state
     const storedQuestion = sessionStorage.getItem('tarot_question')
     const storedSpreadId = sessionStorage.getItem('tarot_spread')
 
@@ -76,17 +75,13 @@ export default function DrawPage() {
       setSpread(foundSpread)
     }
 
-    // Load API Config
-    const localBaseUrl = localStorage.getItem('tarot_api_base_url')?.trim() || null
-    const localApiKey = localStorage.getItem('tarot_api_key')?.trim() || null
-    const localModel = localStorage.getItem('tarot_api_model')?.trim() || 'Qwen/Qwen3-Next-80B-A3B-Instruct'
+    const localModel = localStorage.getItem('tarot_api_model')?.trim() || 'moonshotai/Kimi-K2-Instruct-0905'
     setApiConfig({
-        baseUrl: localBaseUrl,
-        apiKey: localApiKey,
+        baseUrl: localStorage.getItem('tarot_api_base_url')?.trim() || null,
+        apiKey: localStorage.getItem('tarot_api_key')?.trim() || null,
         model: localModel
     })
 
-    // 2. Shuffle Deck
     const allCards = [
       ...tarotCardsData.majorArcana,
       ...tarotCardsData.minorArcana.wands,
@@ -98,7 +93,6 @@ export default function DrawPage() {
     setDeck(shuffled)
   }, [router])
 
-  // Auto scroll effect
   useEffect(() => {
     if (analysis && analysisContainerRef.current) {
        analysisContainerRef.current.scrollTop = analysisContainerRef.current.scrollHeight
@@ -110,8 +104,7 @@ export default function DrawPage() {
     if (drawnIndices.includes(cardIndex)) return
 
     const selectedCard = deck[cardIndex]
-
-    const isReversed = Math.random() > 0.8 // 20% chance reversed
+    const isReversed = Math.random() > 0.8 
     const positionInfo = spread.positions[drawnCards.length]
 
     const newDrawnCard: DrawnCard = {
@@ -136,7 +129,6 @@ export default function DrawPage() {
     setIsAnalysing(true)
     setAnalysis('')
     try {
-      // Create initial history base prompts
       const { systemPrompt, userPrompt } = constructTarotPrompts(
         question,
         spread!.name,
@@ -144,70 +136,57 @@ export default function DrawPage() {
         cards
       )
       
-      const fullAnalysis = await analyzeTarotReading(question, spread!, cards, (chunk) => {
-          setAnalysis(chunk)
+      const fullResult = await analyzeTarotReading(question, spread!, cards, (currentText) => {
+          setAnalysis(currentText)
       });
       
-      setAnalysis(fullAnalysis)
-      
-      // Update chat history with the initial analysis
-      setChatHistory([
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-          { role: 'assistant', content: fullAnalysis }
-      ])
-      
-      // Refresh user info to update quota
+      if (fullResult) {
+          setAnalysis(fullResult)
+          setChatHistory([
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt },
+              { role: 'assistant', content: fullResult }
+          ])
+      }
       fetchUser();
-      
     } catch (err) {
       console.error(err)
-      showToast('解读服务暂时繁忙，请稍后再试', 'error')
-      setAnalysis("抱歉，天机混沌，暂无法获取详细解读。请静心片刻，感受牌面传达的直觉。")
+      showToast('解读服务繁忙', 'error')
+      setAnalysis("抱歉，天机混沌，暂无法获取详细解读。")
     } finally {
       setIsAnalysing(false)
     }
   }
 
-  const handleRestart = () => {
-    router.push('/dashboard')
-  }
+  const handleRestart = () => router.push('/dashboard')
 
   if (!spread) return null
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4 relative overflow-hidden">
+    <div className="min-h-screen pt-20 md:pt-28 pb-12 px-4 relative overflow-hidden bg-[#f5f5f0]">
       
-      {/* Background Atmosphere */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-50 bg-[url('https://www.transparenttextures.com/patterns/rice-paper-2.png')]"></div>
+      {/* Background Texture */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10" style={{ backgroundImage: 'url("/rice-paper-2.png")' }}></div>
 
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-12">
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-8 md:gap-12">
         
         {/* Header Question */}
-        <div className="text-center space-y-4 animate-fade-in">
-           <div className="inline-block border-b-2 border-[#9a2b2b] pb-2 px-8">
-              <h2 className="text-xl md:text-2xl font-serif font-bold text-stone-800 tracking-widest">
+        <div className="text-center space-y-3 md:space-y-4 animate-fade-in">
+           <div className="inline-block border-b border-[#9a2b2b]/30 pb-2 px-4 md:px-8">
+              <h2 className="text-lg md:text-2xl font-serif font-bold text-ink tracking-widest">
                  {question}
               </h2>
            </div>
-           <p className="text-stone-600 text-sm font-serif">
-              {spread.name} · {isDrawingComplete ? '解读中' : `请抽取 ${spread.cardCount - drawnCards.length} 张牌`}
+           <p className="text-stone-500 text-xs md:text-sm font-serif uppercase tracking-widest">
+              {spread.name} · {isDrawingComplete ? '启示呈现' : `请抽取 ${spread.cardCount - drawnCards.length} 张`}
            </p>
-           {user && (
-               <div className="flex justify-center gap-4 mt-2">
-                   <span className="text-[10px] text-stone-400 font-bold uppercase tracking-widest bg-white/50 px-3 py-1 rounded-full border border-stone-200">
-                       今日剩余次数: {user.tarot_limit - user.tarot_used_today} / {user.tarot_limit}
-                   </span>
-               </div>
-           )}
         </div>
 
-        {/* Main Interaction Area */}
-        <div className="relative min-h-[60vh] flex flex-col items-center justify-start gap-12">
+        {/* Interaction Area */}
+        <div className="relative min-h-[50vh] flex flex-col items-center justify-start gap-8 md:gap-12">
             
-            {/* 1. Deck Area (Visible when drawing) */}
             {!isDrawingComplete && (
-                <div className="w-full flex justify-center animate-fade-in">
+                <div className="w-full flex justify-center animate-fade-in scale-75 md:scale-100 overflow-x-hidden">
                     <FanDeck 
                         totalCards={deck.length} 
                         selectedCards={drawnIndices}
@@ -217,8 +196,7 @@ export default function DrawPage() {
                 </div>
             )}
 
-            {/* 2. Spread Display (Cards placed on table) */}
-            <div className={`transition-all duration-1000 ${isDrawingComplete ? 'scale-100' : 'scale-90 opacity-90'}`}>
+            <div className={`transition-all duration-1000 transform ${isDrawingComplete ? 'scale-75 md:scale-100' : 'scale-50 md:scale-90 opacity-80'}`}>
                 <SpreadLayout 
                     spreadId={spread.id}
                     positions={spread.positions}
@@ -230,84 +208,34 @@ export default function DrawPage() {
                 />
             </div>
 
-            {/* 3. Analysis Panel (Appears after drawing) */}
             {isDrawingComplete && (
-                <div className="w-full max-w-4xl animate-slide-up space-y-8">
+                <div className="w-full max-w-4xl animate-slide-up space-y-8 px-2">
                     
-                    {/* AI Interpretation Box */}
-                    <div className="ink-card p-8 md:p-12 bg-white/90 border-t-4 border-[#9a2b2b] shadow-lg relative min-h-[300px]">
-                        {/* Header */}
-                        <div className="flex items-center gap-3 mb-8 border-b border-stone-200 pb-4">
-                            {/* Custom Ink Icon */}
-                            <svg className="w-6 h-6 text-[#9a2b2b]" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-1.07 3.97-2.9 5.39z"/>
-                            </svg>
-                            <h3 className="text-xl font-serif font-bold text-ink tracking-widest">
-                                易 · 启示
+                    <div className="ink-card p-6 md:p-12 bg-white/95 relative min-h-[300px] border-stone-300">
+                        <div className="flex items-center gap-3 mb-6 md:mb-8 border-b border-stone-100 pb-4">
+                            <ChartIcon className="w-5 h-5 text-[#9a2b2b]" />
+                            <h3 className="text-lg md:text-xl font-serif font-bold text-ink tracking-widest">
+                                易朝 · 启示录
                             </h3>
                         </div>
 
-                        {/* Content */}
                         <div 
                             ref={analysisContainerRef}
-                            className="prose prose-stone max-w-none font-serif text-lg leading-loose text-stone-800 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar"
+                            className="prose prose-stone max-w-none font-serif text-base md:text-lg leading-loose text-stone-800 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar"
                         >
                             {!analysis && isAnalysing ? (
-                                <div className="flex items-center justify-center h-20 gap-3 text-stone-500">
-                                    <div className="w-2 h-2 bg-[#9a2b2b] rounded-full animate-bounce"></div>
-                                    <div className="w-2 h-2 bg-[#9a2b2b] rounded-full animate-bounce delay-75"></div>
-                                    <div className="w-2 h-2 bg-[#9a2b2b] rounded-full animate-bounce delay-150"></div>
-                                    <span>星象推演中...</span>
+                                <div className="flex items-center justify-center h-32 gap-3 text-stone-400 tracking-[0.2em]">
+                                    <div className="w-1.5 h-1.5 bg-[#9a2b2b] rounded-full animate-ping"></div>
+                                    <span>推演中...</span>
                                 </div>
                             ) : (
                                 <ReactMarkdown
                                     components={{
-                                        h1: ({ children }) => (
-                                          <h1 className="mb-6 text-2xl font-bold font-display text-ink border-b-2 border-[#9a2b2b] pb-2 inline-block">
-                                            {children}
-                                          </h1>
-                                        ),
-                                        h2: ({ children }) => (
-                                          <h2 className="mb-4 mt-8 text-xl font-bold text-ink border-b border-stone-300 pb-2">
-                                            {children}
-                                          </h2>
-                                        ),
-                                        h3: ({ children }) => (
-                                          <h3 className="mb-3 mt-6 text-lg font-bold text-[#9a2b2b]">
-                                            {children}
-                                          </h3>
-                                        ),
-                                        p: ({ children }) => (
-                                          <p className="mb-4 leading-relaxed text-stone-700">
-                                            {children}
-                                          </p>
-                                        ),
-                                        strong: ({ children }) => (
-                                          <strong className="font-bold text-ink">
-                                            {children}
-                                          </strong>
-                                        ),
-                                        em: ({ children }) => (
-                                          <em className="text-[#9a2b2b] not-italic font-medium">{children}</em>
-                                        ),
-                                        ul: ({ children }) => (
-                                          <ul className="mb-4 space-y-2 pl-6 text-stone-700 list-disc marker:text-[#9a2b2b]">
-                                            {children}
-                                          </ul>
-                                        ),
-                                        ol: ({ children }) => (
-                                          <ol className="mb-4 space-y-2 pl-6 text-stone-700 list-decimal marker:text-[#9a2b2b]">
-                                            {children}
-                                          </ol>
-                                        ),
-                                        li: ({ children }) => (
-                                          <li className="pl-1">{children}</li>
-                                        ),
-                                        blockquote: ({ children }) => (
-                                          <blockquote className="my-6 border-l-4 border-[#9a2b2b] bg-stone-100/50 py-4 pl-6 italic text-stone-600 rounded-r-lg">
-                                            {children}
-                                          </blockquote>
-                                        ),
+                                        h1: ({ children }) => <h1 className="mb-6 text-xl md:text-2xl font-bold text-ink border-b-2 border-[#9a2b2b] pb-1 inline-block">{children}</h1>,
+                                        h2: ({ children }) => <h2 className="mb-4 mt-8 text-lg md:text-xl font-bold text-ink border-b border-stone-200 pb-1">{children}</h2>,
+                                        h3: ({ children }) => <h3 className="mb-2 mt-6 text-base md:text-lg font-bold text-[#9a2b2b]">{children}</h3>,
+                                        p: ({ children }) => <p className="mb-4 leading-relaxed text-stone-700 text-sm md:text-base">{children}</p>,
+                                        blockquote: ({ children }) => <blockquote className="my-6 border-l-2 border-[#9a2b2b] bg-stone-50 py-3 pl-5 italic text-stone-600 rounded-sm">{children}</blockquote>,
                                       }}
                                 >
                                     {analysis}
@@ -315,12 +243,11 @@ export default function DrawPage() {
                             )}
                         </div>
 
-                        {/* Chat Interface */}
                         {!isAnalysing && analysis && (
                           (!user || user.tier === 'free') ? (
-                            <div className="mt-8 border-t border-stone-200 pt-8 text-center">
-                                <p className="text-stone-400 text-sm">进一步提问功能仅限 VIP/SVIP 用户使用</p>
-                                <a href="/vip" className="text-[#9a2b2b] text-xs font-bold hover:underline">去升级会员等级 →</a>
+                            <div className="mt-8 border-t border-stone-100 pt-8 text-center">
+                                <p className="text-stone-400 text-xs">进一步提问功能仅限 VIP/SVIP 用户</p>
+                                <button onClick={() => router.push('/vip')} className="text-[#9a2b2b] text-[10px] font-bold tracking-widest mt-2 hover:underline">升级权限 →</button>
                             </div>
                           ) : (
                             <TarotChat 
@@ -331,16 +258,12 @@ export default function DrawPage() {
                         )}
                     </div>
 
-                    {/* Action */}
-                    <div className="flex justify-center pt-8">
-                        <button 
-                            onClick={handleRestart}
-                            className="btn-seal text-lg px-10 py-3 shadow-xl"
-                        >
-                            新的占卜
+                    <div className="flex justify-center pt-4 pb-12">
+                        <button onClick={handleRestart} className="btn-seal text-base md:text-lg px-10 py-3 flex items-center gap-2">
+                            <TarotIcon className="w-4 h-4" />
+                            <span>重起一卦</span>
                         </button>
                     </div>
-
                 </div>
             )}
         </div>

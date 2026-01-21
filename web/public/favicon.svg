@@ -1,28 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <filter id="rough-paper" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" result="noise" />
-      <feDiffuseLighting in="noise" lighting-color="#fff" surfaceScale="2">
-        <feDistantLight azimuth="45" elevation="60" />
-      </feDiffuseLighting>
+    <filter id="ink-texture">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.4 0" />
     </filter>
   </defs>
-
-  <!-- Background Circle (Seal Ink Style) -->
-  <circle cx="256" cy="256" r="240" fill="#9a2b2b" />
   
-  <!-- Inner Ring (Rough Edge) -->
-  <circle cx="256" cy="256" r="225" fill="none" stroke="#f5f5f0" stroke-width="12" stroke-dasharray="400 20 100 40 200 30" stroke-linecap="round" opacity="0.9" />
-
-  <!-- Character "易" (Yi - Change) Stylized -->
-  <!-- Top Sun part (Ri) -->
-  <path d="M180 140 h152 v80 h-152 z M180 180 h152" fill="none" stroke="#f5f5f0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Seal Body (Vermilion) -->
+  <rect x="10" y="10" width="80" height="80" rx="12" fill="#9a2b2b" />
   
-  <!-- Bottom Moon/Change part (Wu/Moon derivative) -->
-  <path d="M190 260 h100 c50 0 90 40 90 90 c0 50 -40 90 -90 90 h-60 c-40 0 -70 -20 -90 -50" fill="none" stroke="#f5f5f0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M220 260 v60 M260 260 v60" fill="none" stroke="#f5f5f0" stroke-width="24" stroke-linecap="round" opacity="0.9" />
-  <path d="M150 280 l-40 60" fill="none" stroke="#f5f5f0" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Inner Border -->
+  <rect x="16" y="16" width="68" height="68" rx="8" fill="none" stroke="#b94a48" stroke-width="2" />
+  
+  <!-- Character 'Yi' (Stylized) -->
+  <path d="M30 35 H70 M30 35 Q50 40 70 35 M50 25 V45 M25 55 L75 55 M35 65 L45 80 M65 65 L55 80 M20 20 L25 25" 
+        stroke="white" stroke-width="6" stroke-linecap="round" fill="none" 
+        style="display:none" /> <!-- Placeholder for path construction reference -->
 
-  <!-- Texture Overlay to look like stamped ink -->
-  <rect width="100%" height="100%" filter="url(#rough-paper)" opacity="0.15" style="mix-blend-mode: multiply;" />
+  <!-- Actual Path for 'Yi' (Simplified Calligraphy look) -->
+  <g transform="translate(50, 50) scale(0.8) translate(-50, -50)">
+    <!-- Top part (Sun) -->
+    <path d="M30 25 H70 V45 H30 Z M30 35 H70" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Bottom part (Moon strokes roughly) -->
+    <path d="M30 60 Q40 65 50 60 Q30 75 25 85 M60 55 Q70 65 75 80 M40 70 L60 70" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  
+  <!-- Texture Overlay -->
+  <rect x="10" y="10" width="80" height="80" rx="12" fill="url(#ink-texture)" style="mix-blend-mode: multiply; opacity: 0.3;" />
 </svg>

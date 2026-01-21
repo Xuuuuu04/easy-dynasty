@@ -110,10 +110,9 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       case 'error':
         return '✕'
       case 'warning':
-        return '⚠'
-      case 'info':
+        return '!'
       default:
-        return 'ℹ'
+        return 'i'
     }
   }
 

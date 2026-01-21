@@ -6,6 +6,8 @@ from app.core.logger import logger, log_api_call_to_db
 from app.core.security import SECRET_KEY, ALGORITHM
 from jose import jwt
 import time
+import redis.asyncio as redis
+from fastapi_limiter import FastAPILimiter
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -20,6 +22,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup():
+    try:
+        redis_instance = redis.from_url("redis://localhost:6379", encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis_instance)
+        logger.info("Redis Limiter initialized")
+    except Exception as e:
+        logger.warning(f"Redis Limiter failed to initialize: {e}. Rate limiting will be disabled.")
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):

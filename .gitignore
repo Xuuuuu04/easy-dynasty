@@ -25,9 +25,16 @@ env/
 backend/venv/
 backend/.env
 backend/__pycache__/
+backend/chroma_db/
+backend/logs/
+backend/*.log
+backend/*.sqlite
+backend/*.db
 
 # Frontend specific
 web/node_modules/
 web/.next/
 web/.env
 web/.env.local
+web/out/
+web/.turbo/

@@ -8,6 +8,7 @@ from app.services.bazi_calculator import analyze_bazi
 from app.services.quota_service import QuotaService
 from app.services.bazi_rag_service import bazi_rag_service
 from sqlalchemy import text
+from fastapi_limiter.depends import RateLimiter
 import json
 
 router = APIRouter()
@@ -27,7 +28,7 @@ async def calculate_bazi(request: BaziRequest, current_user: User = Depends(get_
         print(f"八字计算错误: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/analyze")
+@router.post("/analyze", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 async def analyze_bazi_ai(request: BaziRequest, current_user: User = Depends(get_current_user), db = Depends(get_db)):
     if current_user.tier == 'free':
         raise HTTPException(
@@ -99,7 +100,7 @@ async def analyze_bazi_ai(request: BaziRequest, current_user: User = Depends(get
         
         return StreamingResponse(stream_basic(), media_type="text/event-stream")
 
-@router.post("/chat")
+@router.post("/chat", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 async def chat_bazi(req: TarotChatRequest, current_user: User = Depends(get_current_user), db = Depends(get_db)):
     # ONLY SVIP can chat further in Bazi as well
     if current_user.tier != 'svip':

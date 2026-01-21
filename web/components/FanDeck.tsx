@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import { CARD_BACK_IMAGE } from '../utils/cardImages'
 
@@ -20,209 +20,187 @@ export default function FanDeck({
   className = ''
 }: FanDeckProps) {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const [rotationAngle, setRotationAngle] = useState(0) // 整体旋转角度
+  const [exitingCard, setExitingCard] = useState<number | null>(null) // 记录正在播放离场动画的卡片
+  const [viewStartIndex, setViewStartIndex] = useState(0)
   
-  // 每次旋转的角度
-  const ROTATION_STEP = 20
+  const VISIBLE_COUNT = 15
+  const SCROLL_STEP = 5 
   
-  // 计算可用的牌（排除已选中的）
   const availableCards = useMemo(() => {
     return Array.from({ length: totalCards }, (_, i) => i)
       .filter(i => !selectedCards.includes(i))
   }, [totalCards, selectedCards])
 
-  // 扇形参数
-  const SPREAD_ANGLE = 160 // 扇形总角度
-  const RADIUS = 380 // 扇形半径
-  const CARD_WIDTH = 85
-  const CARD_HEIGHT = 149
+  const visibleCards = useMemo(() => {
+    // 如果有正在离场的牌，也要算在 visibleCards 里，直到它真正消失
+    // 这里我们简单处理：selectedCards 变化后，availableCards 会变，导致重新渲染。
+    // 为了平滑动画，我们先播放动画，再回调 onCardSelect。
+    return availableCards.slice(viewStartIndex, viewStartIndex + VISIBLE_COUNT)
+  }, [availableCards, viewStartIndex, VISIBLE_COUNT])
 
-  // 计算每张牌的基础角度（不含旋转偏移）
-  const getCardBaseAngle = useCallback((index: number, total: number) => {
-    if (total <= 1) return 0
-    const startAngle = -SPREAD_ANGLE / 2
-    const angleStep = SPREAD_ANGLE / (total - 1)
-    return startAngle + (index * angleStep)
-  }, [])
+  const SPREAD_ANGLE = 100
+  const RADIUS = 420
+  const CARD_WIDTH = 100
+  const CARD_HEIGHT = 175
 
-  // 计算每张牌的样式
+  useEffect(() => {
+    if (viewStartIndex > availableCards.length) {
+        setViewStartIndex(Math.max(0, availableCards.length - VISIBLE_COUNT));
+    }
+  }, [availableCards.length, viewStartIndex]);
+
   const getCardStyle = useCallback((index: number, total: number, originalIndex: number) => {
-    const baseAngle = getCardBaseAngle(index, total)
-    const finalAngle = baseAngle + rotationAngle
+    const startAngle = -SPREAD_ANGLE / 2
+    const actualSpread = total > 1 ? SPREAD_ANGLE : 0;
+    const angleStep = total > 1 ? actualSpread / (total - 1) : 0;
     
-    // 计算牌的位置（基于圆弧）
-    const radians = (finalAngle * Math.PI) / 180
+    const angle = startAngle + (index * angleStep)
+    const radians = (angle * Math.PI) / 180
     const x = Math.sin(radians) * RADIUS
     const y = -Math.cos(radians) * RADIUS + RADIUS
     
     const isHovered = hoveredCard === originalIndex
-    const hoverLift = isHovered ? -35 : 0
-    const hoverScale = isHovered ? 1.15 : 1
-    
-    // 计算z-index：中间的牌在上面，悬停的牌最上面
-    const centerDistance = Math.abs(finalAngle)
-    const baseZIndex = Math.round(50 - centerDistance / 2)
+    const isExiting = exitingCard === originalIndex
+
+    // 基础状态
+    let transform = `translateX(${x}px) translateY(${y}px) rotate(${angle}deg) scale(1)`
+    let opacity = 1
+    let zIndex = index
+
+    if (isExiting) {
+        // 离场动画：向上飞起，放大，旋转归零，透明度降低
+        transform = `translateX(${x}px) translateY(${y - 150}px) rotate(0deg) scale(1.1)`
+        opacity = 0
+        zIndex = 300
+    } else if (isHovered) {
+        // 悬停状态
+        transform = `translateX(${x}px) translateY(${y - 50}px) rotate(${angle}deg) scale(1.15)`
+        zIndex = 200
+    }
     
     return {
-      transform: `
-        translateX(${x}px) 
-        translateY(${y + hoverLift}px) 
-        rotate(${finalAngle}deg)
-        scale(${hoverScale})
-      `,
-      zIndex: isHovered ? 200 : baseZIndex,
+      transform,
+      opacity,
+      zIndex,
     }
-  }, [getCardBaseAngle, rotationAngle, hoveredCard])
+  }, [hoveredCard, exitingCard]) // Depend on exitingCard
 
   const handleCardClick = (originalIndex: number) => {
-    if (disabled) return
-    onCardSelect(originalIndex)
+    if (disabled || exitingCard !== null) return // 动画进行中禁止点击其他
+    
+    // 1. 设置离场状态
+    setExitingCard(originalIndex)
+    
+    // 2. 等待动画结束 (500ms 对应 transition)
+    setTimeout(() => {
+        onCardSelect(originalIndex) // 通知父组件移除
+        setExitingCard(null) // 重置状态
+        setHoveredCard(null)
+    }, 450) // 稍小于 500ms 避免闪烁
   }
 
-  const handleMouseEnter = (originalIndex: number) => {
-    if (!disabled) {
-      setHoveredCard(originalIndex)
-    }
-  }
+  const scrollLeft = () => setViewStartIndex(prev => Math.max(0, prev - SCROLL_STEP))
+  const scrollRight = () => setViewStartIndex(prev => Math.min(availableCards.length - VISIBLE_COUNT, prev + SCROLL_STEP))
 
-  const handleMouseLeave = () => {
-    setHoveredCard(null)
-  }
-
-  // 向左旋转（顺时针）
-  const rotateLeft = () => {
-    setRotationAngle(prev => prev + ROTATION_STEP)
-  }
-
-  // 向右旋转（逆时针）
-  const rotateRight = () => {
-    setRotationAngle(prev => prev - ROTATION_STEP)
-  }
+  const canScrollLeft = viewStartIndex > 0
+  const canScrollRight = viewStartIndex + VISIBLE_COUNT < availableCards.length
 
   return (
-    <div className={`relative ${className}`}>
-      {/* 扇形牌堆容器 */}
-      <div className="relative h-[420px] w-full flex items-end justify-center overflow-hidden">
-        {/* 底部装饰光效 */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gradient-radial from-[#9a2b2b]/10 via-[#9a2b2b]/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+    <div className={`relative ${className} select-none w-full max-w-3xl mx-auto`}>
+      <div className="relative h-[380px] w-full flex items-end justify-center overflow-visible">
         
-        {/* 左旋转按钮 */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-radial from-[#9a2b2b]/10 via-transparent to-transparent opacity-50 pointer-events-none blur-3xl" />
+        
         <button
-          onClick={rotateLeft}
-          disabled={disabled}
-          className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 z-[300] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-stone-300 text-stone-600 hover:text-[#9a2b2b] hover:border-[#9a2b2b] hover:scale-110 transition-all duration-300 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-          aria-label="向左旋转"
+          onClick={scrollLeft}
+          disabled={disabled || !canScrollLeft}
+          className={`absolute left-0 md:-left-12 top-1/2 -translate-y-1/2 z-[300] w-12 h-12 rounded-full border border-[#dcd9cd] bg-[#f5f5f0]/90 flex items-center justify-center transition-all duration-300 ${
+             !canScrollLeft ? 'opacity-0 pointer-events-none' : 'hover:border-[#9a2b2b] hover:text-[#9a2b2b] hover:shadow-md cursor-pointer'
+          }`}
         >
-          <svg className="w-7 h-7 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-          </svg>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </button>
 
-        {/* 右旋转按钮 */}
         <button
-          onClick={rotateRight}
-          disabled={disabled}
-          className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 z-[300] w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-stone-300 text-stone-600 hover:text-[#9a2b2b] hover:border-[#9a2b2b] hover:scale-110 transition-all duration-300 flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
-          aria-label="向右旋转"
+          onClick={scrollRight}
+          disabled={disabled || !canScrollRight}
+          className={`absolute right-0 md:-right-12 top-1/2 -translate-y-1/2 z-[300] w-12 h-12 rounded-full border border-[#dcd9cd] bg-[#f5f5f0]/90 flex items-center justify-center transition-all duration-300 ${
+             !canScrollRight ? 'opacity-0 pointer-events-none' : 'hover:border-[#9a2b2b] hover:text-[#9a2b2b] hover:shadow-md cursor-pointer'
+          }`}
         >
-          <svg className="w-7 h-7 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-          </svg>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </button>
         
-        {/* 牌堆容器 - 使用 transform-origin 确保旋转中心正确 */}
-        <div 
-          className="relative"
-          style={{ 
-            height: '380px', 
-            width: '100%',
-          }}
-        >
-          {availableCards.map((originalIndex, displayIndex) => {
-            const style = getCardStyle(displayIndex, availableCards.length, originalIndex)
+        <div className="relative w-full h-full">
+          {visibleCards.map((originalIndex, index) => {
+            const style = getCardStyle(index, visibleCards.length, originalIndex)
             const isHovered = hoveredCard === originalIndex
+            const isExiting = exitingCard === originalIndex
             
             return (
               <div
                 key={originalIndex}
-                className="absolute bottom-0 left-1/2 cursor-pointer"
+                className="absolute bottom-10 left-1/2 cursor-pointer touch-manipulation origin-bottom"
                 style={{
                   ...style,
                   marginLeft: -CARD_WIDTH / 2,
                   width: CARD_WIDTH,
                   height: CARD_HEIGHT,
-                  // 关键：使用 CSS transition 实现平滑动画
-                  transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0s',
+                  // Exiting 动画使用 ease-in 加速飞出，其他使用 spring
+                  transition: isExiting 
+                    ? 'transform 0.5s ease-in, opacity 0.5s ease-in' 
+                    : 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 }}
                 onClick={() => handleCardClick(originalIndex)}
-                onMouseEnter={() => handleMouseEnter(originalIndex)}
-                onMouseLeave={handleMouseLeave}
+                onMouseEnter={() => !disabled && setHoveredCard(originalIndex)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
-                {/* 牌卡 */}
                 <div 
                   className={`
                     relative w-full h-full rounded-lg overflow-hidden
-                    transition-shadow duration-300
-                    ${isHovered ? 'shadow-[0_0_25px_rgba(154,43,43,0.4)]' : 'shadow-[0_4px_15px_rgba(0,0,0,0.2)]'}
+                    transition-all duration-300 border
+                    ${isHovered 
+                        ? 'border-[#9a2b2b] shadow-[0_0_20px_rgba(154,43,43,0.4)] brightness-110' 
+                        : 'border-[#4a4a4a]/30 shadow-lg brightness-95 grayscale-[0.2]'
+                    }
                     ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                   `}
                 >
-                  {/* 牌背图片 */}
                   <Image
                     src={CARD_BACK_IMAGE}
-                    alt="塔罗牌"
+                    alt="Card"
                     fill
                     className="object-cover"
-                    sizes="85px"
+                    sizes="150px"
                     draggable={false}
+                    priority={index < 5} 
                   />
                   
-                  {/* 悬停光效 */}
-                  <div 
-                    className={`
-                      absolute inset-0 bg-gradient-to-t from-[#9a2b2b]/40 via-transparent to-white/20
-                      transition-opacity duration-200
-                      ${isHovered ? 'opacity-100' : 'opacity-0'}
-                    `}
-                  />
+                  <div className={`absolute inset-0 bg-[#9a2b2b] mix-blend-overlay transition-opacity duration-300 ${isHovered ? 'opacity-20' : 'opacity-0'}`} />
                   
-                  {/* 边框光效 */}
-                  <div 
-                    className={`
-                      absolute inset-0 rounded-lg border-2 transition-colors duration-200
-                      ${isHovered ? 'border-[#9a2b2b]' : 'border-black/5'}
-                    `}
-                  />
-                  
-                  {/* 选择提示 */}
-                  {isHovered && !disabled && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-white/90 backdrop-blur-sm text-[#9a2b2b] text-[10px] px-3 py-1.5 rounded-full font-bold uppercase tracking-wider shadow-sm border border-[#9a2b2b]/20">
-                        选择
-                      </div>
-                    </div>
-                  )}
+                  <div className={`absolute top-2 right-2 transition-all duration-300 ${isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
+                      <div className="w-2 h-2 bg-[#9a2b2b] rounded-full shadow-sm animate-pulse"></div>
+                  </div>
                 </div>
               </div>
             )
           })}
         </div>
         
-        {/* 剩余牌数提示 */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md border border-stone-300 px-5 py-2 rounded-full z-[250] shadow-sm">
-          <span className="text-[#9a2b2b] font-bold text-lg">{availableCards.length}</span>
-          <span className="text-stone-500 text-sm ml-1.5">张牌可选</span>
+        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {Array.from({ length: Math.ceil(availableCards.length / SCROLL_STEP) }).slice(0, 5).map((_, i) => {
+                const isActive = Math.floor(viewStartIndex / SCROLL_STEP) === i;
+                return (
+                    <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${isActive ? 'bg-[#9a2b2b]' : 'bg-stone-300'}`} />
+                )
+            })}
         </div>
+        
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#fffcf5]/80 backdrop-blur border border-[#dcd9cd] px-3 py-1 rounded-full shadow-sm text-[10px] text-stone-500 font-serif tracking-widest whitespace-nowrap">
+            剩余 <span className="text-[#9a2b2b] font-bold text-xs mx-0.5">{availableCards.length}</span> 张
+        </div>
+
       </div>
-      
-      {/* 提示文字 */}
-      {!disabled && availableCards.length > 0 && (
-        <div className="text-center mt-3">
-          <p className="text-stone-500 text-xs">
-            ← → 点击箭头旋转牌堆，选择你感应到的那一张
-          </p>
-        </div>
-      )}
     </div>
   )
 }

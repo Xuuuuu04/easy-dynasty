@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { preprocessMarkdown } from '@/utils/markdown'
 import { parseSSEStream } from '@/utils/sseParser'
 import type { ChatMessage, ApiConfig } from '@/types/tarot'
 
@@ -76,7 +77,7 @@ export default function TarotChat({ initialHistory, apiConfig, endpoint = '/api/
       }
     } catch (error) {
       console.error('Chat error:', error)
-      setHistory(prev => [...prev, { role: 'assistant', content: '⚠️ 连接断开，请重试。' }])
+      setHistory(prev => [...prev, { role: 'assistant', content: '[!] 连接断开，请重试。' }])
     } finally {
       setIsLoading(false)
     }
@@ -91,15 +92,15 @@ export default function TarotChat({ initialHistory, apiConfig, endpoint = '/api/
          <ChatIcon /> {title}
        </h3>
        
-       <div className="space-y-6 mb-6 max-h-[400px] overflow-y-auto">
+       <div className="space-y-4 mb-6 max-h-[300px] md:max-h-[400px] overflow-y-auto pr-1">
           {followUpMessages.map((msg, idx) => (
              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${
+                <div className={`max-w-[90%] md:max-w-[85%] rounded-xl px-3 py-2 md:px-4 md:py-3 shadow-sm ${
                    msg.role === 'user'
                    ? 'bg-[#9a2b2b] text-[#f5f5f0] rounded-br-none'
                    : 'bg-white border border-stone-200 text-stone-800 rounded-bl-none'
                 }`}>
-                   <div className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert' : 'prose-stone'}`}>
+                   <div className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert' : 'prose-stone'} text-xs md:text-sm`}>
                      <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
@@ -115,7 +116,7 @@ export default function TarotChat({ initialHistory, apiConfig, endpoint = '/api/
                             tr: ({ children }) => <tr className="divide-x divide-stone-100 even:bg-stone-50/50">{children}</tr>,
                         }}
                      >
-                        {msg.content || '...'}
+                        {preprocessMarkdown(msg.content || '...')}
                      </ReactMarkdown>
                    </div>
                 </div>

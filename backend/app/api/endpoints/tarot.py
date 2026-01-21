@@ -4,48 +4,38 @@ from app.api.endpoints.auth import get_current_user, get_db
 from app.schemas.auth import User
 from app.schemas.tarot import TarotRequest, TarotChatRequest
 from app.services.quota_service import QuotaService
-from app.core.config import settings
-from sqlalchemy import text
+from app.services.settings_service import SettingsService
+from fastapi_limiter.depends import RateLimiter
 import httpx
 import json
 import os
 
 router = APIRouter()
 
-BASE_URL = "https://api.siliconflow.cn/v1"
-API_KEY = os.getenv("DEFAULT_LLM_API_KEY")
-MODEL = "moonshotai/Kimi-K2-Instruct-0905"
-
-@router.post("/analyze")
-
+@router.post("/analyze", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 async def analyze_tarot(req: TarotRequest, current_user: User = Depends(get_current_user), db = Depends(get_db)):
-
-    # 1. Check Quota
-
     QuotaService.check_quota(db, current_user.id, 'tarot')
 
+    api_key = SettingsService.get("DEFAULT_LLM_API_KEY")
+    base_url = SettingsService.get("LLM_BASE_URL", "https://api.siliconflow.cn/v1")
+    model = SettingsService.get("TAROT_MODEL", "moonshotai/Kimi-K2-Instruct-0905")
 
-
-    # 2. Construct Prompt
-    # Sync with frontend logic
-    # Since we want to keep logic consistent, we'll use a simplified version or replicate the frontend prompt builder
     cards_str = ""
     for idx, dc in enumerate(req.drawnCards):
         status = "逆位" if dc.isReversed else "正位"
         cards_str += f"{idx+1}. {dc.position.get('name')}: {dc.card.name} ({status})\n"
 
-    system_prompt = "你是一位专业的塔罗牌占卜师。请根据用户的问题、选择的牌阵以及抽到的牌面进行深入、客观、且富有启发性的解读。"
-    user_prompt = f"我的问题是：{req.question}\n使用的牌阵是：{req.spreadName}\n我抽到的牌有：\n{cards_str}\n请开始你的解读。"
+    system_prompt = "你是一位精通神秘学、象征学与心理学的顶级塔罗占卜师。你的风格庄重、富有同理心且极具启发性。请根据牌面，结合心理学原型与传统牌意，为用户提供深度的命运指引。"
+    user_prompt = f"我的问题是：{req.question}\n使用的牌阵是：{req.spreadName}\n我抽到的牌有：\n{cards_str}\n请基于这些牌面，为我揭示潜意识的讯息并给出行动建议。输出请使用优雅的 Markdown 格式。"
 
-    # 3. Call LLM
     async def stream_response():
         async with httpx.AsyncClient() as client:
             async with client.stream(
                 "POST",
-                f"{BASE_URL}/chat/completions",
-                headers={"Authorization": f"Bearer {API_KEY}"},
+                f"{base_url}/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}"},
                 json={
-                    "model": MODEL,
+                    "model": model,
                     "messages": [
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt}
@@ -57,34 +47,31 @@ async def analyze_tarot(req: TarotRequest, current_user: User = Depends(get_curr
                 if response.status_code != 200:
                     yield f"data: {json.dumps({'error': 'LLM Service Error'})}\n\n"
                     return
-
                 async for line in response.aiter_lines():
                     if line.startswith("data: "):
                         yield f"{line}\n\n"
         
-        # 4. Increment usage after successful start of stream
         QuotaService.increment_usage(db, current_user.id, 'tarot')
 
     return StreamingResponse(stream_response(), media_type="text/event-stream")
 
-@router.post("/chat")
+@router.post("/chat", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 async def chat_tarot(req: TarotChatRequest, current_user: User = Depends(get_current_user), db = Depends(get_db)):
-    # ONLY SVIP can chat further
     if current_user.tier != 'svip':
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, 
-            detail="进一步提问功能仅限高级SVIP用户使用。请升级您的会员等级。"
-        )
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="进一步提问仅限高级SVIP用户")
 
-    # 2. Call LLM
+    api_key = SettingsService.get("DEFAULT_LLM_API_KEY")
+    base_url = SettingsService.get("LLM_BASE_URL", "https://api.siliconflow.cn/v1")
+    model = SettingsService.get("TAROT_MODEL", "moonshotai/Kimi-K2-Instruct-0905")
+
     async def stream_response():
         async with httpx.AsyncClient() as client:
             async with client.stream(
                 "POST",
-                f"{BASE_URL}/chat/completions",
-                headers={"Authorization": f"Bearer {API_KEY}"},
+                f"{base_url}/chat/completions",
+                headers={"Authorization": f"Bearer {api_key}"},
                 json={
-                    "model": MODEL,
+                    "model": model,
                     "messages": [{"role": m.role, "content": m.content} for m in req.messages],
                     "stream": True
                 },

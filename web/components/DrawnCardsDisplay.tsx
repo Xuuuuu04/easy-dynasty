@@ -10,8 +10,8 @@ interface DrawnCardsDisplayProps {
 export default function DrawnCardsDisplay({ drawnCards }: DrawnCardsDisplayProps) {
   return (
     <div className="glass-panel rounded-3xl p-6 flex flex-col lg:sticky lg:top-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-      <h2 className="text-xl font-bold text-center text-white mb-6 font-display flex items-center justify-center gap-2">
-        <span>🃏</span> 抽到的牌
+      <h2 className="text-xl font-bold text-ink mb-6 flex items-center gap-2">
+        <span>[-]</span> 抽到的牌
       </h2>
       <div className="flex-1 space-y-5 max-h-[calc(100vh-250px)] overflow-y-auto pr-2 custom-scrollbar">
         {drawnCards.map((drawnCard, index) => (

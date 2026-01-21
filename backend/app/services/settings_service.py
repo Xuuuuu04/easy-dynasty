@@ -1,32 +1,31 @@
-from sqlalchemy.orm import Session
-from sqlalchemy import text
 from app.db.session import SessionLocal
-import functools
+from sqlalchemy import text
+import os
 
 class SettingsService:
-    @staticmethod
-    @functools.lru_cache(maxsize=1)
-    def get_all_settings():
-        """Fetch all settings and cache them briefly"""
-        db = SessionLocal()
-        try:
-            result = db.execute(text("SELECT `key`, `value` FROM system_settings")).fetchall()
-            return {row[0]: row[1] for row in result}
-        finally:
-            db.close()
+    _cache = {}
 
     @staticmethod
-    def get_setting(key: str, default: str = ""):
-        # For production, you'd want a more sophisticated cache invalidation
-        # For now, we fetch fresh to ensure admin changes reflect immediately
+    def get(key: str, default: str = None) -> str:
+        # 1. 尝试从数据库读取
         db = SessionLocal()
         try:
-            result = db.execute(
-                text("SELECT `value` FROM system_settings WHERE `key` = :key"),
-                {"key": key}
-            ).fetchone()
-            return result[0] if result else default
+            row = db.execute(text("SELECT value FROM system_settings WHERE `key` = :k"), {"k": key}).fetchone()
+            if row:
+                return row[0]
+        except Exception as e:
+            print(f"DB Settings Error: {e}")
         finally:
             db.close()
+        
+        # 2. 回退到环境变量或默认值
+        return os.getenv(key, default)
 
-settings_service = SettingsService()
+    @staticmethod
+    def set(key: str, value: str):
+        db = SessionLocal()
+        try:
+            db.execute(text("UPDATE system_settings SET value = :v WHERE `key` = :k"), {"k": key, "v": value})
+            db.commit()
+        finally:
+            db.close()

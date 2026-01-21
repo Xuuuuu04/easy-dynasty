@@ -53,6 +53,10 @@ export interface ReadingHistory {
   spreadId: string
   drawnCards: DrawnCard[]
   analysis: string
+  type?: 'tarot' | 'bazi'
+  baziData?: any
+  chart?: any
+  wuxing?: any
 }
 
 /**

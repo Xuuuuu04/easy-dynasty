@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import spreadsData from '../../data/spreads.json'
 import { useToast } from '@/components/Toast'
 import type { Spread } from '@/types/tarot'
+import { TarotIcon } from '@/components/Icons'
 
 export default function Dashboard() {
   const [question, setQuestion] = useState('')
@@ -50,134 +51,112 @@ export default function Dashboard() {
     router.push('/draw')
   }
 
+  // Set default spread to first one if not set
+  useEffect(() => {
+      if (!selectedSpread && spreadsData.spreads.length > 0) {
+          setSelectedSpread(spreadsData.spreads[0].id);
+      }
+  }, []);
+
   return (
-    <div className="relative min-h-screen pt-24 pb-12 px-4 overflow-hidden">
+    <div className="relative min-h-screen pt-20 pb-12 px-4 overflow-hidden bg-[#f5f5f0]">
       
       {/* Background Decos */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none select-none overflow-hidden z-0 opacity-[0.08]">
-         <div className="absolute top-20 left-10 text-6xl writing-vertical font-serif">万物皆有灵 占卜以通神</div>
-         <div className="absolute top-40 right-20 text-5xl writing-vertical font-serif">如是心 如是见</div>
-         <div className="absolute bottom-20 left-1/4 text-4xl writing-vertical font-serif">塔罗之镜 映照本心</div>
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none select-none overflow-hidden z-0 opacity-[0.05] md:opacity-[0.08]">
+         <div className="absolute top-20 left-4 text-4xl writing-vertical font-serif">心诚则灵</div>
+         <div className="absolute bottom-20 right-4 text-4xl writing-vertical font-serif">万象更生</div>
       </div>
 
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-stone-900/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-stone-800/5 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="relative z-10 max-w-5xl mx-auto">
-        {/* ... existing header ... */}
-        {/* (I will replace the full content logic below to include the footer correctly) */}
-
+      <div className="relative z-10 max-w-4xl mx-auto flex flex-col h-full justify-center min-h-[80vh]">
         
-        {/* Header */}
-        <div className="text-center mb-16 space-y-6">
-          <h1 className="text-5xl md:text-6xl font-serif font-bold tracking-tight text-ink">
-            <span className="block mb-2 text-[#9a2b2b] text-xl tracking-[0.5em] font-light">塔罗</span>
-            心之所向
+        {/* Compact Header */}
+        <div className="text-center mb-8 animate-fade-in">
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-ink flex items-center justify-center gap-3">
+            <span className="w-8 h-8 rounded-full border border-[#9a2b2b] flex items-center justify-center text-[#9a2b2b] text-sm">易</span>
+            <span>塔罗启示</span>
           </h1>
-          <p className="text-stone-500 font-serif text-lg tracking-wide">
-            于静谧中抽离，向内探寻智慧的启示
-          </p>
           {user && (
-              <div className="flex justify-center gap-4 mt-4">
-                  <div className="bg-white/50 px-4 py-1.5 rounded-full border border-stone-200 text-[10px] font-bold text-stone-400 uppercase tracking-widest flex items-center gap-2">
-                      <span className="text-[#9a2b2b]">●</span> 塔罗额度: {user.tarot_limit - user.tarot_used_today} / {user.tarot_limit}
-                  </div>
-                  <div className="bg-white/50 px-4 py-1.5 rounded-full border border-stone-200 text-[10px] font-bold text-stone-400 uppercase tracking-widest flex items-center gap-2">
-                      <span className="text-[#9a2b2b]">●</span> 八字额度: {user.bazi_limit - user.bazi_used_today} / {user.bazi_limit}
-                  </div>
+              <div className="flex justify-center gap-4 mt-3 text-[10px] text-stone-400 font-bold uppercase tracking-widest">
+                  <span>塔罗额度: {user.tarot_limit - user.tarot_used_today}</span>
+                  <span className="text-stone-300">|</span>
+                  <span>八字额度: {user.bazi_limit - user.bazi_used_today}</span>
               </div>
           )}
         </div>
 
-        <div className="space-y-16">
-          
-          {/* Question Section */}
-          <div className="ink-card p-1 max-w-3xl mx-auto animate-slide-up bg-[#fffcf5] border-[#dcd9cd]">
-            <div className="p-8 md:p-10 relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#f5f5f0] px-4 text-stone-400 text-xs tracking-[0.2em] font-bold uppercase">
-                Step 1 · 冥想与提问
-              </div>
-              
-              <textarea
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="在此写下您心中的疑惑..."
-                rows={2}
-                className="w-full bg-transparent border-none text-2xl md:text-3xl text-center text-ink placeholder:text-stone-300 focus:outline-none focus:ring-0 resize-none py-4 font-serif leading-relaxed"
-                style={{ backgroundImage: 'linear-gradient(transparent, transparent 49px, #e5e5e5 50px)', backgroundSize: '100% 50px', lineHeight: '50px' }}
-              />
-            </div>
-          </div>
-
-          {/* Spread Selection */}
-          <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <div className="text-center mb-10">
-               <span className="bg-[#f5f5f0] px-4 text-stone-400 text-xs tracking-[0.2em] font-bold uppercase">Step 2 · 选择牌阵</span>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {spreadsData.spreads.map((spread: Spread) => (
-                <div
-                  key={spread.id}
-                  onClick={() => setSelectedSpread(spread.id)}
-                  className={`group relative cursor-pointer p-8 transition-all duration-500 border rounded-sm flex flex-col items-center text-center gap-4 ${
-                    selectedSpread === spread.id
-                      ? 'bg-[#fffcf5] border-stone-800 shadow-lg scale-[1.02]'
-                      : 'bg-white/40 border-stone-200 hover:bg-white/70 hover:border-stone-400'
-                  }`}
-                >
-                  <div className={`w-12 h-12 flex items-center justify-center rounded-full text-lg border mb-2 ${
-                     selectedSpread === spread.id ? 'bg-stone-800 text-white border-stone-800' : 'bg-transparent text-stone-400 border-stone-300'
-                  }`}>
-                     {spread.cardCount}
-                  </div>
-                  
-                  <div>
-                    <h3 className={`text-xl font-serif font-bold mb-1 tracking-wide ${selectedSpread === spread.id ? 'text-ink' : 'text-stone-600'}`}>
-                      {spread.name}
-                    </h3>
-                    <p className="text-xs font-sans uppercase tracking-widest text-stone-400">
-                      {spread.englishName}
-                    </p>
-                  </div>
-                  
-                  <p className="text-sm text-stone-500 font-serif leading-relaxed max-w-xs">
-                    {spread.description}
-                  </p>
-
-                  {selectedSpread === spread.id && (
-                     <div className="absolute top-4 right-4 text-[#9a2b2b] opacity-20 transform rotate-12 border-2 border-[#9a2b2b] p-2 rounded-sm">
-                        <span className="text-xs font-bold writing-vertical">已选定</span>
-                     </div>
-                  )}
+        {/* Question Input - Main Focus */}
+        <div className="mb-8 animate-slide-up">
+            <div className="ink-card p-1 bg-[#fffcf5] border-[#dcd9cd] shadow-md transition-all focus-within:shadow-lg focus-within:border-[#9a2b2b]/50">
+                <div className="p-6 relative">
+                    <label className="block text-center text-xs font-bold text-stone-400 uppercase tracking-[0.2em] mb-4">心中所惑</label>
+                    <textarea
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        placeholder="在此输入您的问题..."
+                        rows={1}
+                        className="w-full bg-transparent border-none text-xl md:text-2xl text-center text-ink placeholder:text-stone-300 focus:outline-none focus:ring-0 resize-none font-serif leading-relaxed"
+                        style={{ minHeight: '60px' }}
+                    />
                 </div>
-              ))}
             </div>
-          </div>
+        </div>
 
-          {/* Action */}
-          <div className="flex justify-center pb-12 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+        {/* Spreads - Horizontal Scroll / Compact Grid */}
+        <div className="mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <label className="block text-center text-xs font-bold text-stone-400 uppercase tracking-[0.2em] mb-4">选择牌阵</label>
+            
+            {/* Mobile: Horizontal Scroll */}
+            <div className="flex overflow-x-auto gap-4 pb-4 md:grid md:grid-cols-3 md:pb-0 px-1 custom-scrollbar snap-x snap-mandatory">
+                {spreadsData.spreads.map((spread: Spread) => (
+                    <div
+                        key={spread.id}
+                        onClick={() => setSelectedSpread(spread.id)}
+                        className={`
+                            flex-shrink-0 w-40 md:w-auto snap-center cursor-pointer transition-all duration-300
+                            border rounded-sm p-4 flex flex-col items-center gap-2 relative
+                            ${selectedSpread === spread.id 
+                                ? 'bg-[#9a2b2b] border-[#9a2b2b] text-white shadow-md scale-105' 
+                                : 'bg-white border-stone-200 text-stone-600 hover:border-stone-400 hover:shadow-sm'
+                            }
+                        `}
+                    >
+                        {/* Card Count Badge */}
+                        <div className={`
+                            absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border
+                            ${selectedSpread === spread.id ? 'border-white/30 bg-white/10 text-white' : 'border-stone-200 bg-stone-50 text-stone-400'}
+                        `}>
+                            {spread.cardCount}
+                        </div>
+
+                        <div className={`text-2xl mt-2 ${selectedSpread === spread.id ? 'text-white/20' : 'text-stone-100'}`}>
+                            ❖
+                        </div>
+                        
+                        <h3 className="text-sm font-bold font-serif tracking-wide">{spread.name}</h3>
+                        <p className={`text-[10px] uppercase tracking-wider ${selectedSpread === spread.id ? 'text-white/60' : 'text-stone-400'}`}>
+                            {spread.englishName}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        {/* Action Button - Always visible */}
+        <div className="flex justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <button
               onClick={handleStartReading}
-              disabled={!question.trim() || !selectedSpread}
-              className="btn-seal text-xl px-12 py-4 shadow-xl"
+              disabled={!question.trim()}
+              className="btn-seal text-lg px-12 py-3.5 shadow-xl flex items-center gap-3 active:scale-95 transition-transform w-full md:w-auto justify-center"
             >
-              <span className="relative z-10">开启牌阵</span>
+              <TarotIcon className="w-5 h-5" />
+              <span>开始占卜</span>
             </button>
-          </div>
-
-          <div className="max-w-3xl mx-auto text-center space-y-4 pb-12">
-            <div className="h-px w-24 bg-stone-300 mx-auto"></div>
-            <p className="text-stone-500 font-serif italic text-sm">“塔罗牌是一面镜子，它揭示的不是未来，而是你当下尚未觉察的内心。”</p>
-            <div className="bg-white/40 backdrop-blur-sm p-6 rounded-sm border border-stone-200 shadow-sm">
-                <p className="text-[10px] text-[#9a2b2b] leading-relaxed uppercase tracking-widest mb-2 font-bold">塔罗启示与心理指引</p>
-                <p className="text-[11px] text-stone-600 leading-relaxed max-w-2xl mx-auto">
-                    塔罗牌通过象征性的符号与原型，帮助我们建立与潜意识的对话。本系统生成的解读基于经典神秘学含义与 AI 深度分析，旨在提供多维度的视角与灵感。
-                    任何结果都并非绝对的预言，真正的力量永远源于您当下的意志与行动。
-                </p>
-            </div>
-          </div>
         </div>
+        
+        <p className="text-center text-[10px] text-stone-400 mt-6 font-serif italic">
+            “心念所至，牌映所显”
+        </p>
+
       </div>
     </div>
   )

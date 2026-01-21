@@ -15,4 +15,4 @@ chromadb==1.4.1
 sentence-transformers==5.2.0
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.7
+python-multipart==0.0.7fastapi-limiter==0.1.6\nredis==5.0.1

@@ -4,6 +4,7 @@ import { RefObject } from 'react'
 import { useRouter } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { preprocessMarkdown } from '@/utils/markdown'
 import TarotChat from './TarotChat'
 import ModelSelector from './ModelSelector'
 import type { ChatMessage, ApiConfig } from '@/types/tarot'
@@ -152,7 +153,7 @@ export default function AnalysisDisplay({
                 tr: ({ children }) => <tr className="divide-x divide-stone-100 even:bg-stone-50/50">{children}</tr>,
               }}
             >
-              {analysis}
+              {preprocessMarkdown(analysis)}
             </ReactMarkdown>
           </div>
         )}

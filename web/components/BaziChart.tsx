@@ -119,8 +119,8 @@ export default function BaziChartDisplay({ result }: { result: BaziResultProps, 
          </div>
       </div>
 
-      {/* Main Chart Table */}
-      <div className="border border-stone-300 bg-white shadow-md rounded-sm overflow-hidden">
+      {/* Main Chart Table (Desktop) */}
+      <div className="hidden md:block border border-stone-300 bg-white shadow-md rounded-sm overflow-hidden">
           <div className="grid grid-cols-[4rem_1fr_1fr_1fr_1fr] bg-stone-800 text-white text-sm font-bold border-b border-stone-300">
               <div className="py-3 text-center border-r border-white/10">项目</div>
               <div className="py-3 text-center">年柱</div>
@@ -160,6 +160,61 @@ export default function BaziChartDisplay({ result }: { result: BaziResultProps, 
                     {p.shensha_info.map((s) => <span key={s.name} title={s.desc} className={`text-xs px-1.5 py-0.5 rounded leading-tight whitespace-nowrap border ${s.color} ${s.bg} ${s.border_color}`}>{s.name}</span>)}
                 </div>
           )} />
+      </div>
+
+      {/* Main Chart Cards (Mobile) */}
+      <div className="md:hidden grid grid-cols-2 gap-3">
+          {['年柱', '月柱', '日柱', '时柱'].map((title, idx) => {
+              const p = pillars[idx];
+              return (
+                  <div key={idx} className="bg-white border border-stone-200 rounded-sm p-3 shadow-sm flex flex-col items-center gap-3 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 w-full h-1 bg-stone-200"></div>
+                      <span className="text-xs font-bold text-stone-400 uppercase tracking-widest">{title}</span>
+                      
+                      {/* Main Pillar */}
+                      <div className="flex flex-col items-center gap-1 my-1">
+                          <div className="flex items-center gap-2">
+                              <span className={`text-3xl font-bold ${ColorMap[p.gan_wuxing]}`}>{p.gan}</span>
+                              <span className={`text-3xl font-bold ${ColorMap[p.zhi_wuxing]}`}>{p.zhi}</span>
+                          </div>
+                          <div className="flex gap-4 text-[10px] opacity-60">
+                              <span>{p.gan_wuxing}</span>
+                              <span>{p.zhi_wuxing}</span>
+                          </div>
+                      </div>
+
+                      {/* Stars */}
+                      <div className="w-full border-t border-stone-100 pt-2 flex flex-col gap-1 text-center">
+                          <span className={`text-xs font-bold ${ColorMap[p.gan_wuxing]}`}>{p.shishen || '日主'}</span>
+                          <div className="flex flex-wrap justify-center gap-1">
+                              {p.hidden_gan.map((g, i) => (
+                                  <span key={i} className={`text-[10px] ${ColorMap[StemWuxing[g]]}`}>{g}</span>
+                              ))}
+                          </div>
+                      </div>
+
+                      {/* NaYin & XingYun */}
+                      <div className="flex justify-between w-full text-[10px] text-stone-500 bg-stone-50 p-1.5 rounded-sm">
+                          <span>{p.nayim}</span>
+                          <span>{p.xingyun}</span>
+                      </div>
+                      
+                      {/* ShenSha (Compact) */}
+                      {p.shensha_info.length > 0 && (
+                          <div className="flex flex-wrap justify-center gap-1 w-full">
+                              {p.shensha_info.slice(0, 3).map((s) => (
+                                  <span key={s.name} className={`text-[9px] px-1 rounded border ${s.color} ${s.bg} ${s.border_color}`}>{s.name}</span>
+                              ))}
+                              {p.shensha_info.length > 3 && <span className="text-[9px] text-stone-400">...</span>}
+                          </div>
+                      )}
+                      
+                      {p.kongwang && (
+                          <div className="absolute top-2 right-2 text-[9px] text-[#9a2b2b] border border-[#9a2b2b] px-1 rounded-sm">空</div>
+                      )}
+                  </div>
+              );
+          })}
       </div>
     </div>
   );
