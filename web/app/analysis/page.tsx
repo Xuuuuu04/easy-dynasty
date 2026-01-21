@@ -247,10 +247,12 @@ export default function AnalysisPage() {
             <button
                 onClick={handleExportClick}
                 disabled={!analysis}
-                className={`px-8 py-3 rounded-sm border transition-all font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed
-                    ${user?.tier === 'svip' 
-                        ? 'border-amber-500/50 text-amber-700 bg-amber-50/50 hover:bg-amber-100/50 hover:border-amber-600' 
-                        : 'border-stone-200 text-stone-400 bg-stone-50 hover:bg-stone-100'}`}
+                className={`px-8 py-3 rounded-sm border transition-all font-medium flex items-center gap-2
+                    ${!analysis ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
+                    ${user?.tier === 'svip'
+                        ? 'border-amber-500 text-amber-700 bg-amber-50 hover:bg-amber-100 hover:border-amber-600 shadow-sm'
+                        : 'border-stone-300 text-stone-500 bg-stone-100 hover:bg-stone-200'}
+                `}
             >
                 {user?.tier === 'svip' ? <ShareIcon /> : <LockIcon />}
                 <span>导出报告</span>
