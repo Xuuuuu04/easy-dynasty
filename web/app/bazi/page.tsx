@@ -280,21 +280,35 @@ export default function BaziPage() {
             if (chunk.type === 'thought' || chunk.type === 'thought_stream') {
                 setAiSteps(prev => {
                     const last = prev[prev.length - 1];
-                    if (last && last.type === 'thought' && chunk.type === 'thought_stream') {
-                        // 追加到最后一条 thought
-                        const newSteps = [...prev];
-                        newSteps[newSteps.length - 1] = { ...last, content: last.content + (chunk.content || '') };
-                        return newSteps;
-                    } else if (chunk.type === 'thought') {
-                        // 新的 thought 步骤
+
+                    // 如果是 thought，创建新的 thought 步骤
+                    if (chunk.type === 'thought') {
                         return [...prev, { type: 'thought', content: chunk.content || '' }];
                     }
+
+                    // 如果是 thought_stream，总是追加到最后一条 thought
+                    if (chunk.type === 'thought_stream') {
+                        if (last && last.type === 'thought') {
+                            // 追加到最后一条 thought
+                            const newSteps = [...prev];
+                            newSteps[newSteps.length - 1] = { ...last, content: last.content + (chunk.content || '') };
+                            return newSteps;
+                        } else {
+                            // 理论上不应该出现：thought_stream 前面必须有 thought
+                            return [...prev, { type: 'thought', content: chunk.content || '' }];
+                        }
+                    }
+
                     return prev;
                 });
                 continue;
             }
             const content = chunk.choices?.[0]?.delta?.content || chunk.content;
-            if (content) { fullText += content; setAiAnalysis(fullText); if (aiContainerRef.current) aiContainerRef.current.scrollTop = aiContainerRef.current.scrollHeight; }
+            if (content) {
+                fullText += content;
+                setAiAnalysis(fullText);
+                if (aiContainerRef.current) aiContainerRef.current.scrollTop = aiContainerRef.current.scrollHeight;
+            }
         }
         historyManager.saveReading("八字排盘", "", "", [], fullText, 'bazi', { birthDate: formData.birthDate, birthTime: formData.birthTime, gender: formData.gender, chart: result.chart, wuxing: result.wuxing });
         fetchUser();
