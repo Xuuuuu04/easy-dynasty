@@ -5,176 +5,484 @@
       "name": "愚人",
       "englishName": "The Fool",
       "suit": "major",
-      "uprightKeywords": ["新开始", "冒险", "纯真", "自由", "潜力"],
-      "reversedKeywords": ["鲁莽", "缺乏计划", "愚蠢", "风险", "不成熟"]
+      "uprightKeywords": [
+        "新开始",
+        "冒险",
+        "纯真",
+        "自由",
+        "潜力"
+      ],
+      "reversedKeywords": [
+        "鲁莽",
+        "缺乏计划",
+        "愚蠢",
+        "风险",
+        "不成熟"
+      ],
+      "uprightMeaning": "新开始、自由精神、潜力、天真、冒险、未知的旅程、自由自在、跳出框架、机遇、探索。愚者代表着一段无限可能的旅程的开始。",
+      "reversedMeaning": "鲁莽、不计后果、被利用、粗心、缺乏方向、混乱、受阻的潜力。暗示着过于冲动或没有计划的行动。"
     },
     {
       "id": 1,
       "name": "魔术师",
       "englishName": "The Magician",
       "suit": "major",
-      "uprightKeywords": ["意志力", "创造", "技能", "专注", "行动"],
-      "reversedKeywords": ["操控", "欺骗", "缺乏技能", "意志薄弱", "延迟"]
+      "uprightKeywords": [
+        "意志力",
+        "创造",
+        "技能",
+        "专注",
+        "行动"
+      ],
+      "reversedKeywords": [
+        "操控",
+        "欺骗",
+        "缺乏技能",
+        "意志薄弱",
+        "延迟"
+      ],
+      "uprightMeaning": "显化、力量、技巧、行动、创造力、资源利用、专注、实现目标。魔术师拥有将愿景转化为现实的能力。",
+      "reversedMeaning": "操纵、计划不周、未开发的才能、欺骗、缺乏力量。暗示着力量的滥用或资源的浪费。"
     },
     {
       "id": 2,
       "name": "女祭司",
       "englishName": "The High Priestess",
       "suit": "major",
-      "uprightKeywords": ["直觉", "潜意识", "神秘", "智慧", "内在知识"],
-      "reversedKeywords": ["缺乏直觉", "秘密", "断开连接", "压抑", "忽视内心"]
+      "uprightKeywords": [
+        "直觉",
+        "潜意识",
+        "神秘",
+        "智慧",
+        "内在知识"
+      ],
+      "reversedKeywords": [
+        "缺乏直觉",
+        "秘密",
+        "断开连接",
+        "压抑",
+        "忽视内心"
+      ],
+      "uprightMeaning": "直觉、神圣知识、神秘、潜意识、内在智慧、洞察力、秘密。女祭司呼唤你关注内心世界和直觉。",
+      "reversedMeaning": "秘密泄露、与直觉断开、表面知识、隐藏真相、被压抑的直觉。暗示着忽视内心的声音。"
     },
     {
       "id": 3,
       "name": "皇后",
       "englishName": "The Empress",
       "suit": "major",
-      "uprightKeywords": ["丰饶", "母性", "创造力", "美丽", "自然"],
-      "reversedKeywords": ["依赖", "空虚", "创造力受阻", "缺乏成长", "不育"]
+      "uprightKeywords": [
+        "丰饶",
+        "母性",
+        "创造力",
+        "美丽",
+        "自然"
+      ],
+      "reversedKeywords": [
+        "依赖",
+        "空虚",
+        "创造力受阻",
+        "缺乏成长",
+        "不育"
+      ],
+      "uprightMeaning": "女性气质、丰盛、滋养、创造、生育、自然、富饶、感官享受。皇后代表着生命的创造力和自然的滋养。",
+      "reversedMeaning": "创造力受阻、依赖、不平衡、物质主义、缺乏滋养。暗示着情感或物质上的匮乏。"
     },
     {
       "id": 4,
       "name": "皇帝",
       "englishName": "The Emperor",
       "suit": "major",
-      "uprightKeywords": ["权威", "结构", "控制", "父性", "稳定"],
-      "reversedKeywords": ["专制", "缺乏纪律", "不负责任", "权力滥用", "严厉"]
+      "uprightKeywords": [
+        "权威",
+        "结构",
+        "控制",
+        "父性",
+        "稳定"
+      ],
+      "reversedKeywords": [
+        "专制",
+        "缺乏纪律",
+        "不负责任",
+        "权力滥用",
+        "严厉"
+      ],
+      "uprightMeaning": "权威、结构、稳定、领导力、控制、父权、秩序、理性。皇帝象征着建立秩序和规则的力量。",
+      "reversedMeaning": "控制问题、僵化、支配、不成熟、权力滥用、缺乏纪律。暗示着过度控制或缺乏领导力。"
     },
     {
       "id": 5,
       "name": "教皇",
       "englishName": "The Hierophant",
       "suit": "major",
-      "uprightKeywords": ["传统", "精神指导", "教育", "信仰", "遵从"],
-      "reversedKeywords": ["反叛", "非传统", "自由思考", "挑战权威", "个人信念"]
+      "uprightKeywords": [
+        "传统",
+        "精神指导",
+        "教育",
+        "信仰",
+        "遵从"
+      ],
+      "reversedKeywords": [
+        "反叛",
+        "非传统",
+        "自由思考",
+        "挑战权威",
+        "个人信念"
+      ],
+      "uprightMeaning": "传统、精神智慧、墨守成规、指导、教导、信仰系统、仪式。教皇代表着传统的价值观和群体信仰。",
+      "reversedMeaning": "反叛、非传统、糟糕的建议、虚伪、局限性。暗示着挑战传统或寻找个人的精神道路。"
     },
     {
       "id": 6,
       "name": "恋人",
       "englishName": "The Lovers",
       "suit": "major",
-      "uprightKeywords": ["爱情", "关系", "选择", "和谐", "价值观"],
-      "reversedKeywords": ["不和谐", "错误选择", "缺乏平衡", "关系问题", "价值冲突"]
+      "uprightKeywords": [
+        "爱情",
+        "关系",
+        "选择",
+        "和谐",
+        "价值观"
+      ],
+      "reversedKeywords": [
+        "不和谐",
+        "错误选择",
+        "缺乏平衡",
+        "关系问题",
+        "价值冲突"
+      ],
+      "uprightMeaning": "爱情、和谐、价值观对齐、选择、人际关系、结合、重要的决定。恋人不仅代表爱情，也代表重大的选择。",
+      "reversedMeaning": "不平衡、未对齐、诱惑、优柔寡断、冲突、分离。暗示着关系中的不和谐或错误的选择。"
     },
     {
       "id": 7,
       "name": "战车",
       "englishName": "The Chariot",
       "suit": "major",
-      "uprightKeywords": ["胜利", "意志力", "决心", "控制", "成功"],
-      "reversedKeywords": ["缺乏控制", "缺乏方向", "侵略", "失败", "缺乏意志力"]
+      "uprightKeywords": [
+        "胜利",
+        "意志力",
+        "决心",
+        "控制",
+        "成功"
+      ],
+      "reversedKeywords": [
+        "缺乏控制",
+        "缺乏方向",
+        "侵略",
+        "失败",
+        "缺乏意志力"
+      ],
+      "uprightMeaning": "决心、控制、抱负、胜利、前进、自我掌控、意志力。战车代表着通过意志力克服障碍。",
+      "reversedMeaning": "缺乏方向、失控、挫败、侵略性、自律不足。暗示着失去控制或过于激进。"
     },
     {
       "id": 8,
       "name": "力量",
       "englishName": "Strength",
       "suit": "major",
-      "uprightKeywords": ["内在力量", "勇气", "耐心", "控制", "同情"],
-      "reversedKeywords": ["内在弱点", "自我怀疑", "缺乏勇气", "缺乏耐心", "失控"]
+      "uprightKeywords": [
+        "内在力量",
+        "勇气",
+        "耐心",
+        "控制",
+        "同情"
+      ],
+      "reversedKeywords": [
+        "内在弱点",
+        "自我怀疑",
+        "缺乏勇气",
+        "缺乏耐心",
+        "失控"
+      ],
+      "uprightMeaning": "力量、勇气、耐心、同情、驯服内在野兽、掌控情绪。力量代表着内在的坚韧和温柔的控制。",
+      "reversedMeaning": "弱点、自私、滥用权力、缺乏自律、恐惧。暗示着内心的软弱或情绪的失控。"
     },
     {
       "id": 9,
       "name": "隐士",
       "englishName": "The Hermit",
       "suit": "major",
-      "uprightKeywords": ["内省", "寻找真理", "指导", "孤独", "智慧"],
-      "reversedKeywords": ["孤立", "迷失", "拒绝帮助", "过度内向", "缺乏指导"]
+      "uprightKeywords": [
+        "内省",
+        "寻找真理",
+        "指导",
+        "孤独",
+        "智慧"
+      ],
+      "reversedKeywords": [
+        "孤立",
+        "迷失",
+        "拒绝帮助",
+        "过度内向",
+        "缺乏指导"
+      ],
+      "uprightMeaning": "内省、独处、寻求指导、智慧、冥想、自我发现、审慎。隐士建议你从喧嚣中退后，寻找内心的光芒。",
+      "reversedMeaning": "孤立、退缩、过度分析、拒绝帮助、迷失方向。暗示着过度的孤独或拒绝他人的指引。"
     },
     {
       "id": 10,
       "name": "命运之轮",
       "englishName": "Wheel of Fortune",
       "suit": "major",
-      "uprightKeywords": ["命运", "变化", "循环", "好运", "转折点"],
-      "reversedKeywords": ["厄运", "缺乏控制", "破坏性变化", "外部力量", "挫折"]
+      "uprightKeywords": [
+        "命运",
+        "变化",
+        "循环",
+        "好运",
+        "转折点"
+      ],
+      "reversedKeywords": [
+        "厄运",
+        "缺乏控制",
+        "破坏性变化",
+        "外部力量",
+        "挫折"
+      ],
+      "uprightMeaning": "命运、转折点、好运、改变、机遇、循环、因果报应。命运之轮提醒我们生命是不断循环变化的。",
+      "reversedMeaning": "厄运、坏运气、停滞、延误、失去控制、意外的挫折。暗示着抵抗变化或暂时的低谷。"
     },
     {
       "id": 11,
       "name": "正义",
       "englishName": "Justice",
       "suit": "major",
-      "uprightKeywords": ["公正", "平衡", "真理", "法律", "因果"],
-      "reversedKeywords": ["不公正", "缺乏责任", "偏见", "法律问题", "不平衡"]
+      "uprightKeywords": [
+        "公正",
+        "平衡",
+        "真理",
+        "法律",
+        "因果"
+      ],
+      "reversedKeywords": [
+        "不公正",
+        "缺乏责任",
+        "偏见",
+        "法律问题",
+        "不平衡"
+      ],
+      "uprightMeaning": "正义、公平、真理、因果报应、法律、责任、客观。正义强调因果关系和公平的裁决。",
+      "reversedMeaning": "不公正、偏见、不诚实、逃避责任、法律纠纷。暗示着不公平的对待或逃避后果。"
     },
     {
       "id": 12,
       "name": "倒吊人",
       "englishName": "The Hanged Man",
       "suit": "major",
-      "uprightKeywords": ["牺牲", "等待", "新视角", "暂停", "放手"],
-      "reversedKeywords": ["延迟", "抵抗", "停滞", "缺乏牺牲", "错失机会"]
+      "uprightKeywords": [
+        "牺牲",
+        "等待",
+        "新视角",
+        "暂停",
+        "放手"
+      ],
+      "reversedKeywords": [
+        "延迟",
+        "抵抗",
+        "停滞",
+        "缺乏牺牲",
+        "错失机会"
+      ],
+      "uprightMeaning": "牺牲、新的视角、暂停、顺从、等待、沉思、放下。倒吊人提示通过换个角度看世界来获得启示。",
+      "reversedMeaning": "优柔寡断、不情愿的牺牲、停滞不前、固执、错失良机。暗示着无谓的牺牲或抗拒必要的等待。"
     },
     {
       "id": 13,
       "name": "死神",
       "englishName": "Death",
       "suit": "major",
-      "uprightKeywords": ["结束", "转变", "重生", "释放", "新开始"],
-      "reversedKeywords": ["抵抗变化", "停滞", "恐惧", "缺乏进展", "重复模式"]
+      "uprightKeywords": [
+        "结束",
+        "转变",
+        "重生",
+        "释放",
+        "新开始"
+      ],
+      "reversedKeywords": [
+        "抵抗变化",
+        "停滞",
+        "恐惧",
+        "缺乏进展",
+        "重复模式"
+      ],
+      "uprightMeaning": "结束、转变、重生、淘汰、过渡、不可避免的改变。死神代表着旧事物的结束和新事物的开始。",
+      "reversedMeaning": "抗拒改变、停滞、恐惧未知、延迟的结束、无法放手。暗示着害怕放手或拒绝接受必要的改变。"
     },
     {
       "id": 14,
       "name": "节制",
       "englishName": "Temperance",
       "suit": "major",
-      "uprightKeywords": ["平衡", "节制", "耐心", "和谐", "治愈"],
-      "reversedKeywords": ["不平衡", "过度", "缺乏耐心", "极端", "冲突"]
+      "uprightKeywords": [
+        "平衡",
+        "节制",
+        "耐心",
+        "和谐",
+        "治愈"
+      ],
+      "reversedKeywords": [
+        "不平衡",
+        "过度",
+        "缺乏耐心",
+        "极端",
+        "冲突"
+      ],
+      "uprightMeaning": "平衡、和谐、耐心、适度、融合、合作、自制。节制教导我们寻找中庸之道和内心的平静。",
+      "reversedMeaning": "不平衡、极端、不和谐、冲突、缺乏自制、过度放纵。暗示着生活失衡或情绪波动。"
     },
     {
       "id": 15,
       "name": "恶魔",
       "englishName": "The Devil",
       "suit": "major",
-      "uprightKeywords": ["束缚", "成瘾", "物质主义", "诱惑", "限制"],
-      "reversedKeywords": ["释放", "自由", "克服成瘾", "觉醒", "打破束缚"]
+      "uprightKeywords": [
+        "束缚",
+        "成瘾",
+        "物质主义",
+        "诱惑",
+        "限制"
+      ],
+      "reversedKeywords": [
+        "释放",
+        "自由",
+        "克服成瘾",
+        "觉醒",
+        "打破束缚"
+      ],
+      "uprightMeaning": "诱惑、束缚、物质主义、上瘾、阴影自我、限制性信念。魔鬼代表着被物质欲望或消极思维束缚。",
+      "reversedMeaning": "摆脱束缚、发现自由、面对阴影、打破限制、开始康复。暗示着打破枷锁，重获自由。"
     },
     {
       "id": 16,
       "name": "塔",
       "englishName": "The Tower",
       "suit": "major",
-      "uprightKeywords": ["突然变化", "破坏", "启示", "觉醒", "混乱"],
-      "reversedKeywords": ["避免灾难", "恐惧变化", "延迟不可避免", "内在动荡", "个人转变"]
+      "uprightKeywords": [
+        "突然变化",
+        "破坏",
+        "启示",
+        "觉醒",
+        "混乱"
+      ],
+      "reversedKeywords": [
+        "避免灾难",
+        "恐惧变化",
+        "延迟不可避免",
+        "内在动荡",
+        "个人转变"
+      ],
+      "uprightMeaning": "突变、毁灭、启示、颠覆、灾难、突然的改变、旧的结构瓦解。高塔象征着通过剧烈的变化来打破虚假的结构。",
+      "reversedMeaning": "避免灾难、延迟的灾难、抗拒改变、内部动荡、重建。暗示着改变的延迟或对破坏的恐惧。"
     },
     {
       "id": 17,
       "name": "星星",
       "englishName": "The Star",
       "suit": "major",
-      "uprightKeywords": ["希望", "信仰", "治愈", "指导", "灵感"],
-      "reversedKeywords": ["绝望", "缺乏信仰", "断开连接", "缺乏灵感", "悲观"]
+      "uprightKeywords": [
+        "希望",
+        "信仰",
+        "治愈",
+        "指导",
+        "灵感"
+      ],
+      "reversedKeywords": [
+        "绝望",
+        "缺乏信仰",
+        "断开连接",
+        "缺乏灵感",
+        "悲观"
+      ],
+      "uprightMeaning": "希望、灵感、宁静、复兴、治疗、信仰、指引。星星是暴风雨后的平静，带来希望和灵感。",
+      "reversedMeaning": "绝望、缺乏灵感、自我怀疑、失去希望、不信任。暗示着失去信心或感到沮丧。"
     },
     {
       "id": 18,
       "name": "月亮",
       "englishName": "The Moon",
       "suit": "major",
-      "uprightKeywords": ["幻觉", "恐惧", "潜意识", "直觉", "不确定"],
-      "reversedKeywords": ["释放恐惧", "真相揭示", "清晰", "克服幻觉", "内在指导"]
+      "uprightKeywords": [
+        "幻觉",
+        "恐惧",
+        "潜意识",
+        "直觉",
+        "不确定"
+      ],
+      "reversedKeywords": [
+        "释放恐惧",
+        "真相揭示",
+        "清晰",
+        "克服幻觉",
+        "内在指导"
+      ],
+      "uprightMeaning": "幻觉、潜意识、直觉、未知、恐惧、困惑、秘密。月亮代表着潜意识的深处和不安的幻觉。",
+      "reversedMeaning": "揭露秘密、克服恐惧、澄清、释放焦虑、认识幻觉。暗示着迷雾散去，真相大白。"
     },
     {
       "id": 19,
       "name": "太阳",
       "englishName": "The Sun",
       "suit": "major",
-      "uprightKeywords": ["快乐", "成功", "活力", "积极", "成就"],
-      "reversedKeywords": ["内在快乐", "过度乐观", "缺乏成功", "悲观", "缺乏活力"]
+      "uprightKeywords": [
+        "快乐",
+        "成功",
+        "活力",
+        "积极",
+        "成就"
+      ],
+      "reversedKeywords": [
+        "内在快乐",
+        "过度乐观",
+        "缺乏成功",
+        "悲观",
+        "缺乏活力"
+      ],
+      "uprightMeaning": "成功、幸福、活力、清晰、乐观、真理、启蒙。太阳带来光明、温暖和积极的能量。",
+      "reversedMeaning": "暂时性低潮、悲观、缺乏热情、隐藏的真相、自我中心。暗示着内心的阴云或暂时的快乐受阻。"
     },
     {
       "id": 20,
       "name": "审判",
       "englishName": "Judgement",
       "suit": "major",
-      "uprightKeywords": ["重生", "内在呼唤", "宽恕", "第二次机会", "觉醒"],
-      "reversedKeywords": ["自我怀疑", "严厉判断", "缺乏宽恕", "错失呼唤", "内疚"]
+      "uprightKeywords": [
+        "重生",
+        "内在呼唤",
+        "宽恕",
+        "第二次机会",
+        "觉醒"
+      ],
+      "reversedKeywords": [
+        "自我怀疑",
+        "严厉判断",
+        "缺乏宽恕",
+        "错失呼唤",
+        "内疚"
+      ],
+      "uprightMeaning": "审判、觉醒、重生、评估、召唤、宽恕、内心呼唤。审判代表着响应内心的召唤，获得新生。",
+      "reversedMeaning": "自我怀疑、拒绝宽恕、不愿改变、延迟的判断、对过去的执着。暗示着忽视召唤或自我批判。"
     },
     {
       "id": 21,
       "name": "世界",
       "englishName": "The World",
       "suit": "major",
-      "uprightKeywords": ["完成", "成就", "旅程结束", "成功", "满足"],
-      "reversedKeywords": ["缺乏完成", "停滞", "缺乏成就", "延迟", "寻求外在认可"]
+      "uprightKeywords": [
+        "完成",
+        "成就",
+        "旅程结束",
+        "成功",
+        "满足"
+      ],
+      "reversedKeywords": [
+        "缺乏完成",
+        "停滞",
+        "缺乏成就",
+        "延迟",
+        "寻求外在认可"
+      ],
+      "uprightMeaning": "完成、成就、整合、旅行、圆满、成功、宇宙意识。世界代表着旅程的圆满结束和完美的和谐。",
+      "reversedMeaning": "未完成、捷径、不完美、缺乏结束、阻碍、未能实现潜力。暗示着尚未完成的任务或缺乏收尾。"
     }
   ],
   "minorArcana": {
@@ -185,8 +493,22 @@
         "englishName": "Ace of Wands",
         "suit": "wands",
         "number": "ace",
-        "uprightKeywords": ["新开始", "创造力", "灵感", "潜力", "成长"],
-        "reversedKeywords": ["缺乏能量", "延迟", "缺乏方向", "创造力受阻", "挫折"]
+        "uprightKeywords": [
+          "新开始",
+          "创造力",
+          "灵感",
+          "潜力",
+          "成长"
+        ],
+        "reversedKeywords": [
+          "缺乏能量",
+          "延迟",
+          "缺乏方向",
+          "创造力受阻",
+          "挫折"
+        ],
+        "uprightMeaning": "创造力、灵感、新开始、潜力、机会、行动、愿景。权杖王牌象征着激情的火花和新行动的开始。",
+        "reversedMeaning": "缺乏方向、错失机会、延迟、创造力受阻、拖延。暗示着即使有想法也未能付诸行动。"
       },
       {
         "id": "two_wands",
@@ -194,8 +516,22 @@
         "englishName": "Two of Wands",
         "suit": "wands",
         "number": 2,
-        "uprightKeywords": ["计划", "决定", "个人力量", "控制", "未来规划"],
-        "reversedKeywords": ["缺乏计划", "恐惧未知", "缺乏控制", "延迟决定", "不切实际"]
+        "uprightKeywords": [
+          "计划",
+          "决定",
+          "个人力量",
+          "控制",
+          "未来规划"
+        ],
+        "reversedKeywords": [
+          "缺乏计划",
+          "恐惧未知",
+          "缺乏控制",
+          "延迟决定",
+          "不切实际"
+        ],
+        "uprightMeaning": "计划、决定、进展、探索、预见、未来规划。权杖二代表着站在起点规划未来的宏伟蓝图。",
+        "reversedMeaning": "缺乏计划、对未知恐惧、优柔寡断、错失良机。暗示着犹豫不决或害怕踏出舒适圈。"
       },
       {
         "id": "three_wands",
@@ -203,8 +539,22 @@
         "englishName": "Three of Wands",
         "suit": "wands",
         "number": 3,
-        "uprightKeywords": ["扩展", "远见", "海外机会", "领导力", "前瞻"],
-        "reversedKeywords": ["缺乏远见", "延迟", "缺乏进展", "挫折", "缺乏计划"]
+        "uprightKeywords": [
+          "扩展",
+          "远见",
+          "海外机会",
+          "领导力",
+          "前瞻"
+        ],
+        "reversedKeywords": [
+          "缺乏远见",
+          "延迟",
+          "缺乏进展",
+          "挫折",
+          "缺乏计划"
+        ],
+        "uprightMeaning": "探索、远见、领导力、扩张、合作、实现初步成功。权杖三象征着将目光投向远方，等待船只归来。",
+        "reversedMeaning": "缺乏远见、延迟、错失机会、停滞不前、不自信。暗示着计划受阻或视野狭隘。"
       },
       {
         "id": "four_wands",
@@ -212,8 +562,22 @@
         "englishName": "Four of Wands",
         "suit": "wands",
         "number": 4,
-        "uprightKeywords": ["庆祝", "和谐", "家庭", "稳定", "里程碑"],
-        "reversedKeywords": ["缺乏和谐", "家庭问题", "不稳定", "延迟庆祝", "冲突"]
+        "uprightKeywords": [
+          "庆祝",
+          "和谐",
+          "家庭",
+          "稳定",
+          "里程碑"
+        ],
+        "reversedKeywords": [
+          "缺乏和谐",
+          "家庭问题",
+          "不稳定",
+          "延迟庆祝",
+          "冲突"
+        ],
+        "uprightMeaning": "庆祝、和谐、归家、社区、稳定、成就、安宁。权杖四代表着由于成就带来的欢乐庆祝和安稳。",
+        "reversedMeaning": "不和谐、不稳定、缺乏支持、未完成的庆祝、家庭冲突。暗示着家庭或团队内部的不稳定。"
       },
       {
         "id": "five_wands",
@@ -221,8 +585,22 @@
         "englishName": "Five of Wands",
         "suit": "wands",
         "number": 5,
-        "uprightKeywords": ["冲突", "竞争", "挑战", "分歧", "斗争"],
-        "reversedKeywords": ["避免冲突", "内在冲突", "缺乏多样性", "协议", "和谐"]
+        "uprightKeywords": [
+          "冲突",
+          "竞争",
+          "挑战",
+          "分歧",
+          "斗争"
+        ],
+        "reversedKeywords": [
+          "避免冲突",
+          "内在冲突",
+          "缺乏多样性",
+          "协议",
+          "和谐"
+        ],
+        "uprightMeaning": "竞争、冲突、挣扎、挑战、分歧、能量竞争。权杖五象征着通过竞争和冲突来磨练能力。",
+        "reversedMeaning": "内部冲突、避免冲突、冲突解决、不愿面对、逃避。暗示着通过避免或解决冲突来寻求和平。"
       },
       {
         "id": "six_wands",
@@ -230,8 +608,22 @@
         "englishName": "Six of Wands",
         "suit": "wands",
         "number": 6,
-        "uprightKeywords": ["胜利", "成功", "认可", "自信", "进步"],
-        "reversedKeywords": ["私人成就", "缺乏认可", "缺乏信心", "延迟", "挫折"]
+        "uprightKeywords": [
+          "胜利",
+          "成功",
+          "认可",
+          "自信",
+          "进步"
+        ],
+        "reversedKeywords": [
+          "私人成就",
+          "缺乏认可",
+          "缺乏信心",
+          "延迟",
+          "挫折"
+        ],
+        "uprightMeaning": "胜利、成功、认可、公众赞誉、自信、进步。权杖六代表着凯旋归来，获得他人的认可。",
+        "reversedMeaning": "自负、短暂的挫折、缺乏认可、失败、谣言。暗示着骄傲自满或成就未被承认。"
       },
       {
         "id": "seven_wands",
@@ -239,8 +631,22 @@
         "englishName": "Seven of Wands",
         "suit": "wands",
         "number": 7,
-        "uprightKeywords": ["挑战", "竞争", "坚持", "防御", "毅力"],
-        "reversedKeywords": ["屈服压力", "缺乏信心", "放弃", "压倒性挑战", "疲惫"]
+        "uprightKeywords": [
+          "挑战",
+          "竞争",
+          "坚持",
+          "防御",
+          "毅力"
+        ],
+        "reversedKeywords": [
+          "屈服压力",
+          "缺乏信心",
+          "放弃",
+          "压倒性挑战",
+          "疲惫"
+        ],
+        "uprightMeaning": "毅力、挑战、保护、捍卫信念、勇敢面对。权杖七象征着在优势位置上捍卫自己的立场。",
+        "reversedMeaning": "放弃、不知所措、屈服、胆怯、抵抗失败。暗示着感到压力过大而想要放弃。"
       },
       {
         "id": "eight_wands",
@@ -248,8 +654,22 @@
         "englishName": "Eight of Wands",
         "suit": "wands",
         "number": 8,
-        "uprightKeywords": ["快速行动", "进展", "运动", "急迫", "变化"],
-        "reversedKeywords": ["延迟", "挫折", "缺乏进展", "内在行动", "耐心"]
+        "uprightKeywords": [
+          "快速行动",
+          "进展",
+          "运动",
+          "急迫",
+          "变化"
+        ],
+        "reversedKeywords": [
+          "延迟",
+          "挫折",
+          "缺乏进展",
+          "内在行动",
+          "耐心"
+        ],
+        "uprightMeaning": "迅速、运动、进步、快速变化、消息、行动。权杖八代表着事情迅速发展，能量自由流动。",
+        "reversedMeaning": "延迟、缓慢、停滞、沟通不畅、错失机会。暗示着事情进展受阻或节奏混乱。"
       },
       {
         "id": "nine_wands",
@@ -257,8 +677,22 @@
         "englishName": "Nine of Wands",
         "suit": "wands",
         "number": 9,
-        "uprightKeywords": ["韧性", "坚持", "测试信念", "边界", "勇气"],
-        "reversedKeywords": ["内在资源", "斗争", "防御过度", "偏执", "顽固"]
+        "uprightKeywords": [
+          "韧性",
+          "坚持",
+          "测试信念",
+          "边界",
+          "勇气"
+        ],
+        "reversedKeywords": [
+          "内在资源",
+          "斗争",
+          "防御过度",
+          "偏执",
+          "顽固"
+        ],
+        "uprightMeaning": "韧性、勇气、防御、警惕、力量、过去经验的积累。权杖九象征着在最后的考验中坚持到底。",
+        "reversedMeaning": "疲惫、偏执、过度防御、不安全感、无法信任。暗示着身心俱疲，难以继续坚持。"
       },
       {
         "id": "ten_wands",
@@ -266,8 +700,22 @@
         "englishName": "Ten of Wands",
         "suit": "wands",
         "number": 10,
-        "uprightKeywords": ["负担", "责任", "辛苦工作", "压力", "成就"],
-        "reversedKeywords": ["释放负担", "委派", "寻求帮助", "减轻负担", "倦怠"]
+        "uprightKeywords": [
+          "负担",
+          "责任",
+          "辛苦工作",
+          "压力",
+          "成就"
+        ],
+        "reversedKeywords": [
+          "释放负担",
+          "委派",
+          "寻求帮助",
+          "减轻负担",
+          "倦怠"
+        ],
+        "uprightMeaning": "负担、责任、过度劳累、完成、重担、达到顶峰。权杖十代表着承担过多的责任，虽然接近终点但步履维艰。",
+        "reversedMeaning": "释放负担、逃避责任、压力减轻、拒绝帮助、过度压力。暗示着放下重担或因压力而崩溃。"
       },
       {
         "id": "page_wands",
@@ -275,8 +723,22 @@
         "englishName": "Page of Wands",
         "suit": "wands",
         "court": "page",
-        "uprightKeywords": ["灵感", "想法", "学习", "发现", "自由精神"],
-        "reversedKeywords": ["缺乏方向", "缺乏计划", "创造力受阻", "坏消息", "不成熟"]
+        "uprightKeywords": [
+          "灵感",
+          "想法",
+          "学习",
+          "发现",
+          "自由精神"
+        ],
+        "reversedKeywords": [
+          "缺乏方向",
+          "缺乏计划",
+          "创造力受阻",
+          "坏消息",
+          "不成熟"
+        ],
+        "uprightMeaning": "热情、探索、新想法、冒险精神、消息、年轻的能量。权杖侍从代表着一个充满好奇心和新点子的信使。",
+        "reversedMeaning": "缺乏热情、粗心、拖延、坏消息、空洞的承诺。暗示着三分钟热度或不可靠的消息。"
       },
       {
         "id": "knight_wands",
@@ -284,8 +746,22 @@
         "englishName": "Knight of Wands",
         "suit": "wands",
         "court": "knight",
-        "uprightKeywords": ["冲动", "冒险", "冲动行动", "激情", "急躁"],
-        "reversedKeywords": ["鲁莽", "缺乏耐心", "冲动", "缺乏自制", "延迟"]
+        "uprightKeywords": [
+          "冲动",
+          "冒险",
+          "冲动行动",
+          "激情",
+          "急躁"
+        ],
+        "reversedKeywords": [
+          "鲁莽",
+          "缺乏耐心",
+          "冲动",
+          "缺乏自制",
+          "延迟"
+        ],
+        "uprightMeaning": "行动、能量、冒险、冲动、热情、迅速的进展。权杖骑士是一个行动派，充满激情地追求目标。",
+        "reversedMeaning": "鲁莽、仓促、不计后果、延误、破坏性。暗示着冲动行事导致的问题。"
       },
       {
         "id": "queen_wands",
@@ -293,8 +769,22 @@
         "englishName": "Queen of Wands",
         "suit": "wands",
         "court": "queen",
-        "uprightKeywords": ["自信", "独立", "社交", "决心", "活力"],
-        "reversedKeywords": ["自私", "嫉妒", "不安全", "缺乏信心", "苛刻"]
+        "uprightKeywords": [
+          "自信",
+          "独立",
+          "社交",
+          "决心",
+          "活力"
+        ],
+        "reversedKeywords": [
+          "自私",
+          "嫉妒",
+          "不安全",
+          "缺乏信心",
+          "苛刻"
+        ],
+        "uprightMeaning": "自信、独立、领导力、魅力、热情、创意、鼓舞人心。权杖王后是一位充满魅力和自信的女性领袖。",
+        "reversedMeaning": "自私、嫉妒、操纵、专横、缺乏自信。暗示着情绪化或利用他人。"
       },
       {
         "id": "king_wands",
@@ -302,8 +792,22 @@
         "englishName": "King of Wands",
         "suit": "wands",
         "court": "king",
-        "uprightKeywords": ["领导力", "愿景", "企业家精神", "荣誉", "自信"],
-        "reversedKeywords": ["专制", "冲动", "缺乏耐心", "鲁莽", "缺乏自制"]
+        "uprightKeywords": [
+          "领导力",
+          "愿景",
+          "企业家精神",
+          "荣誉",
+          "自信"
+        ],
+        "reversedKeywords": [
+          "专制",
+          "冲动",
+          "缺乏耐心",
+          "鲁莽",
+          "缺乏自制"
+        ],
+        "uprightMeaning": "领导力、远见、创业、灵感、权威、掌控力。权杖国王代表着成熟的领导力和富有远见的行动力。",
+        "reversedMeaning": "冲动、攻击性、专横、暴躁、缺乏远见。暗示着独断专行或脾气暴躁。"
       }
     ],
     "cups": [
@@ -313,8 +817,22 @@
         "englishName": "Ace of Cups",
         "suit": "cups",
         "number": "ace",
-        "uprightKeywords": ["新关系", "同情", "直觉", "灵性", "爱"],
-        "reversedKeywords": ["情感封闭", "压抑感情", "直觉受阻", "缺乏同情", "空虚"]
+        "uprightKeywords": [
+          "新关系",
+          "同情",
+          "直觉",
+          "灵性",
+          "爱"
+        ],
+        "reversedKeywords": [
+          "情感封闭",
+          "压抑感情",
+          "直觉受阻",
+          "缺乏同情",
+          "空虚"
+        ],
+        "uprightMeaning": "新情感、灵性、直觉、爱、喜悦、新的开始。圣杯王牌象征着情感的满溢和爱的萌芽。",
+        "reversedMeaning": "情感损失、创造力受阻、空虚、压抑情感、爱与关系的挑战。暗示着情感的枯竭或受阻。"
       },
       {
         "id": "two_cups",
@@ -322,8 +840,22 @@
         "englishName": "Two of Cups",
         "suit": "cups",
         "number": 2,
-        "uprightKeywords": ["统一", "伙伴关系", "相互吸引", "关系", "连接"],
-        "reversedKeywords": ["不平衡关系", "缺乏和谐", "分离", "自爱", "分手"]
+        "uprightKeywords": [
+          "统一",
+          "伙伴关系",
+          "相互吸引",
+          "关系",
+          "连接"
+        ],
+        "reversedKeywords": [
+          "不平衡关系",
+          "缺乏和谐",
+          "分离",
+          "自爱",
+          "分手"
+        ],
+        "uprightMeaning": "团结、伙伴关系、连接、互惠、吸引力、和谐。圣杯二代表着平等的伙伴关系和情感连接。",
+        "reversedMeaning": "不平衡、沟通中断、紧张、分离、关系问题。暗示着关系中的不和谐或误解。"
       },
       {
         "id": "three_cups",
@@ -331,8 +863,22 @@
         "englishName": "Three of Cups",
         "suit": "cups",
         "number": 3,
-        "uprightKeywords": ["友谊", "社区", "庆祝", "创造力", "合作"],
-        "reversedKeywords": ["独立", "缺乏社交", "孤立", "缺乏创造力", "冲突"]
+        "uprightKeywords": [
+          "友谊",
+          "社区",
+          "庆祝",
+          "创造力",
+          "合作"
+        ],
+        "reversedKeywords": [
+          "独立",
+          "缺乏社交",
+          "孤立",
+          "缺乏创造力",
+          "冲突"
+        ],
+        "uprightMeaning": "庆祝、友谊、社区、团队合作、丰盛、共享喜悦。圣杯三象征着与朋友分享快乐和庆祝的时刻。",
+        "reversedMeaning": "过度放纵、八卦、缺乏隐私、冲突、疏远。暗示着社交圈的纷争或放纵。"
       },
       {
         "id": "four_cups",
@@ -340,8 +886,22 @@
         "englishName": "Four of Cups",
         "suit": "cups",
         "number": 4,
-        "uprightKeywords": ["冥想", "沉思", "冷漠", "重新评估", "无聊"],
-        "reversedKeywords": ["动机", "重新关注", "新能量", "新机会", "觉醒"]
+        "uprightKeywords": [
+          "冥想",
+          "沉思",
+          "冷漠",
+          "重新评估",
+          "无聊"
+        ],
+        "reversedKeywords": [
+          "动机",
+          "重新关注",
+          "新能量",
+          "新机会",
+          "觉醒"
+        ],
+        "uprightMeaning": "沉思、不满、冷漠、错失良机、重新评估、退缩。圣杯四代表着对通过情感的忽略和对现状的不满。",
+        "reversedMeaning": "重拾机会、新的视角、接受、热情、觉醒。暗示着从冷漠中走出来，抓住机会。"
       },
       {
         "id": "five_cups",
@@ -349,8 +909,22 @@
         "englishName": "Five of Cups",
         "suit": "cups",
         "number": 5,
-        "uprightKeywords": ["失望", "悲伤", "后悔", "悲伤", "损失"],
-        "reversedKeywords": ["接受", "前进", "宽恕", "恢复", "治愈"]
+        "uprightKeywords": [
+          "失望",
+          "悲伤",
+          "后悔",
+          "悲伤",
+          "损失"
+        ],
+        "reversedKeywords": [
+          "接受",
+          "前进",
+          "宽恕",
+          "恢复",
+          "治愈"
+        ],
+        "uprightMeaning": "失落、悲伤、遗憾、哀悼、后悔、沉溺于过去。圣杯五象征着专注于失去的，而忽略了留下的。",
+        "reversedMeaning": "接受损失、向前看、愈合、宽恕、寻找希望。暗示着走出悲伤，重新开始。"
       },
       {
         "id": "six_cups",
@@ -358,8 +932,22 @@
         "englishName": "Six of Cups",
         "suit": "cups",
         "number": 6,
-        "uprightKeywords": ["怀旧", "童年", "天真", "快乐", "重聚"],
-        "reversedKeywords": ["活在过去", "幼稚", "缺乏成长", "不切实际", "独立"]
+        "uprightKeywords": [
+          "怀旧",
+          "童年",
+          "天真",
+          "快乐",
+          "重聚"
+        ],
+        "reversedKeywords": [
+          "活在过去",
+          "幼稚",
+          "缺乏成长",
+          "不切实际",
+          "独立"
+        ],
+        "uprightMeaning": "怀旧、童年、回忆、纯真、礼物、旧情复燃。圣杯六代表着美好的回忆和纯真的快乐。",
+        "reversedMeaning": "沉溺于过去、失去纯真、未来恐惧、不愿放手。暗示着活在过去，无法由衷地面对未来。"
       },
       {
         "id": "seven_cups",
@@ -367,8 +955,22 @@
         "englishName": "Seven of Cups",
         "suit": "cups",
         "number": 7,
-        "uprightKeywords": ["幻觉", "选择", "愿望思维", "不切实际", "分散注意力"],
-        "reversedKeywords": ["对齐", "个人价值观", "专注", "现实", "决心"]
+        "uprightKeywords": [
+          "幻觉",
+          "选择",
+          "愿望思维",
+          "不切实际",
+          "分散注意力"
+        ],
+        "reversedKeywords": [
+          "对齐",
+          "个人价值观",
+          "专注",
+          "现实",
+          "决心"
+        ],
+        "uprightMeaning": "选择、幻想、白日梦、诱惑、迷惑、多种可能性。圣杯七象征着面临许多选择，但需警惕幻象。",
+        "reversedMeaning": "清晰、现实、目标明确、做出决定、面对现实。暗示着看清真相，做出实际的选择。"
       },
       {
         "id": "eight_cups",
@@ -376,8 +978,22 @@
         "englishName": "Eight of Cups",
         "suit": "cups",
         "number": 8,
-        "uprightKeywords": ["失望", "放弃", "寻求真理", "离开", "撤退"],
-        "reversedKeywords": ["恐惧离开", "避免失望", "恐惧变化", "接受现状", "停滞"]
+        "uprightKeywords": [
+          "失望",
+          "放弃",
+          "寻求真理",
+          "离开",
+          "撤退"
+        ],
+        "reversedKeywords": [
+          "恐惧离开",
+          "避免失望",
+          "恐惧变化",
+          "接受现状",
+          "停滞"
+        ],
+        "uprightMeaning": "放弃、离开、寻求更深意义、失望、精神追求、寻找真相。圣杯八代表着为了寻找更高的追求而放弃物质的满足。",
+        "reversedMeaning": "犹豫不决、退缩、害怕离开、留在不满意的境地。暗示着害怕改变或无法下定决心离开。"
       },
       {
         "id": "nine_cups",
@@ -385,8 +1001,22 @@
         "englishName": "Nine of Cups",
         "suit": "cups",
         "number": 9,
-        "uprightKeywords": ["满足", "快乐", "满意", "奢华", "自满"],
-        "reversedKeywords": ["内在快乐", "物质主义", "不满", "贪婪", "自满"]
+        "uprightKeywords": [
+          "满足",
+          "快乐",
+          "满意",
+          "奢华",
+          "自满"
+        ],
+        "reversedKeywords": [
+          "内在快乐",
+          "物质主义",
+          "不满",
+          "贪婪",
+          "自满"
+        ],
+        "uprightMeaning": "愿望实现、满足、享乐、幸福、自给自足、成功。圣杯九是一张许愿牌，代表着情感和感官的满足。",
+        "reversedMeaning": "不满足、过度放纵、空虚、虚荣、未实现的愿望。暗示着虽然拥有物质但内心空虚。"
       },
       {
         "id": "ten_cups",
@@ -394,8 +1024,22 @@
         "englishName": "Ten of Cups",
         "suit": "cups",
         "number": 10,
-        "uprightKeywords": ["情感满足", "快乐", "和谐", "对齐", "家庭"],
-        "reversedKeywords": ["家庭冲突", "缺乏和谐", "价值观不一致", "不快乐", "分离"]
+        "uprightKeywords": [
+          "情感满足",
+          "快乐",
+          "和谐",
+          "对齐",
+          "家庭"
+        ],
+        "reversedKeywords": [
+          "家庭冲突",
+          "缺乏和谐",
+          "价值观不一致",
+          "不快乐",
+          "分离"
+        ],
+        "uprightMeaning": "家庭幸福、和谐、圆满、情感满足、社区、祝福。圣杯十代表着情感的极致满足和家庭的和谐。",
+        "reversedMeaning": "家庭不和、情感缺失、破裂的关系、不幸福、冲突。暗示着家庭内部的矛盾或情感的疏离。"
       },
       {
         "id": "page_cups",
@@ -403,8 +1047,22 @@
         "englishName": "Page of Cups",
         "suit": "cups",
         "court": "page",
-        "uprightKeywords": ["创造性机会", "直觉信息", "好奇心", "可能性", "直觉发展"],
-        "reversedKeywords": ["新项目", "缺乏目的", "逃避现实", "创造力受阻", "情绪不成熟"]
+        "uprightKeywords": [
+          "创造性机会",
+          "直觉信息",
+          "好奇心",
+          "可能性",
+          "直觉发展"
+        ],
+        "reversedKeywords": [
+          "新项目",
+          "缺乏目的",
+          "逃避现实",
+          "创造力受阻",
+          "情绪不成熟"
+        ],
+        "uprightMeaning": "情感消息、直觉、创造力、新情感、邀请、敏感。圣杯侍从是一个充满梦想和直觉的信使。",
+        "reversedMeaning": "情感阻碍、坏消息、不成熟、欺骗、艺术性受阻。暗示着情绪不稳定或不愉快的消息。"
       },
       {
         "id": "knight_cups",
@@ -412,8 +1070,22 @@
         "englishName": "Knight of Cups",
         "suit": "cups",
         "court": "knight",
-        "uprightKeywords": ["浪漫", "魅力", "想象力", "情绪化", "理想主义"],
-        "reversedKeywords": ["喜怒无常", "不切实际", "嫉妒", "过度情绪化", "缺乏目标"]
+        "uprightKeywords": [
+          "浪漫",
+          "魅力",
+          "想象力",
+          "情绪化",
+          "理想主义"
+        ],
+        "reversedKeywords": [
+          "喜怒无常",
+          "不切实际",
+          "嫉妒",
+          "过度情绪化",
+          "缺乏目标"
+        ],
+        "uprightMeaning": "浪漫、提案、邀请、直觉、魅力、情感表达。圣杯骑士是一个浪漫的追求者，遵循内心的指引。",
+        "reversedMeaning": "欺骗、幻想、失望、不切实际、情绪化、被动。暗示着不切实际的幻想或情绪化的行为。"
       },
       {
         "id": "queen_cups",
@@ -421,8 +1093,22 @@
         "englishName": "Queen of Cups",
         "suit": "cups",
         "court": "queen",
-        "uprightKeywords": ["同情", "关怀", "情感安全", "直觉", "敏感"],
-        "reversedKeywords": ["情感不安全", "缺乏同情", "情绪化", "依赖", "殉道者"]
+        "uprightKeywords": [
+          "同情",
+          "关怀",
+          "情感安全",
+          "直觉",
+          "敏感"
+        ],
+        "reversedKeywords": [
+          "情感不安全",
+          "缺乏同情",
+          "情绪化",
+          "依赖",
+          "殉道者"
+        ],
+        "uprightMeaning": "同情、直觉、滋养、情感支持、梦想、艺术性。圣杯王后是一位温柔、富有同情心和直觉的女性。",
+        "reversedMeaning": "情感依赖、不安全感、情绪波动、操纵、自我牺牲。暗示着情绪过度敏感或依赖他人。"
       },
       {
         "id": "king_cups",
@@ -430,8 +1116,22 @@
         "englishName": "King of Cups",
         "suit": "cups",
         "court": "king",
-        "uprightKeywords": ["情感平衡", "同情", "外交", "平静", "奉献"],
-        "reversedKeywords": ["情感操控", "喜怒无常", "缺乏同情", "冷漠", "自我中心"]
+        "uprightKeywords": [
+          "情感平衡",
+          "同情",
+          "外交",
+          "平静",
+          "奉献"
+        ],
+        "reversedKeywords": [
+          "情感操控",
+          "喜怒无常",
+          "缺乏同情",
+          "冷漠",
+          "自我中心"
+        ],
+        "uprightMeaning": "情感平衡、控制、同情、智慧、外交、成熟。圣杯国王代表着情感的成熟和控制力。",
+        "reversedMeaning": "情绪失衡、操纵、冷漠、压抑情感、逃避责任。暗示着情绪失控或情感冷漠。"
       }
     ],
     "swords": [
@@ -441,8 +1141,22 @@
         "englishName": "Ace of Swords",
         "suit": "swords",
         "number": "ace",
-        "uprightKeywords": ["新想法", "心理清晰", "突破", "新沟通", "灵感"],
-        "reversedKeywords": ["混乱", "缺乏清晰", "误解", "暴力", "残酷"]
+        "uprightKeywords": [
+          "新想法",
+          "心理清晰",
+          "突破",
+          "新沟通",
+          "灵感"
+        ],
+        "reversedKeywords": [
+          "混乱",
+          "缺乏清晰",
+          "误解",
+          "暴力",
+          "残酷"
+        ],
+        "uprightMeaning": "突破、清晰、敏锐思维、新想法、真理、胜利。宝剑王牌象征着思想的突破和清晰的认知。",
+        "reversedMeaning": "混乱、暴力、误解、思想阻塞、滥用力量。暗示着思维混乱或沟通不畅。"
       },
       {
         "id": "two_swords",
@@ -450,8 +1164,22 @@
         "englishName": "Two of Swords",
         "suit": "swords",
         "number": 2,
-        "uprightKeywords": ["困难决定", "权衡选择", "犹豫不决", "平衡", "停滞"],
-        "reversedKeywords": ["决心", "做出选择", "混乱", "信息过载", "犹豫"]
+        "uprightKeywords": [
+          "困难决定",
+          "权衡选择",
+          "犹豫不决",
+          "平衡",
+          "停滞"
+        ],
+        "reversedKeywords": [
+          "决心",
+          "做出选择",
+          "混乱",
+          "信息过载",
+          "犹豫"
+        ],
+        "uprightMeaning": "艰难的选择、优柔寡断、僵局、平衡、逃避真相。宝剑二代表着处于两难境地，暂时维持脆弱的平衡。",
+        "reversedMeaning": "困惑、真相暴露、两害相权取其轻、没有正确的选择。暗示着僵局被打破，不得不做出选择。"
       },
       {
         "id": "three_swords",
@@ -459,8 +1187,22 @@
         "englishName": "Three of Swords",
         "suit": "swords",
         "number": 3,
-        "uprightKeywords": ["心碎", "悲伤", "背叛", "分离", "悲伤"],
-        "reversedKeywords": ["恢复", "宽恕", "前进", "释放痛苦", "治愈"]
+        "uprightKeywords": [
+          "心碎",
+          "悲伤",
+          "背叛",
+          "分离",
+          "悲伤"
+        ],
+        "reversedKeywords": [
+          "恢复",
+          "宽恕",
+          "前进",
+          "释放痛苦",
+          "治愈"
+        ],
+        "uprightMeaning": "心碎、悲伤、分离、失落、背叛、痛苦的真相。宝剑三象征着情感上的痛苦和伤害。",
+        "reversedMeaning": "接受痛苦、恢复、克服悲伤、释放、和解。暗示着从痛苦中恢复，开始愈合。"
       },
       {
         "id": "four_swords",
@@ -468,8 +1210,22 @@
         "englishName": "Four of Swords",
         "suit": "swords",
         "number": 4,
-        "uprightKeywords": ["休息", "恢复", "冥想", "沉思", "被动"],
-        "reversedKeywords": ["恢复活力", "觉醒", "重新思考", "活动", "不安"]
+        "uprightKeywords": [
+          "休息",
+          "恢复",
+          "冥想",
+          "沉思",
+          "被动"
+        ],
+        "reversedKeywords": [
+          "恢复活力",
+          "觉醒",
+          "重新思考",
+          "活动",
+          "不安"
+        ],
+        "uprightMeaning": "休息、恢复、冥想、隐退、充电、平静。宝剑四建议你暂时从冲突中撤退，修养身心。",
+        "reversedMeaning": "不安、倦怠、恢复中断、需要行动、焦虑。暗示着休息被打断或需要重新投入行动。"
       },
       {
         "id": "five_swords",
@@ -477,8 +1233,22 @@
         "englishName": "Five of Swords",
         "suit": "swords",
         "number": 5,
-        "uprightKeywords": ["冲突", "分歧", "竞争", "失败", "胜利"],
-        "reversedKeywords": ["和解", "原谅", "前进", "释放冲突", "妥协"]
+        "uprightKeywords": [
+          "冲突",
+          "分歧",
+          "竞争",
+          "失败",
+          "胜利"
+        ],
+        "reversedKeywords": [
+          "和解",
+          "原谅",
+          "前进",
+          "释放冲突",
+          "妥协"
+        ],
+        "uprightMeaning": "冲突、失败、羞辱、损失、背叛、不公平的胜利。宝剑五代表着空洞的胜利，赢了面子输了里子。",
+        "reversedMeaning": "和解、沟通、放下冲突、寻求解决方案、避免进一步损失。暗示着从冲突中走出来，寻求和平。"
       },
       {
         "id": "six_swords",
@@ -486,8 +1256,22 @@
         "englishName": "Six of Swords",
         "suit": "swords",
         "number": 6,
-        "uprightKeywords": ["过渡", "变化", "仪式通道", "释放", "前进"],
-        "reversedKeywords": ["个人过渡", "抵抗变化", "未解决的问题", "停滞", "重复模式"]
+        "uprightKeywords": [
+          "过渡",
+          "变化",
+          "仪式通道",
+          "释放",
+          "前进"
+        ],
+        "reversedKeywords": [
+          "个人过渡",
+          "抵抗变化",
+          "未解决的问题",
+          "停滞",
+          "重复模式"
+        ],
+        "uprightMeaning": "过渡、离开、克服困难、寻求平静、旅程、移动。宝剑六象征着带着淡淡的忧伤离开困难的局面。",
+        "reversedMeaning": "困境、停滞、拒绝改变、未能摆脱困境、抵抗。暗示着无法摆脱过去的阴影或困难重重。"
       },
       {
         "id": "seven_swords",
@@ -495,8 +1279,22 @@
         "englishName": "Seven of Swords",
         "suit": "swords",
         "number": 7,
-        "uprightKeywords": ["欺骗", "盗窃", "逃避", "策略", "孤独行动"],
-        "reversedKeywords": ["冲动", "承担责任", "诚实", "团队合作", "良心"]
+        "uprightKeywords": [
+          "欺骗",
+          "盗窃",
+          "逃避",
+          "策略",
+          "孤独行动"
+        ],
+        "reversedKeywords": [
+          "冲动",
+          "承担责任",
+          "诚实",
+          "团队合作",
+          "良心"
+        ],
+        "uprightMeaning": "欺骗、偷偷摸摸、不诚实、策略、隐藏、秘密行动。宝剑七代表着使用计谋或欺骗来达到目的。",
+        "reversedMeaning": "真相暴露、面对后果、忏悔、诚实、承认错误。暗示着谎言被揭穿或决心改过自新。"
       },
       {
         "id": "eight_swords",
@@ -504,8 +1302,22 @@
         "englishName": "Eight of Swords",
         "suit": "swords",
         "number": 8,
-        "uprightKeywords": ["限制", "陷阱", "受害者心态", "自我限制", "负面思维"],
-        "reversedKeywords": ["自我接受", "新视角", "自由", "释放", "开放思维"]
+        "uprightKeywords": [
+          "限制",
+          "陷阱",
+          "受害者心态",
+          "自我限制",
+          "负面思维"
+        ],
+        "reversedKeywords": [
+          "自我接受",
+          "新视角",
+          "自由",
+          "释放",
+          "开放思维"
+        ],
+        "uprightMeaning": "束缚、限制、恐惧、自我囚禁、无助、受害者心态。宝剑八象征着思想上的自我限制和困境。",
+        "reversedMeaning": "解放、发现自由、打破限制、面对恐惧、寻求帮助。暗示着打破思想的牢笼，重获自由。"
       },
       {
         "id": "nine_swords",
@@ -513,8 +1325,22 @@
         "englishName": "Nine of Swords",
         "suit": "swords",
         "number": 9,
-        "uprightKeywords": ["焦虑", "担忧", "恐惧", "抑郁", "噩梦"],
-        "reversedKeywords": ["内在动荡", "释放焦虑", "治愈", "希望", "寻求帮助"]
+        "uprightKeywords": [
+          "焦虑",
+          "担忧",
+          "恐惧",
+          "抑郁",
+          "噩梦"
+        ],
+        "reversedKeywords": [
+          "内在动荡",
+          "释放焦虑",
+          "治愈",
+          "希望",
+          "寻求帮助"
+        ],
+        "uprightMeaning": "焦虑、担忧、噩梦、绝望、失眠、恐惧、心理压力。宝剑九代表着内心的恐惧和焦虑导致的痛苦。",
+        "reversedMeaning": "释放焦虑、面对恐惧、寻求帮助、恢复、极度压力。暗示着从绝望中寻找希望，或恐惧的减轻。"
       },
       {
         "id": "ten_swords",
@@ -522,8 +1348,22 @@
         "englishName": "Ten of Swords",
         "suit": "swords",
         "number": 10,
-        "uprightKeywords": ["痛苦结束", "背叛", "损失", "崩溃", "受害"],
-        "reversedKeywords": ["恢复", "重生", "学习", "宽恕", "前进"]
+        "uprightKeywords": [
+          "痛苦结束",
+          "背叛",
+          "损失",
+          "崩溃",
+          "受害"
+        ],
+        "reversedKeywords": [
+          "恢复",
+          "重生",
+          "学习",
+          "宽恕",
+          "前进"
+        ],
+        "uprightMeaning": "痛苦的结局、重伤、被背叛、丧失、结束、疲倦。宝剑十代表着黎明前的黑暗，彻底的结束。",
+        "reversedMeaning": "新生、复苏、缓慢的恢复、幸存、从谷底反弹。暗示着最坏的时期已经过去，开始重生。"
       },
       {
         "id": "page_swords",
@@ -531,8 +1371,22 @@
         "englishName": "Page of Swords",
         "suit": "swords",
         "court": "page",
-        "uprightKeywords": ["新想法", "好奇心", "交流", "警觉", "监视"],
-        "reversedKeywords": ["缺乏计划", "散布谣言", "所有谈话没有行动", "缺乏想法", "封闭思维"]
+        "uprightKeywords": [
+          "新想法",
+          "好奇心",
+          "交流",
+          "警觉",
+          "监视"
+        ],
+        "reversedKeywords": [
+          "缺乏计划",
+          "散布谣言",
+          "所有谈话没有行动",
+          "缺乏想法",
+          "封闭思维"
+        ],
+        "uprightMeaning": "好奇、警觉、刺探、思维敏捷、学习、沟通。宝剑侍从是一个充满好奇心和敏锐观察力的学习者。",
+        "reversedMeaning": "欺骗、多嘴、空想、不可靠、计划落空。暗示着只有言语没有行动，或散布流言。"
       },
       {
         "id": "knight_swords",
@@ -540,8 +1394,22 @@
         "englishName": "Knight of Swords",
         "suit": "swords",
         "court": "knight",
-        "uprightKeywords": ["雄心", "行动", "冲动", "冲动", "不耐烦"],
-        "reversedKeywords": ["鲁莽", "缺乏计划", "冲动", "侵略", "不考虑后果"]
+        "uprightKeywords": [
+          "雄心",
+          "行动",
+          "冲动",
+          "冲动",
+          "不耐烦"
+        ],
+        "reversedKeywords": [
+          "鲁莽",
+          "缺乏计划",
+          "冲动",
+          "侵略",
+          "不考虑后果"
+        ],
+        "uprightMeaning": "强势、急躁、行动力强、勇敢、冲动、野心勃勃。宝剑骑士代表着迅速、果断甚至鲁莽的行动。",
+        "reversedMeaning": "鲁莽、不计后果、攻击性、错误的方向、混乱。暗示着冲动导致的问题或行动受阻。"
       },
       {
         "id": "queen_swords",
@@ -549,8 +1417,22 @@
         "englishName": "Queen of Swords",
         "suit": "swords",
         "court": "queen",
-        "uprightKeywords": ["独立", "公正", "清晰思维", "直接沟通", "原则"],
-        "reversedKeywords": ["冷酷", "残酷", "苦涩", "缺乏同情", "严厉"]
+        "uprightKeywords": [
+          "独立",
+          "公正",
+          "清晰思维",
+          "直接沟通",
+          "原则"
+        ],
+        "reversedKeywords": [
+          "冷酷",
+          "残酷",
+          "苦涩",
+          "缺乏同情",
+          "严厉"
+        ],
+        "uprightMeaning": "独立自主、智慧、清晰洞察、公正、理性、言语犀利。宝剑王后是一位理性、独立且不带偏见的女性。",
+        "reversedMeaning": "冷酷、刻薄、报复心、过于理智、情感封闭。暗示着过于尖刻或利用智慧伤害他人。"
       },
       {
         "id": "king_swords",
@@ -558,8 +1440,22 @@
         "englishName": "King of Swords",
         "suit": "swords",
         "court": "king",
-        "uprightKeywords": ["心理清晰", "智力力量", "权威", "真理", "清晰沟通"],
-        "reversedKeywords": ["安静力量", "内在真理", "误用力量", "残酷", "弱点"]
+        "uprightKeywords": [
+          "心理清晰",
+          "智力力量",
+          "权威",
+          "真理",
+          "清晰沟通"
+        ],
+        "reversedKeywords": [
+          "安静力量",
+          "内在真理",
+          "误用力量",
+          "残酷",
+          "弱点"
+        ],
+        "uprightMeaning": "头脑清晰、智慧过人、权威专家、权力、威权、决断。宝剑国王代表着最高的理性权威和公正的判断。",
+        "reversedMeaning": "残暴、滥用权力、操纵、非理性、专制。暗示着利用智慧进行操纵或令人窒息的控制。"
       }
     ],
     "pentacles": [
@@ -569,8 +1465,22 @@
         "englishName": "Ace of Pentacles",
         "suit": "pentacles",
         "number": "ace",
-        "uprightKeywords": ["新财务机会", "表现", "丰富", "繁荣", "安全"],
-        "reversedKeywords": ["失去机会", "缺乏计划", "稀缺", "缺乏远见", "贫穷心态"]
+        "uprightKeywords": [
+          "新财务机会",
+          "表现",
+          "丰富",
+          "繁荣",
+          "安全"
+        ],
+        "reversedKeywords": [
+          "失去机会",
+          "缺乏计划",
+          "稀缺",
+          "缺乏远见",
+          "贫穷心态"
+        ],
+        "uprightMeaning": "新的开始、机遇、稳定、物质成功、财富、投资。星币王牌象征着物质财富和实际机遇的赠予。",
+        "reversedMeaning": "错失良机、贪婪、资源流失、财务不稳定、缺乏计划。暗示着金钱的损失或错失投资机会。"
       },
       {
         "id": "two_pentacles",
@@ -578,8 +1488,22 @@
         "englishName": "Two of Pentacles",
         "suit": "pentacles",
         "number": 2,
-        "uprightKeywords": ["多重优先级", "时间管理", "优先级", "适应性", "资源管理"],
-        "reversedKeywords": ["失去平衡", "混乱", "压倒性", "过度承诺", "缺乏组织"]
+        "uprightKeywords": [
+          "多重优先级",
+          "时间管理",
+          "优先级",
+          "适应性",
+          "资源管理"
+        ],
+        "reversedKeywords": [
+          "失去平衡",
+          "混乱",
+          "压倒性",
+          "过度承诺",
+          "缺乏组织"
+        ],
+        "uprightMeaning": "平衡、选择、决策、合作、优先选择、适应。星币二代表着在变动中维持平衡，灵活应对。",
+        "reversedMeaning": "失衡、混乱、财务管理不善、不堪重负、缺乏组织。暗示着无法应对压力，生活失去平衡。"
       },
       {
         "id": "three_pentacles",
@@ -587,8 +1511,22 @@
         "englishName": "Three of Pentacles",
         "suit": "pentacles",
         "number": 3,
-        "uprightKeywords": ["团队合作", "合作", "学习", "实施", "建设"],
-        "reversedKeywords": ["缺乏团队合作", "缺乏技能", "缺乏合作", "竞争", "冲突"]
+        "uprightKeywords": [
+          "团队合作",
+          "合作",
+          "学习",
+          "实施",
+          "建设"
+        ],
+        "reversedKeywords": [
+          "缺乏团队合作",
+          "缺乏技能",
+          "缺乏合作",
+          "竞争",
+          "冲突"
+        ],
+        "uprightMeaning": "团结、合作、成长、共享、成功、学习。星币三象征着团队合作和专业技能的认可。",
+        "reversedMeaning": "缺乏团队精神、工作不力、竞争对立、缺乏技能。暗示着团队协作的问题或工作质量不佳。"
       },
       {
         "id": "four_pentacles",
@@ -596,8 +1534,22 @@
         "englishName": "Four of Pentacles",
         "suit": "pentacles",
         "number": 4,
-        "uprightKeywords": ["储蓄", "安全", "保守主义", "稀缺", "控制"],
-        "reversedKeywords": ["过度消费", "贪婪", "自私", "财务不安全", "慷慨"]
+        "uprightKeywords": [
+          "储蓄",
+          "安全",
+          "保守主义",
+          "稀缺",
+          "控制"
+        ],
+        "reversedKeywords": [
+          "过度消费",
+          "贪婪",
+          "自私",
+          "财务不安全",
+          "慷慨"
+        ],
+        "uprightMeaning": "省钱、安全、保守、节俭、管理、占有欲。星币四代表着对物质财富的固守和稳定。",
+        "reversedMeaning": "贪婪、挥霍、不安全感、阻碍流通、吝啬。暗示着对金钱的过度执着或财务管理不当。"
       },
       {
         "id": "five_pentacles",
@@ -605,8 +1557,22 @@
         "englishName": "Five of Pentacles",
         "suit": "pentacles",
         "number": 5,
-        "uprightKeywords": ["财务损失", "贫困", "缺乏", "不安全", "孤立"],
-        "reversedKeywords": ["财务恢复", "精神贫困", "内在资源", "改善", "积极变化"]
+        "uprightKeywords": [
+          "财务损失",
+          "贫困",
+          "缺乏",
+          "不安全",
+          "孤立"
+        ],
+        "reversedKeywords": [
+          "财务恢复",
+          "精神贫困",
+          "内在资源",
+          "改善",
+          "积极变化"
+        ],
+        "uprightMeaning": "贫困、财务困难、损失、孤立、困境、低潮。星币五象征着物质或精神上的贫瘠和困难。",
+        "reversedMeaning": "复苏、改变、恢复、结束艰难、帮助、新方向。暗示着困难时期的结束和希望的曙光。"
       },
       {
         "id": "six_pentacles",
@@ -614,8 +1580,22 @@
         "englishName": "Six of Pentacles",
         "suit": "pentacles",
         "number": 6,
-        "uprightKeywords": ["慷慨", "慈善", "分享", "公平", "社区"],
-        "reversedKeywords": ["自私", "债务", "单向关系", "腐败", "贪婪"]
+        "uprightKeywords": [
+          "慷慨",
+          "慈善",
+          "分享",
+          "公平",
+          "社区"
+        ],
+        "reversedKeywords": [
+          "自私",
+          "债务",
+          "单向关系",
+          "腐败",
+          "贪婪"
+        ],
+        "uprightMeaning": "给予、付出、捐赠、接受、分享财富、慷慨。星币六代表着慷慨地给予或接受帮助，维持平衡。",
+        "reversedMeaning": "自私、债务、不平等、滥用慷慨、嫉妒。暗示着给予的一方别有用心或接受的一方产生依赖。"
       },
       {
         "id": "seven_pentacles",
@@ -623,8 +1603,22 @@
         "englishName": "Seven of Pentacles",
         "suit": "pentacles",
         "number": 7,
-        "uprightKeywords": ["长期视角", "毅力", "投资", "辛苦工作", "耐心"],
-        "reversedKeywords": ["缺乏长期视角", "有限成功", "缺乏回报", "不耐烦", "缺乏毅力"]
+        "uprightKeywords": [
+          "长期视角",
+          "毅力",
+          "投资",
+          "辛苦工作",
+          "耐心"
+        ],
+        "reversedKeywords": [
+          "缺乏长期视角",
+          "有限成功",
+          "缺乏回报",
+          "不耐烦",
+          "缺乏毅力"
+        ],
+        "uprightMeaning": "着眼长远、持之以恒、耐心、计划、策略、等待回报。星币七象征着辛勤耕耘后的耐心等待和评估。",
+        "reversedMeaning": "未完成的工作、拖延、浪费、缺乏成长、挫折。暗示着努力没有回报或半途而废。"
       },
       {
         "id": "eight_pentacles",
@@ -632,8 +1626,22 @@
         "englishName": "Eight of Pentacles",
         "suit": "pentacles",
         "number": 8,
-        "uprightKeywords": ["学徒制", "重复练习", "技能发展", "质量", "高标准"],
-        "reversedKeywords": ["缺乏专注", "缺乏质量", "缺乏技能", "完美主义", "缺乏动机"]
+        "uprightKeywords": [
+          "学徒制",
+          "重复练习",
+          "技能发展",
+          "质量",
+          "高标准"
+        ],
+        "reversedKeywords": [
+          "缺乏专注",
+          "缺乏质量",
+          "缺乏技能",
+          "完美主义",
+          "缺乏动机"
+        ],
+        "uprightMeaning": "自我发展、学徒、精通、技能、专注、成果。星币八代表着专注于细节和技能的打磨。",
+        "reversedMeaning": "粗心、缺乏专注、懒散、敷衍、过度完美主义。暗示着工作缺乏热情或过于拘泥于细节。"
       },
       {
         "id": "nine_pentacles",
@@ -641,8 +1649,22 @@
         "englishName": "Nine of Pentacles",
         "suit": "pentacles",
         "number": 9,
-        "uprightKeywords": ["丰富", "奢华", "自给自足", "财务独立", "优雅"],
-        "reversedKeywords": ["财务依赖", "缺乏自制", "过度消费", "财务挫折", "缺乏远见"]
+        "uprightKeywords": [
+          "丰富",
+          "奢华",
+          "自给自足",
+          "财务独立",
+          "优雅"
+        ],
+        "reversedKeywords": [
+          "财务依赖",
+          "缺乏自制",
+          "过度消费",
+          "财务挫折",
+          "缺乏远见"
+        ],
+        "uprightMeaning": "丰衣足食、丰富、富庶、自给自足、财务自由、享受生活。星币九象征着通过努力获得的成功和优雅的生活。",
+        "reversedMeaning": "浪费、虚度、迷恋、财务依赖、表面光鲜。暗示着过度依赖他人或物质上的虚荣。"
       },
       {
         "id": "ten_pentacles",
@@ -650,8 +1672,22 @@
         "englishName": "Ten of Pentacles",
         "suit": "pentacles",
         "number": 10,
-        "uprightKeywords": ["财富", "财务安全", "家庭", "长期成功", "贡献"],
-        "reversedKeywords": ["财务失败", "缺乏稳定", "缺乏长期视角", "家庭冲突", "财务损失"]
+        "uprightKeywords": [
+          "财富",
+          "财务安全",
+          "家庭",
+          "长期成功",
+          "贡献"
+        ],
+        "reversedKeywords": [
+          "财务失败",
+          "缺乏稳定",
+          "缺乏长期视角",
+          "家庭冲突",
+          "财务损失"
+        ],
+        "uprightMeaning": "富裕、物质成功、家庭、遗产、财富、持久性。星币十代表着家族的繁荣和长久的物质安全。",
+        "reversedMeaning": "家庭不和、金钱纠纷、经济损失、遗产问题、不稳固。暗示着家庭内部因金钱产生的矛盾。"
       },
       {
         "id": "page_pentacles",
@@ -659,8 +1695,22 @@
         "englishName": "Page of Pentacles",
         "suit": "pentacles",
         "court": "page",
-        "uprightKeywords": ["表现", "财务机会", "技能发展", "目标", "雄心"],
-        "reversedKeywords": ["缺乏进展", "缺乏承诺", "缺乏目标", "坏消息", "懒惰"]
+        "uprightKeywords": [
+          "表现",
+          "财务机会",
+          "技能发展",
+          "目标",
+          "雄心"
+        ],
+        "reversedKeywords": [
+          "缺乏进展",
+          "缺乏承诺",
+          "缺乏目标",
+          "坏消息",
+          "懒惰"
+        ],
+        "uprightMeaning": "显现、表现、投资机会、技能发展、勤奋、务实。星币侍从是一个勤奋务实、渴望学习新技能的学生。",
+        "reversedMeaning": "懒惰、浪费资源、缺乏专注、不切实际、错失机会。暗示着缺乏进取心或未能把握机会。"
       },
       {
         "id": "knight_pentacles",
@@ -668,8 +1718,22 @@
         "englishName": "Knight of Pentacles",
         "suit": "pentacles",
         "court": "knight",
-        "uprightKeywords": ["效率", "辛苦工作", "责任", "例行公事", "保守主义"],
-        "reversedKeywords": ["自我纪律", "无聊", "挫折", "缺乏进展", "完美主义"]
+        "uprightKeywords": [
+          "效率",
+          "辛苦工作",
+          "责任",
+          "例行公事",
+          "保守主义"
+        ],
+        "reversedKeywords": [
+          "自我纪律",
+          "无聊",
+          "挫折",
+          "缺乏进展",
+          "完美主义"
+        ],
+        "uprightMeaning": "勤奋工作、高效、规律、保守、稳健、可靠。星币骑士是一个可靠、勤奋且按部就班的建设者。",
+        "reversedMeaning": "停滞、懒惰、固执、缺乏野心、工作狂。暗示着过于死板或缺乏灵活性。"
       },
       {
         "id": "queen_pentacles",
@@ -677,8 +1741,22 @@
         "englishName": "Queen of Pentacles",
         "suit": "pentacles",
         "court": "queen",
-        "uprightKeywords": ["养育", "实用", "提供安全", "工作与家庭", "足智多谋"],
-        "reversedKeywords": ["工作与家庭冲突", "忽视", "缺乏资源", "自私", "不信任"]
+        "uprightKeywords": [
+          "养育",
+          "实用",
+          "提供安全",
+          "工作与家庭",
+          "足智多谋"
+        ],
+        "reversedKeywords": [
+          "工作与家庭冲突",
+          "忽视",
+          "缺乏资源",
+          "自私",
+          "不信任"
+        ],
+        "uprightMeaning": "温暖、丰饶、职业女性、务实、滋养、安全感。星币王后是一位务实、慷慨且善于照顾他人的女性。",
+        "reversedMeaning": "依赖、财务混乱、物质主义、缺乏自我照顾、窒息。暗示着过于关注物质或忽略精神需求。"
       },
       {
         "id": "king_pentacles",
@@ -686,8 +1764,22 @@
         "englishName": "King of Pentacles",
         "suit": "pentacles",
         "court": "king",
-        "uprightKeywords": ["财务成功", "商业头脑", "安全", "纪律", "丰富"],
-        "reversedKeywords": ["财务不负责任", "顽固", "便宜", "腐败", "贪婪"]
+        "uprightKeywords": [
+          "财务成功",
+          "商业头脑",
+          "安全",
+          "纪律",
+          "丰富"
+        ],
+        "reversedKeywords": [
+          "财务不负责任",
+          "顽固",
+          "便宜",
+          "腐败",
+          "贪婪"
+        ],
+        "uprightMeaning": "丰富、繁荣、安全、雄心勃勃、可靠、掌控。星币国王代表着事业的成功和稳固的财富地位。",
+        "reversedMeaning": "贪婪、物质主义、挥霍、固执、专制。暗示着对金钱的贪婪或利用财富控制他人。"
       }
     ]
   }

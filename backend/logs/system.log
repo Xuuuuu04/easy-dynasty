@@ -1,31 +1,57 @@
-2026-01-21 03:05:09,392 [INFO] [main] OPTIONS /api/v1/auth/users/me - 200 - 1.36ms
-2026-01-21 03:05:09,400 [INFO] [main] OPTIONS /api/v1/auth/users/me - 200 - 8.21ms
-2026-01-21 03:05:09,437 [INFO] [main] GET /api/v1/auth/users/me - 200 - 18.50ms
-2026-01-21 03:05:09,437 [INFO] [main] GET /api/v1/auth/users/me - 200 - 18.32ms
-2026-01-21 03:05:09,455 [INFO] [main] OPTIONS /api/v1/admin/stats - 200 - 1.13ms
-2026-01-21 03:05:09,456 [INFO] [main] OPTIONS /api/v1/admin/stats - 200 - 1.41ms
-2026-01-21 03:05:09,472 [INFO] [main] GET /api/v1/admin/stats - 200 - 11.05ms
-2026-01-21 03:05:09,473 [INFO] [main] GET /api/v1/admin/stats - 200 - 6.91ms
-2026-01-21 03:05:11,082 [INFO] [main] OPTIONS /api/v1/admin/users - 200 - 0.54ms
-2026-01-21 03:05:11,083 [INFO] [main] GET /api/v1/auth/users/me - 200 - 6.93ms
-2026-01-21 03:05:11,086 [INFO] [main] OPTIONS /api/v1/admin/users - 200 - 0.56ms
-2026-01-21 03:05:11,114 [INFO] [main] GET /api/v1/admin/users - 200 - 24.23ms
-2026-01-21 03:05:11,116 [INFO] [main] GET /api/v1/admin/users - 200 - 8.76ms
-2026-01-21 03:05:14,517 [INFO] [main] OPTIONS /api/v1/admin/orders - 200 - 0.57ms
-2026-01-21 03:05:14,518 [INFO] [main] OPTIONS /api/v1/admin/orders - 200 - 1.27ms
-2026-01-21 03:05:14,530 [INFO] [main] GET /api/v1/auth/users/me - 200 - 14.64ms
-2026-01-21 03:05:14,539 [INFO] [main] GET /api/v1/admin/orders - 200 - 8.28ms
-2026-01-21 03:05:14,544 [INFO] [main] GET /api/v1/admin/orders - 200 - 4.33ms
-2026-01-21 03:05:16,638 [INFO] [main] OPTIONS /api/v1/admin/logs - 200 - 0.50ms
-2026-01-21 03:05:16,638 [INFO] [main] OPTIONS /api/v1/admin/logs - 200 - 1.13ms
-2026-01-21 03:05:16,645 [INFO] [main] GET /api/v1/auth/users/me - 200 - 8.82ms
-2026-01-21 03:05:16,663 [INFO] [main] GET /api/v1/admin/logs - 200 - 17.09ms
-2026-01-21 03:05:16,664 [INFO] [main] GET /api/v1/admin/logs - 200 - 15.77ms
-2026-01-21 03:05:22,242 [INFO] [main] OPTIONS /api/v1/admin/settings - 200 - 0.98ms
-2026-01-21 03:05:22,248 [INFO] [main] OPTIONS /api/v1/admin/settings - 200 - 6.03ms
-2026-01-21 03:05:22,251 [INFO] [main] GET /api/v1/auth/users/me - 200 - 11.96ms
-2026-01-21 03:05:22,262 [INFO] [main] GET /api/v1/admin/settings - 200 - 9.11ms
-2026-01-21 03:05:22,262 [INFO] [main] GET /api/v1/admin/settings - 200 - 5.00ms
-2026-01-21 03:05:24,041 [INFO] [main] GET /api/v1/auth/users/me - 200 - 18.63ms
-2026-01-21 03:05:24,042 [INFO] [main] GET /api/v1/admin/logs - 200 - 16.19ms
-2026-01-21 03:05:24,043 [INFO] [main] GET /api/v1/admin/logs - 200 - 19.07ms
+2026-01-22 13:08:38,542 [INFO] [main] Redis Limiter initialized
+2026-01-22 13:08:45,700 [INFO] [main] GET /health - 200 - 1.19ms
+2026-01-22 13:14:49,117 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.68ms
+2026-01-22 13:14:49,253 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 117.92ms
+2026-01-22 13:22:40,750 [INFO] [main] Redis Limiter initialized
+2026-01-22 13:23:01,648 [INFO] [main] GET /health - 200 - 1.53ms
+2026-01-22 13:35:36,087 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 0.48ms
+2026-01-22 13:35:36,211 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 115.72ms
+2026-01-22 13:38:49,631 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 72.58ms
+2026-01-22 14:02:57,781 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.51ms
+2026-01-22 14:02:57,863 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 65.94ms
+2026-01-22 14:05:14,429 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 74.71ms
+2026-01-22 14:11:12,338 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 74.04ms
+2026-01-22 14:23:35,579 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.51ms
+2026-01-22 14:23:35,712 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 109.52ms
+2026-01-22 14:29:28,974 [INFO] [main] Redis Limiter initialized
+2026-01-22 14:29:54,887 [INFO] [main] Redis Limiter initialized
+2026-01-22 14:30:00,185 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 103.98ms
+2026-01-22 14:31:54,435 [INFO] [main] Redis Limiter initialized
+2026-01-22 14:41:07,917 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 0.98ms
+2026-01-22 14:41:08,039 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 98.93ms
+2026-01-22 14:44:35,760 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 61.60ms
+2026-01-22 14:48:39,876 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 65.07ms
+2026-01-22 14:51:58,183 [INFO] [main] Redis Limiter initialized
+2026-01-22 14:53:33,025 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.58ms
+2026-01-22 14:53:33,080 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 14:53:33,174 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 125.75ms
+2026-01-22 14:53:47,319 [INFO] [main] OPTIONS /api/v1/tarot/chat - 200 - 0.41ms
+2026-01-22 14:53:47,396 [INFO] [main] POST /api/v1/tarot/chat - 200 - 69.37ms
+2026-01-22 15:10:04,756 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.50ms
+2026-01-22 15:10:04,781 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 15:10:04,836 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 63.77ms
+2026-01-22 15:11:49,825 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 15:11:49,879 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 61.67ms
+2026-01-22 15:14:38,199 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 15:14:38,256 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 65.86ms
+2026-01-22 16:00:19,696 [INFO] [main] Redis Limiter initialized
+2026-01-22 16:00:58,711 [INFO] [main] GET /health - 200 - 1.16ms
+2026-01-22 16:00:58,718 [ERROR] [logger] Failed to write API log to DB: (pymysql.err.OperationalError) (2003, "Can't connect to MySQL server on 'localhost' ([Errno 61] Connection refused)")
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-01-22 16:06:43,983 [INFO] [main] Redis Limiter initialized
+2026-01-22 16:07:07,037 [INFO] [main] Redis Limiter initialized
+2026-01-22 16:07:20,109 [INFO] [main] Redis Limiter initialized
+2026-01-22 16:07:52,829 [INFO] [main] GET /health - 200 - 1.22ms
+2026-01-22 16:07:53,636 [INFO] [main] GET / - 200 - 0.74ms
+2026-01-22 16:08:09,641 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 0.49ms
+2026-01-22 16:08:09,654 [INFO] [tarot] Tarot Analysis - Model: moonshotai/Kimi-K2-Instruct-0905, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 16:08:09,742 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 95.72ms
+2026-01-22 16:10:18,906 [INFO] [main] GET /health - 200 - 0.67ms
+2026-01-22 16:12:19,474 [INFO] [tarot] Tarot Analysis - Model: moonshotai/Kimi-K2-Instruct-0905, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 16:12:19,536 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 64.20ms
+2026-01-22 16:13:32,226 [INFO] [main] Redis Limiter initialized
+2026-01-22 16:13:57,961 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 16:13:58,049 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 91.67ms
+2026-01-22 16:33:18,168 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.89ms
+2026-01-22 16:33:18,181 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 16:33:18,239 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 64.12ms

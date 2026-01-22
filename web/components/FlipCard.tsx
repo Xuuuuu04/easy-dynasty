@@ -12,6 +12,7 @@ interface FlipCardProps {
   onFlipComplete?: () => void
   autoFlip?: boolean
   flipDelay?: number
+  initialFlipped?: boolean
 }
 
 export default function FlipCard({
@@ -22,9 +23,10 @@ export default function FlipCard({
   className = '',
   onFlipComplete,
   autoFlip = false,
-  flipDelay = 1000
+  flipDelay = 1000,
+  initialFlipped = false
 }: FlipCardProps) {
-  const [isFlipped, setIsFlipped] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(initialFlipped)
   const [showAnimation, setShowAnimation] = useState(false)
 
   useEffect(() => {

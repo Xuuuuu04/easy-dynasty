@@ -10,10 +10,26 @@ export const metadata: Metadata = {
     default: '易朝 · 东方命理与塔罗启示',
   },
   description: "融合传统八字与西方塔罗的智能命理助手",
+  manifest: '/site.webmanifest',
+  themeColor: '#9a2b2b',
   icons: {
-    icon: '/favicon.svg?v=2',
-    shortcut: '/favicon.svg?v=2',
-    apple: '/favicon.svg?v=2',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
+  appleWebApp: {
+    title: '易朝',
+    statusBarStyle: 'default',
+    capable: true,
+  },
+  openGraph: {
+    title: '易朝 · EasyDynasty',
+    description: '融合传统八字与西方塔罗的智能命理助手',
+    type: 'website',
+    locale: 'zh_CN',
   },
 };
 

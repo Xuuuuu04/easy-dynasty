@@ -183,6 +183,417 @@
           "description": "基于前面所有因素的综合，最可能的最终结果或结局"
         }
       ]
+    },
+    {
+      "id": "two_choices",
+      "name": "二选一牌阵",
+      "englishName": "Two Choices Spread",
+      "description": "当面临两个选项难以抉择时，对比两种选择的发展和结果",
+      "cardCount": 7,
+      "positions": [
+        {
+          "id": 1,
+          "name": "当前状况",
+          "description": "你目前所处的情况和需要做出选择的背景"
+        },
+        {
+          "id": 2,
+          "name": "选项A的过程",
+          "description": "选择第一个方案后的发展过程和经历"
+        },
+        {
+          "id": 3,
+          "name": "选项A的结果",
+          "description": "选择第一个方案的最终结果和影响"
+        },
+        {
+          "id": 4,
+          "name": "选项B的过程",
+          "description": "选择第二个方案后的发展过程和经历"
+        },
+        {
+          "id": 5,
+          "name": "选项B的结果",
+          "description": "选择第二个方案的最终结果和影响"
+        },
+        {
+          "id": 6,
+          "name": "潜在影响因素",
+          "description": "无论选哪个都会影响的因素或需要注意的事项"
+        },
+        {
+          "id": 7,
+          "name": "最佳建议",
+          "description": "宇宙给予的指引和建议，帮助你做出最适合的选择"
+        }
+      ]
+    },
+    {
+      "id": "hexagram",
+      "name": "六芒星牌阵",
+      "englishName": "Hexagram Spread",
+      "description": "深度预测牌阵，理清事物本源，分析潜意识与显意识，指导未来走向",
+      "cardCount": 7,
+      "positions": [
+        {
+          "id": 1,
+          "name": "过去",
+          "description": "问题的起源和历史背景，已经发生的事情"
+        },
+        {
+          "id": 2,
+          "name": "现在",
+          "description": "当前的状况和你现在所处的位置"
+        },
+        {
+          "id": 3,
+          "name": "未来",
+          "description": "即将发生的事情和未来的发展趋势"
+        },
+        {
+          "id": 4,
+          "name": "原因",
+          "description": "问题的深层原因或根本动机"
+        },
+        {
+          "id": 5,
+          "name": "对策",
+          "description": "应该采取的行动或解决方案"
+        },
+        {
+          "id": 6,
+          "name": "周围环境",
+          "description": "外部环境的影响、他人的态度或客观条件"
+        },
+        {
+          "id": 7,
+          "name": "最终结果",
+          "description": "综合所有因素后可能达成的最终结局"
+        }
+      ]
+    },
+    {
+      "id": "seven_card_prophecy",
+      "name": "七牌预言占卜法",
+      "englishName": "Seven-Card Prophecy Spread",
+      "description": "全面分析问题各方面，从现况、自己、对方到结果的完整解读",
+      "cardCount": 7,
+      "positions": [
+        {
+          "id": 1,
+          "name": "现况",
+          "description": "问题的现状和当前情况的真实面貌"
+        },
+        {
+          "id": 2,
+          "name": "自己",
+          "description": "你在这件事中的位置、态度和内心状态"
+        },
+        {
+          "id": 3,
+          "name": "对方",
+          "description": "涉及的他人、对手或外部因素的状态与想法"
+        },
+        {
+          "id": 4,
+          "name": "原因",
+          "description": "导致当前状况的根本原因或关键因素"
+        },
+        {
+          "id": 5,
+          "name": "注意事项",
+          "description": "需要特别留意的地方、潜在风险或关键点"
+        },
+        {
+          "id": 6,
+          "name": "方法",
+          "description": "解决问题的方法、应对策略或行动方向"
+        },
+        {
+          "id": 7,
+          "name": "结果",
+          "description": "事情的最终发展结果和可能的结局"
+        }
+      ]
+    },
+    {
+      "id": "lovers_venus",
+      "name": "恋人维纳斯牌阵",
+      "englishName": "Lovers Venus Spread",
+      "description": "爱情占卜经典牌阵，全面深入分析两性关系，揭示感情各方面",
+      "cardCount": 8,
+      "positions": [
+        {
+          "id": 1,
+          "name": "求问者的表现",
+          "description": "你在这段感情中的当前表现和状态"
+        },
+        {
+          "id": 2,
+          "name": "对方的表现",
+          "description": "感情另一方目前的表现和状态"
+        },
+        {
+          "id": 3,
+          "name": "双方环境",
+          "description": "双方感情所面临的外部环境和影响因素"
+        },
+        {
+          "id": 4,
+          "name": "感情现状",
+          "description": "反应双方感情关系的当前真实情况"
+        },
+        {
+          "id": 5,
+          "name": "帮助或阻碍",
+          "description": "感情关系中的助力或阻力因素"
+        },
+        {
+          "id": 6,
+          "name": "你的内心",
+          "description": "求问者内心真实感觉和隐藏状态"
+        },
+        {
+          "id": 7,
+          "name": "对方的内心",
+          "description": "感情另一方的真实感觉和隐藏状态"
+        },
+        {
+          "id": 8,
+          "name": "未来发展",
+          "description": "双方感情的未来发展趋势和可能结果"
+        }
+      ]
+    },
+    {
+      "id": "horseshoe",
+      "name": "马蹄铁牌阵",
+      "englishName": "Horseshoe Spread",
+      "description": "经典预测牌阵，像灯塔一样照亮前方道路，适合有经验者使用",
+      "cardCount": 7,
+      "positions": [
+        {
+          "id": 1,
+          "name": "过去",
+          "description": "曾经的情况，甜蜜回忆或过去的争吵"
+        },
+        {
+          "id": 2,
+          "name": "现在",
+          "description": "当前的状况、问题的表征或问卜者的心情"
+        },
+        {
+          "id": 3,
+          "name": "未来",
+          "description": "在现有情况下会达成的结果"
+        },
+        {
+          "id": 4,
+          "name": "周遭状况",
+          "description": "影响问题的外部环境和周围因素"
+        },
+        {
+          "id": 5,
+          "name": "阻碍",
+          "description": "面临的困难、挑战或需要克服的障碍"
+        },
+        {
+          "id": 6,
+          "name": "本人态度",
+          "description": "问卜者的希望、恐惧或内在期待"
+        },
+        {
+          "id": 7,
+          "name": "最后结果",
+          "description": "综合所有因素后的最终走向和结局"
+        }
+      ]
+    },
+    {
+      "id": "relationship_cross",
+      "name": "关系十字牌阵",
+      "englishName": "Relationship Cross Spread",
+      "description": "诊断型牌阵，通过六个维度深入剖析关系的动态、优势与挑战",
+      "cardCount": 6,
+      "positions": [
+        {
+          "id": 1,
+          "name": "你的角色",
+          "description": "你在这段关系中的位置、态度和作用"
+        },
+        {
+          "id": 2,
+          "name": "对方的角色",
+          "description": "对方在这段关系中的位置、态度和作用"
+        },
+        {
+          "id": 3,
+          "name": "关系现状",
+          "description": "当前关系的真实情况和主要特征"
+        },
+        {
+          "id": 4,
+          "name": "关系基础",
+          "description": "这段关系建立的基础和深层连接"
+        },
+        {
+          "id": 5,
+          "name": "主要挑战",
+          "description": "关系中面临的核心问题或需要解决的矛盾"
+        },
+        {
+          "id": 6,
+          "name": "发展潜力",
+          "description": "关系的未来发展潜力和可能性"
+        }
+      ]
+    },
+    {
+      "id": "career_pyramid",
+      "name": "事业金字塔牌阵",
+      "englishName": "Career Pyramid Spread",
+      "description": "稳定事业、明确优缺点，适合事业遇瓶颈时寻找突破口",
+      "cardCount": 6,
+      "positions": [
+        {
+          "id": 1,
+          "name": "当前状态",
+          "description": "你目前的职业状态和工作情况"
+        },
+        {
+          "id": 2,
+          "name": "优势",
+          "description": "你在事业中的优势、强项和有利因素"
+        },
+        {
+          "id": 3,
+          "name": "劣势",
+          "description": "你在事业中的劣势、弱点或需要改进的地方"
+        },
+        {
+          "id": 4,
+          "name": "机遇",
+          "description": "即将到来的机会或可以把握的契机"
+        },
+        {
+          "id": 5,
+          "name": "挑战",
+          "description": "需要面对的困难、竞争或外部压力"
+        },
+        {
+          "id": 6,
+          "name": "建议行动",
+          "description": "为了事业发展应该采取的具体行动或策略"
+        }
+      ]
+    },
+    {
+      "id": "wealth_tree",
+      "name": "财富之树牌阵",
+      "englishName": "Wealth Tree Spread",
+      "description": "深入探索财富能量与金钱关系，从信念到收获全面分析财务状况",
+      "cardCount": 5,
+      "positions": [
+        {
+          "id": 1,
+          "name": "财富信念",
+          "description": "你对金钱和财富的核心信念与态度"
+        },
+        {
+          "id": 2,
+          "name": "财务现状",
+          "description": "当前的财务状况和金钱能量状态"
+        },
+        {
+          "id": 3,
+          "name": "成长机遇",
+          "description": "财富增长的机会、投资理财的方向"
+        },
+        {
+          "id": 4,
+          "name": "潜在障碍",
+          "description": "阻碍财富积累的因素、需要警惕的风险"
+        },
+        {
+          "id": 5,
+          "name": "最终收获",
+          "description": "未来的财富成果和经济状况的发展趋势"
+        }
+      ]
+    },
+    {
+      "id": "twelve_houses",
+      "name": "12宫位年运势牌阵",
+      "englishName": "Twelve Houses Annual Fortune Spread",
+      "description": "结合占星学原理，全面预测未来一年12个生活领域的运势",
+      "cardCount": 13,
+      "positions": [
+        {
+          "id": 1,
+          "name": "第一宫：自我",
+          "description": "个人特质、形象、自我认知和整体状态"
+        },
+        {
+          "id": 2,
+          "name": "第二宫：财富",
+          "description": "财务状况、物质资源、金钱运势"
+        },
+        {
+          "id": 3,
+          "name": "第三宫：沟通",
+          "description": "沟通表达、学习能力、短途旅行"
+        },
+        {
+          "id": 4,
+          "name": "第四宫：家庭",
+          "description": "家庭关系、居住环境、内心安全感"
+        },
+        {
+          "id": 5,
+          "name": "第五宫：爱情",
+          "description": "恋爱感情、娱乐休闲、创造力"
+        },
+        {
+          "id": 6,
+          "name": "第六宫：工作",
+          "description": "日常工作、健康状况、服务他人"
+        },
+        {
+          "id": 7,
+          "name": "第七宫：伴侣",
+          "description": "婚姻关系、合作伙伴、人际互动"
+        },
+        {
+          "id": 8,
+          "name": "第八宫：转化",
+          "description": "投资理财、性爱关系、深度转化"
+        },
+        {
+          "id": 9,
+          "name": "第九宫：智慧",
+          "description": "高等教育、长途旅行、哲学信仰"
+        },
+        {
+          "id": 10,
+          "name": "第十宫：事业",
+          "description": "职业发展、社会地位、成就荣誉"
+        },
+        {
+          "id": 11,
+          "name": "第十一宫：社交",
+          "description": "朋友圈子、社群活动、理想目标"
+        },
+        {
+          "id": 12,
+          "name": "第十二宫：灵性",
+          "description": "潜意识、灵性成长、隐秘事务"
+        },
+        {
+          "id": 13,
+          "name": "年度总结",
+          "description": "全年整体运势的核心主题和关键指引"
+        }
+      ]
     }
   ]
 }

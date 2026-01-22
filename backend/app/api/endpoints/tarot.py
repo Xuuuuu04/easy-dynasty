@@ -1,24 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
-from app.api.endpoints.auth import get_current_user, get_db
-from app.schemas.auth import User
 from app.schemas.tarot import TarotRequest, TarotChatRequest
-from app.services.quota_service import QuotaService
 from app.services.settings_service import SettingsService
 from fastapi_limiter.depends import RateLimiter
+from app.core.logger import logger
 import httpx
 import json
-import os
 
 router = APIRouter()
 
 @router.post("/analyze", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
-async def analyze_tarot(req: TarotRequest, current_user: User = Depends(get_current_user), db = Depends(get_db)):
-    QuotaService.check_quota(db, current_user.id, 'tarot')
-
+async def analyze_tarot(req: TarotRequest):
     api_key = SettingsService.get("DEFAULT_LLM_API_KEY")
     base_url = SettingsService.get("LLM_BASE_URL", "https://api.siliconflow.cn/v1")
     model = SettingsService.get("TAROT_MODEL", "moonshotai/Kimi-K2-Instruct-0905")
+    
+    logger.info(f"Tarot Analysis - Model: {model}, Base URL: {base_url}")
 
     cards_str = ""
     for idx, dc in enumerate(req.drawnCards):
@@ -30,55 +27,56 @@ async def analyze_tarot(req: TarotRequest, current_user: User = Depends(get_curr
 
     async def stream_response():
         async with httpx.AsyncClient() as client:
-            async with client.stream(
-                "POST",
-                f"{base_url}/chat/completions",
-                headers={"Authorization": f"Bearer {api_key}"},
-                json={
-                    "model": model,
-                    "messages": [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt}
-                    ],
-                    "stream": True
-                },
-                timeout=60.0
-            ) as response:
-                if response.status_code != 200:
-                    yield f"data: {json.dumps({'error': 'LLM Service Error'})}\n\n"
-                    return
-                async for line in response.aiter_lines():
-                    if line.startswith("data: "):
-                        yield f"{line}\n\n"
-        
-        QuotaService.increment_usage(db, current_user.id, 'tarot')
+            try:
+                async with client.stream(
+                    "POST",
+                    f"{base_url}/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": model,
+                        "messages": [
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        "stream": True
+                    },
+                    timeout=60.0
+                ) as response:
+                    if response.status_code != 200:
+                        yield f"data: {json.dumps({'error': f'LLM Service Error: {response.status_code}'})}\n\n"
+                        return
+                    async for line in response.aiter_lines():
+                        if line.startswith("data: "):
+                            yield f"{line}\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
     return StreamingResponse(stream_response(), media_type="text/event-stream")
 
 @router.post("/chat", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
-async def chat_tarot(req: TarotChatRequest, current_user: User = Depends(get_current_user), db = Depends(get_db)):
-    if current_user.tier != 'svip':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="进一步提问仅限高级SVIP用户")
-
+async def chat_tarot(req: TarotChatRequest):
     api_key = SettingsService.get("DEFAULT_LLM_API_KEY")
     base_url = SettingsService.get("LLM_BASE_URL", "https://api.siliconflow.cn/v1")
     model = SettingsService.get("TAROT_MODEL", "moonshotai/Kimi-K2-Instruct-0905")
 
     async def stream_response():
         async with httpx.AsyncClient() as client:
-            async with client.stream(
-                "POST",
-                f"{base_url}/chat/completions",
-                headers={"Authorization": f"Bearer {api_key}"},
-                json={
-                    "model": model,
-                    "messages": [{"role": m.role, "content": m.content} for m in req.messages],
-                    "stream": True
-                },
-                timeout=60.0
-            ) as response:
-                async for line in response.aiter_lines():
-                    if line.startswith("data: "):
-                        yield f"{line}\n\n"
+            try:
+                async with client.stream(
+                    "POST",
+                    f"{base_url}/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}"},
+                    json={
+                        "model": model,
+                        "messages": [{"role": m.role, "content": m.content} for m in req.messages],
+                        "stream": True
+                    },
+                    timeout=60.0
+                ) as response:
+                    async for line in response.aiter_lines():
+                        if line.startswith("data: "):
+                            yield f"{line}\n\n"
+            except Exception as e:
+                 yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
     return StreamingResponse(stream_response(), media_type="text/event-stream")

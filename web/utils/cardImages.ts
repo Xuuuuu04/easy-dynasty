@@ -92,8 +92,8 @@ export const cardImageMap: Record<string, string> = {
 // 获取塔罗牌图片路径
 export function getCardImage(cardId: string | number): string {
   const imageUrl = cardImageMap[cardId.toString()]
-  return imageUrl || '/cards/CardBacks.png' // 如果找不到对应图片，返回牌背
+  return imageUrl || '/cards/back-new.png' // 如果找不到对应图片，返回牌背
 }
 
 // 牌背图片
-export const CARD_BACK_IMAGE = '/cards/CardBacks.png'
+export const CARD_BACK_IMAGE = '/cards/back-new.png'

@@ -1,31 +1,24 @@
-from app.db.session import SessionLocal
-from sqlalchemy import text
+from app.core.config import settings
 import os
 
 class SettingsService:
-    _cache = {}
-
+    """
+    简化的设置服务，从环境变量和配置对象读取设置
+    """
+    
     @staticmethod
     def get(key: str, default: str = None) -> str:
-        # 1. 尝试从数据库读取
-        db = SessionLocal()
-        try:
-            row = db.execute(text("SELECT value FROM system_settings WHERE `key` = :k"), {"k": key}).fetchone()
-            if row:
-                return row[0]
-        except Exception as e:
-            print(f"DB Settings Error: {e}")
-        finally:
-            db.close()
+        """从 settings 对象或环境变量读取配置"""
+        # 1. 尝试从 settings 对象读取
+        if hasattr(settings, key):
+            value = getattr(settings, key)
+            if value:
+                return value
         
-        # 2. 回退到环境变量或默认值
-        return os.getenv(key, default)
-
-    @staticmethod
-    def set(key: str, value: str):
-        db = SessionLocal()
-        try:
-            db.execute(text("UPDATE system_settings SET value = :v WHERE `key` = :k"), {"k": key, "v": value})
-            db.commit()
-        finally:
-            db.close()
+        # 2. 回退到环境变量
+        value = os.getenv(key)
+        if value:
+            return value
+        
+        # 3. 使用默认值
+        return default
