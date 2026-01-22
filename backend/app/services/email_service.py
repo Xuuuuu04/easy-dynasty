@@ -1,11 +1,14 @@
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-from pydantic import EmailStr
 import random
 import string
+
 import redis.asyncio as redis
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
+from pydantic import EmailStr
+
 from app.services.settings_service import SettingsService
 
 redis_client = redis.from_url("redis://localhost:6379", encoding="utf-8", decode_responses=True)
+
 
 class EmailService:
     @staticmethod
@@ -19,7 +22,7 @@ class EmailService:
             MAIL_STARTTLS=False,
             MAIL_SSL_TLS=True,
             USE_CREDENTIALS=True,
-            VALIDATE_CERTS=True
+            VALIDATE_CERTS=True,
         )
 
     @staticmethod
@@ -30,7 +33,7 @@ class EmailService:
     async def send_verification_code(email: EmailStr) -> bool:
         code = EmailService.generate_code()
         await redis_client.set(f"verify_code:{email}", code, ex=300)
-        
+
         html = f"""
         <div style="background-color: #f5f5f0; padding: 20px; font-family: serif; color: #1c1917;">
             <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 8px; border: 1px solid #dcd9cd;">
@@ -48,10 +51,7 @@ class EmailService:
         """
 
         message = MessageSchema(
-            subject="【易朝】您的验证码",
-            recipients=[email],
-            body=html,
-            subtype=MessageType.html
+            subject="【易朝】您的验证码", recipients=[email], body=html, subtype=MessageType.html
         )
 
         fm = FastMail(EmailService._get_conf())

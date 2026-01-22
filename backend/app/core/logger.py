@@ -14,8 +14,10 @@ logger = logging.getLogger("EasyDynasty")
 logger.setLevel(logging.INFO)
 
 # File Handler (10MB per file, keep 5 backups)
-file_handler = RotatingFileHandler(LOG_FILE, maxBytes=10*1024*1024, backupCount=5, encoding='utf-8')
-file_formatter = logging.Formatter('%(asctime)s [%(levelname)s] [%(module)s] %(message)s')
+file_handler = RotatingFileHandler(
+    LOG_FILE, maxBytes=10 * 1024 * 1024, backupCount=5, encoding="utf-8"
+)
+file_formatter = logging.Formatter("%(asctime)s [%(levelname)s] [%(module)s] %(message)s")
 file_handler.setFormatter(file_formatter)
 
 # Console Handler
@@ -25,6 +27,7 @@ console_handler.setFormatter(file_formatter)
 if not logger.handlers:
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
+
 
 def log_order_event(order_id: str, message: str):
     logger.info(f"[ORDER:{order_id}] {message}")

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import tarotCardsData from '../../data/tarot-cards.json';
-import { TarotIcon, BaziIcon } from '@/components/Icons';
-import Image from 'next/image';
-import { getCardImage } from '@/utils/cardImages';
+import { TarotIcon } from '@/components/Icons';
+import AtmosphereBackground from '@/components/AtmosphereBackground';
 import CardDetailModal from '@/components/CardDetailModal';
+import WikiCard from '@/components/WikiCard';
 
 // Define explicit type for card data
 interface TarotCardData {
@@ -19,10 +19,12 @@ interface TarotCardData {
     reversedMeaning?: string;
 }
 
+const CARDS_PER_PAGE = 20;
+
 export default function WikiPage() {
-    const [activeTab, setActiveTab] = useState<'tarot' | 'bazi'>('tarot');
     const [search, setSearch] = useState('');
     const [selectedCard, setSelectedCard] = useState<TarotCardData | null>(null);
+    const [displayCount, setDisplayCount] = useState(CARDS_PER_PAGE);
 
     const allTarotCards = useMemo(() => {
         const majors = tarotCardsData.majorArcana || [];
@@ -32,111 +34,131 @@ export default function WikiPage() {
             ...(minors.wands || []),
             ...(minors.cups || []),
             ...(minors.swords || []),
-            ...(minors.pentacles || [])
+            ...(minors.pentacles || []),
         ] as TarotCardData[];
     }, []);
 
     const filteredCards = useMemo(() => {
         if (!search) return allTarotCards;
         const lowerSearch = search.toLowerCase();
-        return allTarotCards.filter(c =>
-            c.name.includes(search) ||
-            c.englishName.toLowerCase().includes(lowerSearch)
+        return allTarotCards.filter(
+            (c) => c.name.includes(search) || c.englishName.toLowerCase().includes(lowerSearch)
         );
     }, [search, allTarotCards]);
 
+    const displayedCards = useMemo(() => {
+        return filteredCards.slice(0, displayCount);
+    }, [filteredCards, displayCount]);
+
+    const handleLoadMore = useCallback(() => {
+        setDisplayCount((prev) => Math.min(prev + CARDS_PER_PAGE, filteredCards.length));
+    }, [filteredCards.length]);
+
+    const handleCardClick = useCallback((card: TarotCardData) => {
+        setSelectedCard(card);
+    }, []);
+
+    const handleCloseModal = useCallback(() => {
+        setSelectedCard(null);
+    }, []);
+
+    const hasMore = displayCount < filteredCards.length;
+
     return (
-        <div className="min-h-screen bg-[#f5f5f0] pt-24 pb-12 px-4 font-serif text-stone-800">
-            <div className="max-w-6xl mx-auto">
+        <div className="min-h-screen bg-[#f5f5f0] pt-24 pb-12 px-4 font-serif text-stone-800 relative overflow-hidden">
+            {/* Atmosphere Background */}
+            <AtmosphereBackground />
+
+            {/* Background Texture */}
+            <div
+                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20"
+                style={{ backgroundImage: 'url("/rice-paper-2.png")' }}
+            ></div>
+
+            {/* Tarot Art Overlay */}
+            <div
+                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply transition-opacity duration-1000"
+                style={{
+                    backgroundImage: 'url("/tarot-art-overlay.png")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                }}
+            ></div>
+
+            {/* Floating Text Decor */}
+            <div className="absolute top-[10%] right-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-5xl text-[#9a2b2b] animate-float">
+                宇宙万象 · 智慧之书
+            </div>
+            <div className="absolute bottom-[10%] left-[5%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-stone-800 animate-float-delayed">
+                Gallery
+            </div>
+
+            <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-12 animate-fade-in">
                     <h1 className="text-4xl font-bold text-ink mb-4 tracking-[0.2em]">万象图鉴</h1>
-                    <p className="text-stone-500 text-sm tracking-widest">探索塔罗与命理的符号世界</p>
+                    <p className="text-stone-500 text-sm tracking-widest">探索塔罗的符号世界</p>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex justify-center gap-6 mb-10 animate-slide-up">
-                    <button
-                        onClick={() => setActiveTab('tarot')}
-                        className={`flex items-center gap-2 px-6 py-2 rounded-full border transition-all ${activeTab === 'tarot' ? 'bg-stone-800 text-white border-stone-800' : 'bg-white text-stone-500 border-stone-200 hover:border-stone-400'}`}
-                    >
-                        <TarotIcon className="w-4 h-4" /> 塔罗
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('bazi')}
-                        className={`flex items-center gap-2 px-6 py-2 rounded-full border transition-all ${activeTab === 'bazi' ? 'bg-[#9a2b2b] text-white border-[#9a2b2b]' : 'bg-white text-stone-500 border-stone-200 hover:border-stone-400'}`}
-                    >
-                        <BaziIcon className="w-4 h-4" /> 命理
-                    </button>
-                </div>
+                <div className="animate-fade-in">
+                    <div className="mb-8 max-w-md mx-auto">
+                        <input
+                            type="text"
+                            placeholder="搜索牌名 (如: 愚人, Fool)..."
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setDisplayCount(CARDS_PER_PAGE); // Reset display count on search
+                            }}
+                            className="ink-input w-full text-center"
+                        />
+                    </div>
 
-                {activeTab === 'tarot' && (
-                    <div className="animate-fade-in">
-                        <div className="mb-8 max-w-md mx-auto">
-                            <input
-                                type="text"
-                                placeholder="搜索牌名 (如: 愚人, Fool)..."
-                                value={search}
-                                onChange={e => setSearch(e.target.value)}
-                                className="ink-input w-full text-center"
+                    {/* Card Count Info */}
+                    <div className="text-center mb-6 text-sm text-stone-500">
+                        显示 {displayedCards.length} / {filteredCards.length} 张牌
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                        {displayedCards.map((card) => (
+                            <WikiCard
+                                key={card.id}
+                                card={card}
+                                onClick={() => handleCardClick(card)}
                             />
-                        </div>
+                        ))}
+                    </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                            {filteredCards.map(card => (
-                                <div
-                                    key={card.id}
-                                    className="group cursor-pointer h-[320px] transition-transform hover:-translate-y-2"
-                                    onClick={() => setSelectedCard(card)}
+                    {/* Load More Button */}
+                    {hasMore && (
+                        <div className="mt-12 flex justify-center">
+                            <button
+                                onClick={handleLoadMore}
+                                className="btn-seal flex items-center gap-2 px-8 py-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                 >
-                                    <div className="relative w-full h-full rounded-lg overflow-hidden shadow-md border border-stone-200 bg-white flex flex-col hover:shadow-xl transition-shadow">
-                                        {/* Top Art Area */}
-                                        <div className="flex-1 relative bg-stone-100 flex items-center justify-center overflow-hidden">
-                                            <Image
-                                                src={getCardImage(card.id)}
-                                                alt={card.name}
-                                                fill
-                                                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
-                                            />
-
-                                            {/* Card Name Overlay */}
-                                            <div className="absolute bottom-0 left-0 right-0 p-3 bg-white/90 backdrop-blur-sm border-t border-stone-100 text-center">
-                                                <h3 className="text-base font-bold text-ink mb-0.5">{card.name}</h3>
-                                                <p className="text-[10px] text-stone-400 uppercase tracking-widest">{card.englishName}</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Bottom Keywords Preview */}
-                                        <div className="h-auto p-3 bg-stone-50 border-t border-stone-200 text-center">
-                                            <p className="text-[10px] text-stone-500 line-clamp-2 leading-relaxed">
-                                                {card.uprightKeywords.slice(0, 3).join(' · ')}
-                                            </p>
-                                            <span className="text-[9px] text-[#9a2b2b] block mt-2 opacity-60 group-hover:opacity-100 transition-opacity">点击查看解析</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                                <span>加载更多 ({filteredCards.length - displayCount} 张)</span>
+                            </button>
                         </div>
-                    </div>
-                )}
-
-                {activeTab === 'bazi' && (
-                    <div className="text-center py-20 animate-fade-in ink-card bg-white">
-                        <div className="w-16 h-16 rounded-full bg-stone-100 mx-auto mb-4 flex items-center justify-center text-2xl text-stone-400">
-                            <BaziIcon />
-                        </div>
-                        <h2 className="text-xl font-bold text-ink mb-2">命理词典编撰中</h2>
-                        <p className="text-stone-500 text-sm">十神、神煞、纳音等知识即将上线...</p>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
             {/* Modal */}
             {selectedCard && (
-                <CardDetailModal
-                    card={selectedCard}
-                    onClose={() => setSelectedCard(null)}
-                />
+                <CardDetailModal card={selectedCard} onClose={handleCloseModal} />
             )}
         </div>
     );

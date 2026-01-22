@@ -1,110 +1,230 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
 :root {
-  --ink-primary: #1c1917;
-  --ink-secondary: #44403c;
-  --paper-bg: #f5f5f0;
-  --seal-red: #9a2b2b;
-  --gold: #b4a078;
+    --ink-primary: #1c1917;
+    --ink-secondary: #44403c;
+    --paper-bg: #f5f5f0;
+    --seal-red: #9a2b2b;
+    --gold: #b4a078;
 }
 
 /* Base Styles */
 body {
-  background-color: #f5f5f0;
-  color: #1c1917;
-  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  -webkit-font-smoothing: antialiased;
-  background-image: url("/rice-paper-2.png");
-  background-blend-mode: multiply;
+    background-color: #f5f5f0;
+    color: #1c1917;
+    font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    -webkit-font-smoothing: antialiased;
+    background-image: url('/rice-paper-2.png');
+    background-blend-mode: multiply;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  letter-spacing: -0.025em;
-  font-weight: 700;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    letter-spacing: -0.025em;
+    font-weight: 700;
 }
 
 /* Utilities / Components */
 @layer components {
-  .ink-input {
-    @apply w-full bg-transparent border-b-2 border-stone-300 py-3 text-lg 
-           focus:outline-none focus:border-stone-800 transition-all duration-500
-           placeholder:text-stone-300 text-stone-800 font-serif;
-  }
-  
-  .ink-card {
-    @apply bg-white/60 backdrop-blur-sm border border-stone-200/50 shadow-sm
-           rounded-sm transition-all duration-500 hover:shadow-md hover:bg-white/80;
-  }
+    .ink-input {
+        @apply w-full bg-transparent border-b-2 border-stone-300 py-3 text-lg focus:outline-none focus:border-stone-800 transition-all duration-500 placeholder:text-stone-300 text-stone-800 font-serif;
+    }
 
-  .btn-seal {
-    @apply relative px-8 py-3 bg-[#9a2b2b] text-[#f5f5f0] font-bold tracking-widest
-           transition-all duration-300 hover:bg-[#852222] hover:scale-105 shadow-md
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-           flex items-center justify-center gap-2 rounded-sm;
-  }
+    .ink-card {
+        @apply bg-white/60 backdrop-blur-sm border border-stone-200/50 shadow-sm rounded-sm transition-all duration-500 hover:shadow-md hover:bg-white/80;
+    }
+
+    .btn-seal {
+        @apply relative px-8 py-3 bg-[#9a2b2b] text-[#f5f5f0] font-bold tracking-widest transition-all duration-300 hover:bg-[#852222] hover:scale-105 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 rounded-sm;
+    }
 }
 
 /* Custom Utilities */
 .text-ink {
-  color: var(--ink-primary);
+    color: var(--ink-primary);
 }
+
 .bg-paper {
-  background-color: var(--paper-bg);
+    background-color: var(--paper-bg);
 }
 
 .writing-vertical {
-  writing-mode: vertical-rl;
-  text-orientation: upright;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
 }
 
 .animate-ink-spread {
-  animation: inkSpread 1.5s ease-out forwards;
+    animation: inkSpread 1.5s ease-out forwards;
 }
 
 .animate-float {
-  animation: float 6s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float 7s ease-in-out infinite 1.5s;
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
+    animation: fadeIn 0.8s ease-out forwards;
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
+    animation: fadeInUp 0.8s ease-out forwards;
 }
 
 @keyframes inkSpread {
-  0% { transform: scale(0.95); opacity: 0; filter: blur(10px); }
-  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+    0% {
+        transform: scale(0.95);
+        opacity: 0;
+        filter: blur(10px);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0);
+    }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes mistFlow1 {
+    0%,
+    100% {
+        transform: translateX(-10%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(10%) translateY(-5%);
+    }
+}
+
+@keyframes mistFlow2 {
+    0%,
+    100% {
+        transform: translateX(10%) translateY(5%);
+    }
+
+    50% {
+        transform: translateX(-15%) translateY(0);
+    }
+}
+
+@keyframes mistFlow3 {
+    0%,
+    100% {
+        transform: translateX(5%) translateY(-3%);
+    }
+
+    50% {
+        transform: translateX(-8%) translateY(3%);
+    }
+}
+
+@keyframes particleFloat {
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translate(20px, -30px);
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.2;
+    }
+}
+
+.animate-fade-in-dropdown {
+    animation: fadeInDropdown 0.2s ease-out forwards;
+}
+
+.animate-mist-flow-1 {
+    animation: mistFlow1 20s ease-in-out infinite;
+}
+
+.animate-mist-flow-2 {
+    animation: mistFlow2 15s ease-in-out infinite;
+}
+
+.animate-mist-flow-3 {
+    animation: mistFlow3 18s ease-in-out infinite;
+}
+
+.animate-particle-float {
+    animation: particleFloat 10s ease-in-out infinite;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #d6d3d1;
-  border-radius: 3px;
+    background: #d6d3d1;
+    border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a29e;
+    background: #a8a29e;
 }

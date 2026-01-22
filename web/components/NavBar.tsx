@@ -2,73 +2,259 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { MenuIcon, CloseIcon, BookIcon, TarotIcon } from '@/components/Icons';
+import { useState, useRef, useEffect } from 'react';
+import { MenuIcon, CloseIcon, BookIcon, TarotIcon, Volume2Icon, VolumeXIcon } from '@/components/Icons';
+import { useDeck } from '@/context/DeckContext';
+import { useSound } from '@/context/SoundContext';
+
+function SoundToggle() {
+    const { isMuted, toggleMute } = useSound();
+    return (
+        <button
+            onClick={toggleMute}
+            className="p-1.5 rounded-sm text-stone-600 hover:bg-stone-200/50 hover:text-[#9a2b2b] transition-all"
+            title={isMuted ? "开启音效" : "静音"}
+        >
+            {isMuted ? <VolumeXIcon className="w-4 h-4" /> : <Volume2Icon className="w-4 h-4" />}
+        </button>
+    );
+}
+
+function DeckSwitcher() {
+    const { currentDeck, setDeck, availableDecks } = useDeck();
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const currentDeckName = availableDecks.find((d) => d.id === currentDeck)?.name || '默认牌组';
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="px-3 py-1.5 rounded-sm text-sm tracking-wide text-stone-600 hover:bg-stone-200/50 flex items-center gap-1.5 transition-all border border-transparent hover:border-stone-200"
+            >
+                <span className="w-2 h-2 rounded-full bg-[#9a2b2b]"></span>
+                {currentDeckName}
+            </button>
+
+            {isOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-md shadow-lg overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200">
+                    {availableDecks.map((deck) => (
+                        <button
+                            key={deck.id}
+                            onClick={() => {
+                                setDeck(deck.id);
+                                setIsOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2 text-sm hover:bg-stone-50 transition-colors flex flex-col ${currentDeck === deck.id ? 'bg-stone-100 text-[#9a2b2b]' : 'text-stone-600'}`}
+                        >
+                            <span className="font-medium">{deck.name}</span>
+                            <span className="text-[10px] text-stone-400">{deck.description}</span>
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function DeckSwitcherMobile() {
+    const { currentDeck, setDeck, availableDecks } = useDeck();
+
+    return (
+        <div className="flex flex-col gap-2">
+            {availableDecks.map((deck) => (
+                <button
+                    key={deck.id}
+                    onClick={() => setDeck(deck.id)}
+                    className={`text-sm px-4 py-2 rounded-full border transition-all ${currentDeck === deck.id
+                        ? 'border-[#9a2b2b] text-[#9a2b2b] bg-[#9a2b2b]/5'
+                        : 'border-stone-200 text-stone-500'
+                        }`}
+                >
+                    {deck.name}
+                </button>
+            ))}
+        </div>
+    );
+}
+
+function DeckNameDisplay() {
+    const { currentDeck, availableDecks } = useDeck();
+    const currentDeckName = availableDecks.find((d) => d.id === currentDeck)?.name || '默认';
+    // Shorten long names if needed
+    const displayName = currentDeckName.split('(')[0].trim();
+    return <>{displayName}</>;
+}
 
 export default function NavBar() {
-  const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const pathname = usePathname();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const isActive = (path: string) => {
-    if (path === '/' && pathname === '/') return true;
-    if (path !== '/' && pathname.startsWith(path)) return true;
-    return false;
-  };
+    const isActive = (path: string) => {
+        if (path === '/' && pathname === '/') return true;
+        if (path !== '/' && pathname.startsWith(path)) return true;
+        return false;
+    };
 
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#f5f5f0]/95 backdrop-blur-md border-b border-stone-200 shadow-sm font-serif">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMenuOpen]);
 
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group z-50">
-          <div className="relative w-10 h-10 transition-transform duration-500 group-hover:rotate-12">
-            <img src="/favicon.svg" alt="易朝" className="w-full h-full drop-shadow-md" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-2xl font-bold font-serif text-ink tracking-[0.2em] leading-none">易朝</span>
-            <span className="text-[9px] text-[#9a2b2b] uppercase tracking-[0.3em] font-medium leading-none mt-1">Dynasty</span>
-          </div>
-        </Link>
+    return (
+        <>
+            <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#f5f5f0]/95 backdrop-blur-md border-b border-stone-200 shadow-sm font-serif">
+                <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center gap-3 group z-50">
+                        <div className="relative w-10 h-10 transition-transform duration-500 group-hover:rotate-12">
+                            <img
+                                src="/favicon.svg"
+                                alt="易朝"
+                                className="w-full h-full drop-shadow-md"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-2xl font-bold font-serif text-ink tracking-[0.2em] leading-none">
+                                易朝
+                            </span>
+                            <span className="text-[9px] text-[#9a2b2b] uppercase tracking-[0.3em] font-medium leading-none mt-1">
+                                Dynasty
+                            </span>
+                        </div>
+                    </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-1 lg:gap-2">
-          <Link href="/draw" className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/draw') ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-200/50'}`}>
-            <TarotIcon className="w-4 h-4" /> 塔罗占卜
-          </Link>
-          <Link href="/wiki" className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/wiki') ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-200/50'}`}>
-            <BookIcon className="w-4 h-4" /> 牌灵图鉴
-          </Link>
-        </div>
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex items-center gap-1 lg:gap-2">
+                        <Link
+                            href="/draw"
+                            className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/draw') ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-200/50'}`}
+                        >
+                            <TarotIcon className="w-4 h-4" /> 塔罗占卜
+                        </Link>
+                        <Link
+                            href="/wiki"
+                            className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/wiki') ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-200/50'}`}
+                        >
+                            <BookIcon className="w-4 h-4" /> 牌灵图鉴
+                        </Link>
+                        <div className="h-4 w-px bg-stone-300 mx-1"></div>
+                        <SoundToggle />
+                        <div className="h-4 w-px bg-stone-300 mx-1"></div>
+                        <DeckSwitcher />
+                    </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center gap-4">
-          <button className="text-stone-600 focus:outline-none" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <CloseIcon className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
-          </button>
-        </div>
-      </div>
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden flex items-center gap-3">
+                        {/* Current Deck Indicator (Mobile) */}
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-stone-100 rounded-sm">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#9a2b2b]"></span>
+                            <span className="text-xs font-medium text-stone-600 truncate max-w-[80px]">
+                                <DeckNameDisplay />
+                            </span>
+                        </div>
 
-      {/* Mobile Menu Overlay */}
-      <div className={`md:hidden fixed inset-0 z-40 bg-[#f5f5f0] transition-all duration-300 flex flex-col items-center justify-center gap-8 ${isMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}>
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10" style={{ backgroundImage: 'url("/rice-paper-2.png")' }}></div>
+                        <SoundToggle />
+                        <button
+                            className="text-stone-600 focus:outline-none p-1"
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        >
+                            {isMenuOpen ? (
+                                <CloseIcon className="w-6 h-6" />
+                            ) : (
+                                <MenuIcon className="w-6 h-6" />
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </nav>
 
-        <div className="flex flex-col gap-6 text-center w-full max-w-xs animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          {[
-            { label: '塔罗占卜', path: '/draw', icon: <TarotIcon /> },
-            { label: '牌灵图鉴', path: '/wiki', icon: <BookIcon /> },
-          ].map(link => (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={() => setIsMenuOpen(false)}
-              className={`text-xl font-serif py-3 border-b border-stone-200 hover:text-[#9a2b2b] hover:border-[#9a2b2b] transition-all flex items-center justify-center gap-3 ${isActive(link.path) ? 'text-[#9a2b2b] border-[#9a2b2b] font-bold' : 'text-stone-600'}`}
+            {/* Mobile Menu Overlay (Sidebar Drawer) - Rendered at body level */}
+            {/* Backdrop */}
+            <div
+                className={`md:hidden fixed inset-0 z-[9998] bg-stone-900/20 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={() => setIsMenuOpen(false)}
+            ></div>
+
+            {/* Drawer Panel */}
+            <div
+                className={`md:hidden fixed top-0 right-0 z-[9999] h-full w-[75%] max-w-[300px] bg-[#fdfdfc] shadow-2xl transition-transform duration-300 ease-in-out transform flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
-              {link.icon && <span className="w-5 h-5">{link.icon}</span>}
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </nav>
-  );
+                {/* Drawer Header */}
+                <div className="h-16 flex items-center justify-between px-6 border-b border-stone-200/50">
+                    <span className="text-sm font-bold text-stone-400 uppercase tracking-widest">
+                        MENU
+                    </span>
+                    <button
+                        onClick={() => setIsMenuOpen(false)}
+                        className="text-stone-500 hover:text-[#9a2b2b] transition-colors"
+                    >
+                        <CloseIcon className="w-6 h-6" />
+                    </button>
+                </div>
+
+                {/* Drawer Content */}
+                <div className="flex-1 overflow-y-auto py-6 px-6 flex flex-col gap-8">
+                    {/* Navigation Links */}
+                    <div className="flex flex-col gap-2">
+                        {[
+                            { label: '塔罗占卜', path: '/draw', icon: <TarotIcon /> },
+                            { label: '牌灵图鉴', path: '/wiki', icon: <BookIcon /> },
+                        ].map((link) => (
+                            <Link
+                                key={link.path}
+                                href={link.path}
+                                onClick={() => setIsMenuOpen(false)}
+                                className={`flex items-center gap-4 px-4 py-3 rounded-lg text-base font-medium transition-all ${isActive(link.path)
+                                    ? 'bg-[#9a2b2b]/5 text-[#9a2b2b]'
+                                    : 'text-stone-600 hover:bg-stone-100'
+                                    }`}
+                            >
+                                <span className={`${isActive(link.path) ? 'text-[#9a2b2b]' : 'text-stone-400'}`}>
+                                    {link.icon}
+                                </span>
+                                {link.label}
+                            </Link>
+                        ))}
+                    </div>
+
+                    <div className="h-px w-full bg-stone-200/50"></div>
+
+                    {/* Deck Switcher Section */}
+                    <div className="flex flex-col gap-4">
+                        <span className="text-xs font-bold text-stone-400 uppercase tracking-widest px-2">
+                            选择牌组 / Deck
+                        </span>
+                        <DeckSwitcherMobile />
+                    </div>
+                </div>
+
+                {/* Drawer Footer */}
+                <div className="p-6 border-t border-stone-200/50 bg-stone-50/50">
+                    <div className="flex items-center justify-center gap-2 text-[10px] text-stone-400 uppercase tracking-widest">
+                        <span>EasyDynasty</span>
+                        <span>•</span>
+                        <span>2024</span>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }

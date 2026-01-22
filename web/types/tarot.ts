@@ -4,94 +4,94 @@
  * 塔罗牌位置信息
  */
 export interface Position {
-  id: number
-  name: string
-  description: string
+    id: number;
+    name: string;
+    description: string;
 }
 
 /**
  * 塔罗牌基础信息
  */
 export interface TarotCard {
-  id: string | number
-  name: string
-  englishName: string
-  suit: string
-  uprightKeywords: string[]
-  reversedKeywords: string[]
+    id: string | number;
+    name: string;
+    englishName: string;
+    suit: string;
+    uprightKeywords: string[];
+    reversedKeywords: string[];
 }
 
 /**
  * 抽取的牌（包含位置和正逆位信息）
  */
 export interface DrawnCard {
-  card: TarotCard
-  isReversed: boolean
-  position: Position
+    card: TarotCard;
+    isReversed: boolean;
+    position: Position;
 }
 
 /**
  * 牌阵信息
  */
 export interface Spread {
-  id: string
-  name: string
-  englishName: string
-  description: string
-  cardCount: number
-  positions: Position[]
+    id: string;
+    name: string;
+    englishName: string;
+    description: string;
+    cardCount: number;
+    positions: Position[];
 }
 
 /**
  * 占卜历史记录
  */
 export interface ReadingHistory {
-  id: string
-  timestamp: number
-  question: string
-  spreadName: string
-  spreadId: string
-  drawnCards: DrawnCard[]
-  analysis: string
-  type?: 'tarot' | 'bazi'
-  baziData?: any
-  chart?: any
-  wuxing?: any
+    id: string;
+    timestamp: number;
+    question: string;
+    spreadName: string;
+    spreadId: string;
+    drawnCards: DrawnCard[];
+    analysis: string;
+    type?: 'tarot' | 'bazi';
+    baziData?: any;
+    chart?: any;
+    wuxing?: any;
 }
 
 /**
  * API 配置
  */
 export interface ApiConfig {
-  baseUrl: string | null
-  apiKey: string | null
-  model: string
+    baseUrl: string | null;
+    apiKey: string | null;
+    model: string;
 }
 
 /**
  * 聊天消息
  */
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant'
-  content: string
+    role: 'system' | 'user' | 'assistant';
+    content: string;
 }
 
 /**
  * 八字 - 流年信息
  */
 export interface LiuNianInfo {
-  year: number
-  age: number
-  gan_zhi: string
+    year: number;
+    age: number;
+    gan_zhi: string;
 }
 
 /**
  * 八字 - 大运信息
  */
 export interface DaYunInfo {
-  start_year: number
-  end_year: number
-  gan_zhi: string
-  start_age: number
-  liunian_list?: LiuNianInfo[]
+    start_year: number;
+    end_year: number;
+    gan_zhi: string;
+    start_age: number;
+    liunian_list?: LiuNianInfo[];
 }

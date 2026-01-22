@@ -55,3 +55,33 @@
 2026-01-22 16:33:18,168 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.89ms
 2026-01-22 16:33:18,181 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
 2026-01-22 16:33:18,239 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 64.12ms
+2026-01-22 18:30:18,457 [INFO] [main] Redis Limiter initialized
+2026-01-22 18:30:48,419 [INFO] [main] GET /health - 200 - 1.08ms
+2026-01-22 18:42:34,037 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.58ms
+2026-01-22 18:42:34,054 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 18:42:34,155 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 110.11ms
+2026-01-22 19:52:11,698 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.60ms
+2026-01-22 19:52:11,711 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 19:52:11,769 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 63.87ms
+2026-01-22 19:57:06,846 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 19:57:06,931 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 96.21ms
+2026-01-22 20:07:05,975 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.38ms
+2026-01-22 20:07:05,990 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 20:07:06,084 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 102.13ms
+2026-01-22 20:12:52,894 [INFO] [main] Redis Limiter initialized
+2026-01-22 20:13:18,701 [INFO] [main] Redis Limiter initialized
+2026-01-22 20:13:24,465 [INFO] [main] Redis Limiter initialized
+2026-01-22 20:20:49,541 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 0.99ms
+2026-01-22 20:20:49,549 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 20:20:49,648 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 103.51ms
+2026-01-22 20:49:04,369 [INFO] [main] Redis Limiter initialized
+2026-01-22 20:49:41,482 [INFO] [main] GET /health - 200 - 1.26ms
+2026-01-22 20:58:27,275 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 1.79ms
+2026-01-22 20:58:27,316 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 20:58:27,687 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 393.76ms
+2026-01-22 21:21:54,621 [INFO] [main] OPTIONS /api/v1/tarot/analyze - 200 - 0.43ms
+2026-01-22 21:21:54,627 [INFO] [tarot] Tarot Analysis - Model: Qwen/Qwen3-Next-80B-A3B-Instruct, Base URL: https://api.siliconflow.cn/v1
+2026-01-22 21:21:54,681 [INFO] [main] POST /api/v1/tarot/analyze - 200 - 55.67ms
+2026-01-22 22:19:53,137 [INFO] [main] Redis Limiter initialized
+2026-01-22 22:37:18,150 [INFO] [main] Redis Limiter initialized
+2026-01-22 22:37:21,234 [INFO] [main] Redis Limiter initialized

@@ -1,16 +1,19 @@
-import type { DrawnCard } from '@/types/tarot'
+import type { DrawnCard } from '@/types/tarot';
 
 export const constructTarotPrompts = (
-  question: string,
-  spreadName: string,
-  spreadId: string,
-  cards: DrawnCard[]
+    question: string,
+    spreadName: string,
+    spreadId: string,
+    cards: DrawnCard[]
 ) => {
-  const cardsDescription = cards
-    .map((c, i) => `${i + 1}. 【${c.position.name}】：${c.card.name} (${c.isReversed ? '逆位' : '正位'}) - 关键词：${c.isReversed ? c.card.reversedKeywords.join('、') : c.card.uprightKeywords.join('、')}`)
-    .join('\n')
+    const cardsDescription = cards
+        .map(
+            (c, i) =>
+                `${i + 1}. 【${c.position.name}】：${c.card.name} (${c.isReversed ? '逆位' : '正位'}) - 关键词：${c.isReversed ? c.card.reversedKeywords.join('、') : c.card.uprightKeywords.join('、')}`
+        )
+        .join('\n');
 
-  const systemPrompt = `你是一位拥有深厚神秘学造诣、直觉敏锐且极具同理心的资深塔罗占卜师“易朝”。你精通东西方命理，擅长将塔罗智慧与现实生活结合，给出既有深度又“接地气”的指引。
+    const systemPrompt = `你是一位拥有深厚神秘学造诣、直觉敏锐且极具同理心的资深塔罗占卜师“易朝”。你精通东西方命理，擅长将塔罗智慧与现实生活结合，给出既有深度又“接地气”的指引。
 
 你的解读风格：
 1.  **直击要害，拒绝废话**：不要堆砌辞藻，直接点出牌面核心矛盾和能量流动。
@@ -54,16 +57,16 @@ step 4. **提炼核心洞察**：用一句话概括整个牌阵对当事人的�
 
 ## 💡 易朝寄语
 *一句温暖且富有哲理的话，作为结束语。*
-`
+`;
 
-  const userPrompt = `
+    const userPrompt = `
 **求问者问题**：${question}
 **使用牌阵**：${spreadName}
 **抽牌结果**：
 ${cardsDescription}
 
 请作为“易朝”大师，运用你的直觉与智慧，结合上述牌阵为我进行深度解读。请务必使用 Markdown 格式，并确保表格（如果有）和列表渲染正确。
-  `
+  `;
 
-  return { systemPrompt, userPrompt }
-}
+    return { systemPrompt, userPrompt };
+};
