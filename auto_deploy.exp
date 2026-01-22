@@ -1,0 +1,21 @@
+#!/usr/bin/expect
+
+set timeout 600
+set password "Xsy19507"
+
+spawn ./deploy.sh
+
+expect {
+    "Are you sure you want to continue connecting" {
+        send "yes\r"
+        exp_continue
+    }
+    "password:" {
+        send "$password\r"
+        exp_continue
+    }
+    "Deployment Complete!" {
+        exit 0
+    }
+    eof
+}

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, ReactNode } from 'react';
-import html2canvas from 'html2canvas';
+import { domToPng } from 'modern-screenshot';
 import jsPDF from 'jspdf';
 import { useToast } from '@/components/Toast';
 import { preprocessMarkdown } from '@/utils/markdown';
@@ -195,50 +195,34 @@ export default function ExportReportModal({
         try {
             await document.fonts.ready;
 
-            // Force strict styling for capture
-            const canvas = await html2canvas(reportRef.current, {
+            // Use modern-screenshot which supports modern CSS color functions
+            const dataUrl = await domToPng(reportRef.current, {
                 scale: 2,
-                useCORS: true,
                 backgroundColor: colors.bg,
-                logging: false,
-                onclone: (clonedDoc) => {
-                    const el = clonedDoc.getElementById('export-container');
-                    if (el) {
-                        // Ensure background is properly set in the clone
-                        el.style.backgroundColor = colors.bg;
-                        let bgImage = '';
-                        if (template === 'ink') {
-                            bgImage = 'url("/rice-paper-2.png")';
-                        } else if (template === 'mystic') {
-                            bgImage = `linear-gradient(to bottom, ${colors.bg}, #292524)`;
-                        } else if (template === 'royal') {
-                            bgImage = `linear-gradient(135deg, #2d1b1b 0%, #1a0f0f 50%, #2d1b1b 100%)`;
-                        } else if (template === 'minimal') {
-                            bgImage = `linear-gradient(to bottom, #fafafa, #f5f5f5)`;
-                        } else if (template === 'starry') {
-                            bgImage = `radial-gradient(ellipse at top, #1e1b4b 0%, #0f0a1f 100%)`;
-                        } else if (template === 'cyber') {
-                            bgImage = `linear-gradient(to bottom, #0a0a0a, #1a1a1a, #0a0a0a)`;
-                        }
-                        el.style.backgroundImage = bgImage;
-                    }
+                style: {
+                    // Force sRGB color rendering
+                    colorScheme: 'light',
                 },
             });
 
             if (format === 'image') {
                 const link = document.createElement('a');
                 link.download = `EasyDynasty_${type}_${new Date().getTime()}.png`;
-                link.href = canvas.toDataURL('image/png');
+                link.href = dataUrl;
                 link.click();
                 showToast('图片导出成功', 'success');
             } else {
-                const imgData = canvas.toDataURL('image/png');
+                // For PDF, we need to create an image first to get dimensions
+                const img = new Image();
+                img.src = dataUrl;
+                await new Promise((resolve) => { img.onload = resolve; });
+
                 const pdf = new jsPDF({
                     orientation: 'p',
                     unit: 'px',
-                    format: [canvas.width / 2, canvas.height / 2],
+                    format: [img.width / 2, img.height / 2],
                 });
-                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+                pdf.addImage(dataUrl, 'PNG', 0, 0, img.width / 2, img.height / 2);
                 pdf.save(`EasyDynasty_${type}_${new Date().getTime()}.pdf`);
                 showToast('PDF 导出成功', 'success');
             }

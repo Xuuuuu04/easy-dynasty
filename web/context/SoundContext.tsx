@@ -54,27 +54,60 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    // Initialize sounds once interaction happens (or lazily)
-    // To comply with browser autoplay policies, we should probably instantiate on first user interaction,
-    // but Howler handles some of this. We'll instantiate on mount but they won't play until requested.
+    // Initialize sounds state
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
+        // Prevent multiple initializations if already done
+        if (isInitialized || Object.keys(sounds.current).length > 0) return;
+
         (Object.keys(SOUND_PATHS) as SoundType[]).forEach((key) => {
-            sounds.current[key] = new Howl({
-                src: [SOUND_PATHS[key]],
-                volume: VOLUMES[key],
-                loop: key === 'bgm',
-                preload: true,
-                html5: key === 'bgm', // Use HTML5 Audio for long tracks (BGM)
-            });
+            try {
+                // Unload potential previous instances just in case
+                if (sounds.current[key]) {
+                    sounds.current[key]?.unload();
+                }
+
+                sounds.current[key] = new Howl({
+                    src: [SOUND_PATHS[key]],
+                    volume: VOLUMES[key],
+                    loop: key === 'bgm',
+                    preload: true,
+                    // html5: false forces Web Audio API, which is more stable for recurring sounds
+                    // and avoids the "HTML5 Audio pool exhausted" error.
+                    html5: false,
+                    onloaderror: (id, err) => {
+                        console.warn(`Failed to load sound ${key}:`, err);
+                    },
+                    onplayerror: (id, err) => {
+                        console.warn(`Failed to play sound ${key}:`, err);
+                        // Unlock audio on touch if needed
+                        sounds.current[key]?.once('unlock', () => {
+                            sounds.current[key]?.play();
+                        });
+                    }
+                });
+            } catch (e) {
+                console.error(`Error initializing sound ${key}:`, e);
+            }
         });
         setIsInitialized(true);
 
+        // Cleanup function
         return () => {
+            // Stop and unload all sounds
+            Object.values(sounds.current).forEach(sound => {
+                if (sound) {
+                    sound.stop();
+                    sound.unload();
+                }
+            });
+            sounds.current = {};
+            setIsInitialized(false);
+            // Global unload as safety net
             Howler.unload();
         };
-    }, []);
+    }, []); // Empty dependency array ensures this runs once on mount
 
     const toggleMute = useCallback(() => {
         const newMuted = !isMuted;
