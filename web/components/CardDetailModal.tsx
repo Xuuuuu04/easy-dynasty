@@ -37,11 +37,6 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [selectedDeckVariant, setSelectedDeckVariant] = useState(currentDeck);
 
-    // Sync selected variant with global deck when it changes, or just init?
-    // User might want to see other variants without changing global setting.
-    // So init with currentDeck is good.
-    // However, if modal is closed and re-opened, it remounts, so init is fine.
-
     useEffect(() => {
         setIsVisible(true);
         document.body.style.overflow = 'hidden';
@@ -77,24 +72,24 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
 
             {/* Modal Content */}
             <div
-                className={`relative bg-[#fffcf5] w-full md:max-w-5xl h-full md:h-[92vh] md:rounded-xl shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 md:mx-4 ${isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'}`}
+                className={`relative bg-card-bg w-full md:max-w-5xl h-full md:h-[92vh] md:rounded-xl shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 md:mx-4 border border-border ${isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'}`}
             >
                 {/* Header */}
-                <div className="relative bg-gradient-to-r from-stone-800 to-stone-700 text-white p-4 md:p-6 flex items-center justify-between shrink-0 z-20">
+                <div className="relative bg-gradient-to-r from-text-main to-text-sub dark:from-slate-900 dark:to-slate-800 text-bg-main dark:text-text-main p-4 md:p-6 flex items-center justify-between shrink-0 z-20 border-b border-border/50">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
-                            <TarotIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                            <TarotIcon className="w-5 h-5 md:w-6 md:h-6 text-current" />
                         </div>
                         <div>
                             <h2 className="text-xl md:text-2xl font-bold">{card.name}</h2>
-                            <p className="text-xs md:text-sm text-white/70 tracking-wider uppercase">
+                            <p className="text-xs md:text-sm opacity-70 tracking-wider uppercase">
                                 {card.englishName}
                             </p>
                         </div>
                     </div>
                     <button
                         onClick={handleClose}
-                        className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                        className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
                     >
                         ✕
                     </button>
@@ -103,8 +98,8 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                 {/* Main Content Area */}
                 <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
                     {/* Left: Card Image */}
-                    <div className="w-full md:w-2/5 bg-stone-100 p-4 md:p-8 flex flex-col items-center justify-center relative md:overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-stone-200">
-                        <div className="relative w-[180px] h-[300px] md:w-full md:max-w-[280px] md:h-[480px] shadow-2xl rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-500 border-4 border-white/50 shrink-0">
+                    <div className="w-full md:w-2/5 bg-bg-main p-4 md:p-8 flex flex-col items-center justify-center relative md:overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-border">
+                        <div className="relative w-[180px] h-[300px] md:w-full md:max-w-[280px] md:h-[480px] shadow-2xl rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-500 border-4 border-card-bg shrink-0">
                             <Image
                                 src={getCardImage(card.id, selectedDeckVariant)}
                                 alt={card.name}
@@ -131,8 +126,8 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                     key={deck.id}
                                     onClick={() => setSelectedDeckVariant(deck.id)}
                                     className={`px-3 py-1.5 text-xs rounded-full border transition-all font-serif tracking-wide ${selectedDeckVariant === deck.id
-                                        ? 'bg-stone-800 text-white border-stone-800'
-                                        : 'text-stone-500 border-stone-300 hover:border-stone-500 hover:text-stone-700 bg-white/50'
+                                        ? 'bg-text-main text-bg-main border-text-main'
+                                        : 'text-text-muted border-border hover:border-text-muted hover:text-text-sub bg-card-bg/50'
                                         }`}
                                 >
                                     {deck.name}
@@ -142,14 +137,14 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
 
                         {/* Background watermark */}
                         <div className="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
-                            <TarotIcon className="w-full h-full text-stone-900" />
+                            <TarotIcon className="w-full h-full text-text-main" />
                         </div>
                     </div>
 
                     {/* Right: Tabbed Content */}
-                    <div className="flex-1 flex flex-col overflow-hidden bg-white/50">
+                    <div className="flex-1 flex flex-col overflow-hidden bg-card-bg/50">
                         {/* Tab Navigation */}
-                        <div className="flex border-b border-stone-200 bg-stone-50 px-6 overflow-x-auto no-scrollbar">
+                        <div className="flex border-b border-border bg-bg-main/50 px-6 overflow-x-auto no-scrollbar">
                             {[
                                 { id: 'overview', label: '综合解析', Icon: BookOpenIcon },
                                 { id: 'love', label: '爱情', Icon: HeartIcon },
@@ -161,8 +156,8 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id as TabType)}
                                     className={`px-4 py-3 text-sm font-medium transition-all flex items-center gap-2 border-b-2 whitespace-nowrap ${activeTab === tab.id
-                                        ? 'text-[#9a2b2b] border-[#9a2b2b]'
-                                        : 'text-stone-500 border-transparent hover:text-stone-700'
+                                        ? 'text-accent-main border-accent-main'
+                                        : 'text-text-muted border-transparent hover:text-text-sub'
                                         }`}
                                 >
                                     <tab.Icon className="w-4 h-4 shrink-0" />
@@ -177,11 +172,11 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                 <div className="space-y-6 animate-fade-in">
                                     <div className="flex flex-wrap gap-2 mb-6">
                                         {card.suit === 'major' ? (
-                                            <span className="text-xs font-bold text-white bg-stone-800 px-3 py-1 rounded-full">
+                                            <span className="text-xs font-bold text-bg-main bg-text-main px-3 py-1 rounded-full">
                                                 大阿卡纳 Major Arcana
                                             </span>
                                         ) : (
-                                            <span className="text-xs font-bold text-stone-600 bg-stone-200 px-3 py-1 rounded-full capitalize">
+                                            <span className="text-xs font-bold text-text-sub bg-bg-main px-3 py-1 rounded-full capitalize">
                                                 {card.suit} 小阿卡纳
                                             </span>
                                         )}
@@ -191,7 +186,7 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                     <div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <span className="w-1.5 h-6 bg-emerald-600 rounded-full"></span>
-                                            <h3 className="text-xl font-bold text-emerald-800">
+                                            <h3 className="text-xl font-bold text-emerald-800 dark:text-emerald-400">
                                                 正位 Upright
                                             </h3>
                                         </div>
@@ -199,13 +194,13 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                             {card.uprightKeywords.map((k, i) => (
                                                 <span
                                                     key={i}
-                                                    className="text-xs text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200"
+                                                    className="text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800"
                                                 >
                                                     {k}
                                                 </span>
                                             ))}
                                         </div>
-                                        <p className="text-stone-700 leading-relaxed text-base font-serif">
+                                        <p className="text-text-sub leading-relaxed text-base font-serif">
                                             {card.uprightMeaning ||
                                                 '此牌正位代表积极、正向的能量。建议你保持乐观的态度，勇敢前行。'}
                                         </p>
@@ -215,7 +210,7 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                     <div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <span className="w-1.5 h-6 bg-amber-600 rounded-full"></span>
-                                            <h3 className="text-xl font-bold text-amber-800">
+                                            <h3 className="text-xl font-bold text-amber-800 dark:text-amber-400">
                                                 逆位 Reversed
                                             </h3>
                                         </div>
@@ -223,13 +218,13 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                             {card.reversedKeywords.map((k, i) => (
                                                 <span
                                                     key={i}
-                                                    className="text-xs text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200"
+                                                    className="text-xs text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800"
                                                 >
                                                     {k}
                                                 </span>
                                             ))}
                                         </div>
-                                        <p className="text-stone-700 leading-relaxed text-base font-serif">
+                                        <p className="text-text-sub leading-relaxed text-base font-serif">
                                             {card.reversedMeaning ||
                                                 '此牌逆位提示你需要注意潜在的挑战或阻碍，调整你的策略和心态。'}
                                         </p>
@@ -240,42 +235,42 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                             {activeTab === 'love' && (
                                 <div className="space-y-6 animate-fade-in">
                                     <div className="text-center mb-6">
-                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-100 flex items-center justify-center">
-                                            <HeartIcon className="w-8 h-8 text-rose-600" />
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
+                                            <HeartIcon className="w-8 h-8 text-rose-600 dark:text-rose-400" />
                                         </div>
-                                        <h3 className="text-2xl font-bold text-rose-800">
+                                        <h3 className="text-2xl font-bold text-rose-800 dark:text-rose-300">
                                             爱情 · 情感关系
                                         </h3>
-                                        <p className="text-sm text-stone-500 mt-2">
+                                        <p className="text-sm text-text-muted mt-2">
                                             Love & Relationships
                                         </p>
                                     </div>
 
                                     <div className="space-y-6">
-                                        <div className="bg-rose-50 rounded-lg p-6 border border-rose-200">
-                                            <h4 className="font-bold text-rose-800 mb-3 flex items-center gap-2">
-                                                <span className="text-green-600">↑</span> 正位时
+                                        <div className="bg-rose-50 dark:bg-rose-900/10 rounded-lg p-6 border border-rose-200 dark:border-rose-800">
+                                            <h4 className="font-bold text-rose-800 dark:text-rose-300 mb-3 flex items-center gap-2">
+                                                <span className="text-green-600 dark:text-green-400">↑</span> 正位时
                                             </h4>
-                                            <p className="text-stone-700 leading-relaxed">
+                                            <p className="text-text-sub leading-relaxed">
                                                 {getContentForArea('love', false)}
                                             </p>
                                         </div>
 
-                                        <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                                            <h4 className="font-bold text-amber-800 mb-3 flex items-center gap-2">
-                                                <span className="text-orange-600">↓</span> 逆位时
+                                        <div className="bg-amber-50 dark:bg-amber-900/10 rounded-lg p-6 border border-amber-200 dark:border-amber-800">
+                                            <h4 className="font-bold text-amber-800 dark:text-amber-300 mb-3 flex items-center gap-2">
+                                                <span className="text-orange-600 dark:text-orange-400">↓</span> 逆位时
                                             </h4>
-                                            <p className="text-stone-700 leading-relaxed">
+                                            <p className="text-text-sub leading-relaxed">
                                                 {getContentForArea('love', true)}
                                             </p>
                                         </div>
 
-                                        <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                                            <h4 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
+                                        <div className="bg-blue-50 dark:bg-blue-900/10 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                                            <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
                                                 <LightbulbIcon className="w-4 h-4" />
                                                 关系建议
                                             </h4>
-                                            <ul className="space-y-2 text-stone-700">
+                                            <ul className="space-y-2 text-text-sub">
                                                 <li className="flex gap-2">
                                                     <span>•</span>
                                                     <span>倾听内心的声音，理解自己的真实需求</span>
@@ -297,42 +292,42 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                             {activeTab === 'career' && (
                                 <div className="space-y-6 animate-fade-in">
                                     <div className="text-center mb-6">
-                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 flex items-center justify-center">
-                                            <BriefcaseIcon className="w-8 h-8 text-blue-600" />
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                            <BriefcaseIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                                         </div>
-                                        <h3 className="text-2xl font-bold text-blue-800">
+                                        <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-300">
                                             事业 · 职业发展
                                         </h3>
-                                        <p className="text-sm text-stone-500 mt-2">
+                                        <p className="text-sm text-text-muted mt-2">
                                             Career & Professional Life
                                         </p>
                                     </div>
 
                                     <div className="space-y-6">
-                                        <div className="bg-emerald-50 rounded-lg p-6 border border-emerald-200">
-                                            <h4 className="font-bold text-emerald-800 mb-3 flex items-center gap-2">
-                                                <span className="text-green-600">↑</span> 正位时
+                                        <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-lg p-6 border border-emerald-200 dark:border-emerald-800">
+                                            <h4 className="font-bold text-emerald-800 dark:text-emerald-300 mb-3 flex items-center gap-2">
+                                                <span className="text-green-600 dark:text-green-400">↑</span> 正位时
                                             </h4>
-                                            <p className="text-stone-700 leading-relaxed">
+                                            <p className="text-text-sub leading-relaxed">
                                                 {getContentForArea('career', false)}
                                             </p>
                                         </div>
 
-                                        <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                                            <h4 className="font-bold text-amber-800 mb-3 flex items-center gap-2">
-                                                <span className="text-orange-600">↓</span> 逆位时
+                                        <div className="bg-amber-50 dark:bg-amber-900/10 rounded-lg p-6 border border-amber-200 dark:border-amber-800">
+                                            <h4 className="font-bold text-amber-800 dark:text-amber-300 mb-3 flex items-center gap-2">
+                                                <span className="text-orange-600 dark:text-orange-400">↓</span> 逆位时
                                             </h4>
-                                            <p className="text-stone-700 leading-relaxed">
+                                            <p className="text-text-sub leading-relaxed">
                                                 {getContentForArea('career', true)}
                                             </p>
                                         </div>
 
-                                        <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                                            <h4 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
+                                        <div className="bg-blue-50 dark:bg-blue-900/10 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                                            <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
                                                 <LightbulbIcon className="w-4 h-4" />
                                                 职业建议
                                             </h4>
-                                            <ul className="space-y-2 text-stone-700">
+                                            <ul className="space-y-2 text-text-sub">
                                                 <li className="flex gap-2">
                                                     <span>•</span>
                                                     <span>
@@ -356,42 +351,42 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                             {activeTab === 'finance' && (
                                 <div className="space-y-6 animate-fade-in">
                                     <div className="text-center mb-6">
-                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-                                            <CoinsIcon className="w-8 h-8 text-green-600" />
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                            <CoinsIcon className="w-8 h-8 text-green-600 dark:text-green-400" />
                                         </div>
-                                        <h3 className="text-2xl font-bold text-green-800">
+                                        <h3 className="text-2xl font-bold text-green-800 dark:text-green-300">
                                             财运 · 物质生活
                                         </h3>
-                                        <p className="text-sm text-stone-500 mt-2">
+                                        <p className="text-sm text-text-muted mt-2">
                                             Finance & Material Wealth
                                         </p>
                                     </div>
 
                                     <div className="space-y-6">
-                                        <div className="bg-green-50 rounded-lg p-6 border border-green-200">
-                                            <h4 className="font-bold text-green-800 mb-3 flex items-center gap-2">
-                                                <span className="text-green-600">↑</span> 正位时
+                                        <div className="bg-green-50 dark:bg-green-900/10 rounded-lg p-6 border border-green-200 dark:border-green-800">
+                                            <h4 className="font-bold text-green-800 dark:text-green-300 mb-3 flex items-center gap-2">
+                                                <span className="text-green-600 dark:text-green-400">↑</span> 正位时
                                             </h4>
-                                            <p className="text-stone-700 leading-relaxed">
+                                            <p className="text-text-sub leading-relaxed">
                                                 {getContentForArea('finance', false)}
                                             </p>
                                         </div>
 
-                                        <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
-                                            <h4 className="font-bold text-amber-800 mb-3 flex items-center gap-2">
-                                                <span className="text-orange-600">↓</span> 逆位时
+                                        <div className="bg-amber-50 dark:bg-amber-900/10 rounded-lg p-6 border border-amber-200 dark:border-amber-800">
+                                            <h4 className="font-bold text-amber-800 dark:text-amber-300 mb-3 flex items-center gap-2">
+                                                <span className="text-orange-600 dark:text-orange-400">↓</span> 逆位时
                                             </h4>
-                                            <p className="text-stone-700 leading-relaxed">
+                                            <p className="text-text-sub leading-relaxed">
                                                 {getContentForArea('finance', true)}
                                             </p>
                                         </div>
 
-                                        <div className="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                                            <h4 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
+                                        <div className="bg-blue-50 dark:bg-blue-900/10 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                                            <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
                                                 <LightbulbIcon className="w-4 h-4" />
                                                 理财建议
                                             </h4>
-                                            <ul className="space-y-2 text-stone-700">
+                                            <ul className="space-y-2 text-text-sub">
                                                 <li className="flex gap-2">
                                                     <span>•</span>
                                                     <span>制定合理的财务规划和预算</span>
@@ -413,20 +408,20 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                             {activeTab === 'advice' && (
                                 <div className="space-y-6 animate-fade-in">
                                     <div className="text-center mb-6">
-                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 flex items-center justify-center">
-                                            <LightbulbIcon className="w-8 h-8 text-indigo-600" />
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                                            <LightbulbIcon className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
                                         </div>
-                                        <h3 className="text-2xl font-bold text-indigo-800">
+                                        <h3 className="text-2xl font-bold text-indigo-800 dark:text-indigo-300">
                                             实践建议 · 学习指引
                                         </h3>
-                                        <p className="text-sm text-stone-500 mt-2">
+                                        <p className="text-sm text-text-muted mt-2">
                                             Practical Advice & Learning Guide
                                         </p>
                                     </div>
 
                                     <div className="space-y-6">
-                                        <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-200">
-                                            <h4 className="font-bold text-indigo-800 mb-3 flex items-center gap-2">
+                                        <div className="bg-indigo-50 dark:bg-indigo-900/10 rounded-lg p-6 border border-indigo-200 dark:border-indigo-800">
+                                            <h4 className="font-bold text-indigo-800 dark:text-indigo-300 mb-3 flex items-center gap-2">
                                                 <svg
                                                     className="w-5 h-5"
                                                     viewBox="0 0 24 24"
@@ -440,9 +435,9 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                                 </svg>
                                                 如何应用此牌
                                             </h4>
-                                            <ul className="space-y-3 text-stone-700">
+                                            <ul className="space-y-3 text-text-sub">
                                                 <li className="flex gap-3">
-                                                    <span className="text-indigo-600 font-bold">
+                                                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">
                                                         1.
                                                     </span>
                                                     <span>
@@ -451,7 +446,7 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                                     </span>
                                                 </li>
                                                 <li className="flex gap-3">
-                                                    <span className="text-indigo-600 font-bold">
+                                                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">
                                                         2.
                                                     </span>
                                                     <span>
@@ -460,7 +455,7 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                                     </span>
                                                 </li>
                                                 <li className="flex gap-3">
-                                                    <span className="text-indigo-600 font-bold">
+                                                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">
                                                         3.
                                                     </span>
                                                     <span>
@@ -469,7 +464,7 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                                     </span>
                                                 </li>
                                                 <li className="flex gap-3">
-                                                    <span className="text-indigo-600 font-bold">
+                                                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">
                                                         4.
                                                     </span>
                                                     <span>
@@ -477,15 +472,24 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                                         根据牌意,设定一个小目标并在一周内实践。
                                                     </span>
                                                 </li>
+                                                <li className="flex gap-3">
+                                                    <span className="text-indigo-600 dark:text-indigo-400 font-bold">
+                                                        5.
+                                                    </span>
+                                                    <span>
+                                                        <strong>定期回顾：</strong>
+                                                        一周后回顾这个目标,看看是否有新的领悟。
+                                                    </span>
+                                                </li>
                                             </ul>
                                         </div>
 
-                                        <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
-                                            <h4 className="font-bold text-purple-800 mb-3 flex items-center gap-2">
+                                        <div className="bg-purple-50 dark:bg-purple-900/10 rounded-lg p-6 border border-purple-200 dark:border-purple-800">
+                                            <h4 className="font-bold text-purple-800 dark:text-purple-300 mb-3 flex items-center gap-2">
                                                 <BookOpenIcon className="w-4 h-4" />
                                                 学习要点
                                             </h4>
-                                            <div className="space-y-3 text-stone-700">
+                                            <div className="space-y-3 text-text-sub">
                                                 <p>
                                                     <strong>关键词记忆：</strong>
                                                     通过反复查看正逆位关键词,建立对此牌的直觉认知。
@@ -501,8 +505,8 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                             </div>
                                         </div>
 
-                                        <div className="bg-yellow-50 rounded-lg p-6 border border-yellow-300">
-                                            <h4 className="font-bold text-yellow-800 mb-3 flex items-center gap-2">
+                                        <div className="bg-yellow-50 dark:bg-yellow-900/10 rounded-lg p-6 border border-yellow-300 dark:border-yellow-700">
+                                            <h4 className="font-bold text-yellow-800 dark:text-yellow-300 mb-3 flex items-center gap-2">
                                                 <svg
                                                     className="w-5 h-5"
                                                     viewBox="0 0 24 24"
@@ -516,7 +520,7 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
                                                 </svg>
                                                 解读注意事项
                                             </h4>
-                                            <ul className="space-y-2 text-stone-700 text-sm">
+                                            <ul className="space-y-2 text-stone-700 dark:text-slate-300 text-sm">
                                                 <li className="flex gap-2">
                                                     <span>•</span>
                                                     <span>

@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import NavBar from '@/components/NavBar';
-import { ToastProvider } from '@/components/Toast';
-import { DeckProvider } from '@/context/DeckContext';
-import { SoundProvider } from '@/context/SoundContext';
 import BackgroundPoetry from '@/components/BackgroundPoetry';
 import DisclaimerModal from '@/components/DisclaimerModal';
+import { Providers } from './providers';
 
 export const viewport: Viewport = {
     themeColor: '#9a2b2b',
@@ -37,18 +35,14 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="zh-CN">
-            <body className="antialiased bg-[#f5f5f0] text-stone-800 selection:bg-[#9a2b2b]/20">
-                <DisclaimerModal />
-                <ToastProvider>
-                    <DeckProvider>
-                        <SoundProvider>
-                            <BackgroundPoetry />
-                            <NavBar />
-                            {children}
-                        </SoundProvider>
-                    </DeckProvider>
-                </ToastProvider>
+        <html lang="zh-CN" suppressHydrationWarning>
+            <body className="antialiased bg-bg-main text-text-main selection:bg-accent-main/20 transition-colors duration-500">
+                <Providers>
+                    <DisclaimerModal />
+                    <BackgroundPoetry />
+                    <NavBar />
+                    {children}
+                </Providers>
             </body>
         </html>
     );

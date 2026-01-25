@@ -711,13 +711,13 @@ export default function ExportReportModal({
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
             <div className="bg-white md:rounded-lg shadow-2xl w-full max-w-6xl h-full md:h-[90vh] flex flex-col md:flex-row overflow-hidden">
                 {/* Left: Controls - Keep Tailwind here as it's not exported */}
-                <div className="w-full md:w-80 bg-stone-50 border-b md:border-b-0 md:border-r border-stone-200 p-4 md:p-6 flex flex-col gap-4 md:gap-6 shrink-0 h-auto max-h-[40vh] md:max-h-full overflow-y-auto z-10">
+                <div className="w-full md:w-80 bg-card-bg border-b md:border-b-0 md:border-r border-border p-4 md:p-6 flex flex-col gap-4 md:gap-6 shrink-0 h-auto max-h-[40vh] md:max-h-full overflow-y-auto z-10">
                     <div className="flex justify-between items-center md:block">
                         <div>
-                            <h3 className="text-lg font-bold text-ink mb-1">导出报告</h3>
-                            <p className="text-xs text-stone-500">生成精美的命理分析卡片</p>
+                            <h3 className="text-lg font-bold text-text-main mb-1">导出报告</h3>
+                            <p className="text-xs text-text-muted">生成精美的命理分析卡片</p>
                         </div>
-                        <button onClick={onClose} className="md:hidden text-stone-400 hover:text-stone-600">
+                        <button onClick={onClose} className="md:hidden text-text-muted hover:text-text-main">
                             ✕
                         </button>
                     </div>
@@ -725,8 +725,7 @@ export default function ExportReportModal({
                     {type === 'tarot' && (
                         <div className="space-y-3">
                             <label
-                                className="text-xs font-bold uppercase hidden md:block"
-                                style={{ color: '#a3a3a3' }}
+                                className="text-xs font-bold uppercase hidden md:block text-text-muted"
                             >
                                 选择风格
                             </label>
@@ -738,10 +737,10 @@ export default function ExportReportModal({
                                         className="px-3 py-2 md:px-4 md:py-3.5 text-xs md:text-sm border-2 rounded-lg md:rounded-xl text-left transition-all flex items-center justify-between group hover:shadow-md"
                                         style={{
                                             borderColor:
-                                                template === opt.id ? opt.border : '#e7e5e4',
+                                                template === opt.id ? opt.border : 'var(--border)',
                                             backgroundColor:
-                                                template === opt.id ? opt.bg : '#ffffff',
-                                            color: template === opt.id ? opt.text : '#57534e',
+                                                template === opt.id ? opt.bg : 'var(--card-bg)',
+                                            color: template === opt.id ? opt.text : 'var(--text-sub)',
                                         }}
                                     >
                                         <span className="font-bold">{opt.name}</span>
@@ -768,12 +767,12 @@ export default function ExportReportModal({
 
                     {type === 'bazi' && (
                         <div className="space-y-3">
-                            <label className="text-xs font-bold text-stone-400 uppercase hidden md:block">
+                            <label className="text-xs font-bold text-text-muted uppercase hidden md:block">
                                 隐私设置
                             </label>
                             <label className="flex items-center gap-3 cursor-pointer group">
                                 <div
-                                    className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${hidePrivateInfo ? 'bg-[#9a2b2b] border-[#9a2b2b]' : 'border-stone-300 bg-white group-hover:border-stone-400'}`}
+                                    className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${hidePrivateInfo ? 'bg-accent-main border-accent-main' : 'border-border bg-card-bg group-hover:border-text-muted'}`}
                                 >
                                     {hidePrivateInfo && (
                                         <svg
@@ -797,25 +796,25 @@ export default function ExportReportModal({
                                     checked={hidePrivateInfo}
                                     onChange={(e) => setHidePrivateInfo(e.target.checked)}
                                 />
-                                <span className="text-sm text-stone-700">隐藏生辰八字</span>
+                                <span className="text-sm text-text-sub">隐藏生辰八字</span>
                             </label>
-                            <p className="text-[10px] text-stone-400 leading-relaxed hidden md:block">
+                            <p className="text-[10px] text-text-muted leading-relaxed hidden md:block">
                                 开启后，导出图片将不会显示具体的出生时间和完整的四柱信息，仅保留分析结果。
                             </p>
                         </div>
                     )}
 
-                    <div className="mt-auto space-y-3 pt-4 border-t border-stone-200/50 md:border-0 md:pt-0">
+                    <div className="mt-auto space-y-3 pt-4 border-t border-border md:border-0 md:pt-0">
                         <button
                             onClick={() => handleExport('image')}
                             disabled={isGenerating}
-                            className="w-full py-2.5 md:py-3 bg-[#9a2b2b] hover:bg-[#852222] text-white font-bold tracking-widest rounded-sm shadow-md transition-all disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2 text-sm md:text-base"
+                            className="w-full py-2.5 md:py-3 bg-accent-main hover:bg-accent-light text-white font-bold tracking-widest rounded-sm shadow-md transition-all disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2 text-sm md:text-base"
                         >
                             {isGenerating ? '生成中...' : '保存为图片'}
                         </button>
                         <button
                             onClick={onClose}
-                            className="w-full py-2 text-xs text-stone-400 hover:text-stone-600 hidden md:block"
+                            className="w-full py-2 text-xs text-text-muted hover:text-text-main hidden md:block"
                         >
                             取消
                         </button>
@@ -823,7 +822,7 @@ export default function ExportReportModal({
                 </div>
 
                 {/* Right: Preview Area */}
-                <div className="flex-1 bg-stone-200/50 overflow-auto p-4 md:p-8 flex justify-center custom-scrollbar">
+                <div className="flex-1 bg-bg-main overflow-auto p-4 md:p-8 flex justify-center custom-scrollbar">
                     <div
                         className="relative shadow-2xl origin-top transition-transform duration-500 scale-[0.35] md:scale-[0.6] lg:scale-[0.75] mb-20 md:mb-0"
                         style={{ transformOrigin: 'top center' }}

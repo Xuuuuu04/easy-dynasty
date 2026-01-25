@@ -92,7 +92,7 @@ export default function CardShowcase({ card, onComplete }: CardShowcaseProps) {
           `}
                 >
                     {/* Front (Card Face) - Rotated 180 initially so it shows when container flips */}
-                    <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-xl overflow-hidden shadow-2xl border-4 border-[#9a2b2b]">
+                    <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-xl overflow-hidden shadow-2xl border-4 border-accent-main">
                         <div className="relative w-full h-full bg-white">
                             <Image
                                 src={imgSrc}
@@ -115,7 +115,7 @@ export default function CardShowcase({ card, onComplete }: CardShowcaseProps) {
                     </div>
 
                     {/* Back (Card Back) */}
-                    <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden shadow-2xl border-2 border-[#4a4a4a]">
+                    <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden shadow-2xl border-2 border-border">
                         <Image
                             src={CARD_BACK_IMAGE}
                             alt="Card Back"

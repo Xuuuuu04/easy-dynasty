@@ -79,10 +79,10 @@ export function useSpreadSlotRenderer(props: SpreadComponentProps) {
                     <div
                         className="inline-flex items-center gap-1.5 rounded-sm border-2 backdrop-blur-md px-2 md:px-3 py-1 text-[10px] md:text-xs font-bold uppercase tracking-widest whitespace-nowrap"
                         style={{
-                            backgroundColor: labelBg || 'rgba(255, 255, 255, 0.95)',
-                            borderColor: labelBorder || 'rgba(154, 43, 43, 0.4)',
-                            color: labelText || '#9a2b2b',
-                            boxShadow: `0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px ${labelBorder || 'rgba(154, 43, 43, 0.2)'}`,
+                            backgroundColor: labelBg || 'var(--card-bg-opacity)',
+                            borderColor: labelBorder || 'var(--border)',
+                            color: labelText || 'var(--accent-main)',
+                            boxShadow: `0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px ${labelBorder || 'var(--border)'}`,
                         }}
                     >
                         <span>{position.name}</span>
@@ -98,12 +98,12 @@ export function useSpreadSlotRenderer(props: SpreadComponentProps) {
             ${rotateCard ? 'rotate-90' : ''}
             ${!drawnCard ? 'rounded-lg border-2 border-dashed' : ''}
             ${canDraw && !drawnCard
-                            ? 'cursor-pointer border-[#9a2b2b]/50 bg-[#9a2b2b]/5 hover:border-[#9a2b2b] hover:shadow-[0_0_15px_rgba(154,43,43,0.2)]'
+                            ? 'cursor-pointer border-accent-main/50 bg-accent-main/5 hover:border-accent-main hover:shadow-[0_0_15px_rgba(var(--accent-main-rgb),0.2)]'
                             : !drawnCard
-                                ? 'border-stone-300 bg-stone-100/30'
+                                ? 'border-border bg-bg-main/30'
                                 : ''
                         }
-            ${isCurrentlyDrawing ? 'border-[#9a2b2b] animate-pulse shadow-md' : ''}
+            ${isCurrentlyDrawing ? 'border-accent-main animate-pulse shadow-md' : ''}
             ${drawnCard ? 'shadow-2xl' : ''}
           `}
                     onClick={() => canDraw && onPositionClick(position.id)}
@@ -127,7 +127,7 @@ export function useSpreadSlotRenderer(props: SpreadComponentProps) {
                             className={`text-center p-2 opacity-60 transition-opacity ${canDraw ? 'group-hover:opacity-100' : ''}`}
                         >
                             <span
-                                className={`text-[10px] md:text-xs text-stone-400 font-serif block mb-1 ${rotateCard ? '-rotate-90' : ''}`}
+                                className={`text-[10px] md:text-xs text-text-muted font-serif block mb-1 ${rotateCard ? '-rotate-90' : ''}`}
                             >
                                 {isCurrentlyDrawing
                                     ? 'Drawing...'
@@ -148,7 +148,7 @@ export function useSpreadSlotRenderer(props: SpreadComponentProps) {
               ${labelPosition === 'bottom' ? 'top-[130%]' : 'top-[105%]'}
             `}
                     >
-                        <p className="text-[9px] md:text-[10px] text-stone-400 leading-tight bg-white/80 p-1 rounded backdrop-blur-sm shadow-sm border border-stone-100">
+                        <p className="text-[9px] md:text-[10px] text-text-muted leading-tight bg-card-bg/80 p-1 rounded backdrop-blur-sm shadow-sm border border-border">
                             {position.description}
                         </p>
                     </div>

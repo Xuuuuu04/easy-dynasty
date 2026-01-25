@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     # LLM Configuration
     DEFAULT_LLM_API_KEY: str = ""
     DEFAULT_LLM_BASE_URL: str = "https://api.siliconflow.cn/v1"
-    DEFAULT_LLM_MODEL: str = "moonshotai/Kimi-K2-Instruct-0905"
-    TAROT_MODEL: str = "moonshotai/Kimi-K2-Instruct-0905"
+    DEFAULT_LLM_MODEL: str = "Qwen/Qwen3-Next-80B-A3B-Instruct"
+    TAROT_MODEL: str = "Qwen/Qwen3-Next-80B-A3B-Instruct"
 
     class Config:
         case_sensitive = True

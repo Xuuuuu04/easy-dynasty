@@ -140,7 +140,7 @@ export function useTarotAnalysis() {
                     overrideCandidate ??
                     (hasLocalConfig ? localModel : null) ??
                     (useDefaultConfig ? defaultConfig.model : null) ??
-                    'moonshotai/Kimi-K2-Instruct-0905';
+                    'Qwen/Qwen3-Next-80B-A3B-Instruct';
 
                 if (hasLocalConfig && effectiveModel) {
                     localStorage.setItem('tarot_api_model', effectiveModel);
@@ -308,6 +308,11 @@ export async function analyzeTarotReading(
     const batcher = onStream ? createStreamBatcher(onStream) : null;
 
     for await (const chunk of parseSSEStream(reader)) {
+        // Check for error in chunk
+        if (chunk.error) {
+             throw new Error(chunk.error);
+        }
+
         // Robustly handle both standard OpenAI and custom content fields
         const content = chunk.choices?.[0]?.delta?.content || chunk.content;
         if (content) {

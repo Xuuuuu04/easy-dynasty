@@ -153,12 +153,12 @@ export default function ModelSelector({
     if (!hasCustomApiConfig) return null;
 
     return (
-        <div className="mt-8 rounded-sm border border-stone-200 bg-stone-50 p-6">
-            <div className="mb-4 flex items-center gap-3 text-stone-700">
+        <div className="mt-8 rounded-sm border border-border bg-card-bg p-6">
+            <div className="mb-4 flex items-center gap-3 text-text-sub">
                 <ReinterpretIcon />
                 <div>
-                    <h3 className="text-sm font-bold text-ink">重新解读</h3>
-                    <p className="text-xs text-stone-500">尝试使用其他模型获取不同的视角</p>
+                    <h3 className="text-sm font-bold text-text-main">重新解读</h3>
+                    <p className="text-xs text-text-muted">尝试使用其他模型获取不同的视角</p>
                 </div>
             </div>
 
@@ -166,10 +166,10 @@ export default function ModelSelector({
                 <div
                     className={`mb-4 rounded-sm border p-3 text-xs font-medium ${
                         modelMessage.includes('成功') || modelMessage.includes('✅')
-                            ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                            ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/30 dark:bg-emerald-900/10 dark:text-emerald-400'
                             : modelMessage.includes('❌') || modelMessage.includes('失败')
-                              ? 'border-red-200 bg-red-50 text-red-700'
-                              : 'border-sky-200 bg-sky-50 text-sky-700'
+                              ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-900/30 dark:bg-red-900/10 dark:text-red-400'
+                              : 'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-900/30 dark:bg-sky-900/10 dark:text-sky-400'
                     }`}
                 >
                     {modelMessage}
@@ -180,7 +180,7 @@ export default function ModelSelector({
                 <button
                     onClick={handleFetchModels}
                     disabled={isFetchingModels || isAnalysisLoading}
-                    className="w-full rounded-sm border border-stone-300 bg-white px-4 py-3 text-sm font-medium text-stone-600 hover:bg-stone-50 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-sm border border-border bg-bg-main px-4 py-3 text-sm font-medium text-text-sub hover:bg-bg-main/80 transition-all disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     {isFetchingModels
                         ? '获取中...'
@@ -197,7 +197,7 @@ export default function ModelSelector({
                                 value={selectedModel}
                                 onChange={(e) => onModelChange(e.target.value)}
                                 disabled={isAnalysisLoading}
-                                className="w-full rounded-sm bg-white border border-stone-300 px-4 py-3 text-sm text-stone-800 focus:border-[#9a2b2b] focus:outline-none focus:ring-1 focus:ring-[#9a2b2b]/50 appearance-none cursor-pointer"
+                                className="w-full rounded-sm bg-bg-main border border-border px-4 py-3 text-sm text-text-main focus:border-accent-main focus:outline-none focus:ring-1 focus:ring-accent-main/50 appearance-none cursor-pointer"
                             >
                                 <option value="">请选择模型</option>
                                 {availableModels.map((modelId) => (
@@ -228,7 +228,7 @@ export default function ModelSelector({
                                     setModelMessage('');
                                 }}
                                 disabled={isAnalysisLoading}
-                                className="rounded-sm border border-stone-300 bg-white px-4 py-3 text-sm font-medium text-stone-500 hover:text-stone-700 transition-all disabled:opacity-50"
+                                className="rounded-sm border border-border bg-bg-main px-4 py-3 text-sm font-medium text-text-muted hover:text-text-main transition-all disabled:opacity-50"
                             >
                                 隐藏
                             </button>

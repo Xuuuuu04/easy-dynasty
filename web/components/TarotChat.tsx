@@ -57,7 +57,7 @@ const ChatIcon = () => (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-[#9a2b2b]"
+        className="text-accent-main"
     >
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
     </svg>
@@ -149,8 +149,8 @@ export default function TarotChat({
     const followUpMessages = history.slice(3);
 
     return (
-        <div className="mt-8 border-t border-stone-200 pt-8 animate-fade-in text-left">
-            <h3 className="text-xl font-bold text-ink mb-6 flex items-center gap-2">
+        <div className="mt-8 border-t border-border pt-8 animate-fade-in text-left">
+            <h3 className="text-xl font-bold text-text-main mb-6 flex items-center gap-2">
                 <ChatIcon /> {title}
             </h3>
 
@@ -162,12 +162,12 @@ export default function TarotChat({
                     >
                         <div
                             className={`max-w-[90%] md:max-w-[85%] rounded-xl px-3 py-2 md:px-4 md:py-3 shadow-sm ${msg.role === 'user'
-                                    ? 'bg-[#9a2b2b] text-[#f5f5f0] rounded-br-none'
-                                    : 'bg-white border border-stone-200 text-stone-800 rounded-bl-none'
+                                    ? 'bg-accent-main text-white rounded-br-none'
+                                    : 'bg-card-bg border border-border text-text-main rounded-bl-none'
                                 }`}
                         >
                             <div
-                                className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert' : 'prose-stone'} text-xs md:text-sm`}
+                                className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert' : 'dark:prose-invert prose-stone'} text-xs md:text-sm`}
                             >
                                 <ReactMarkdown
                                     remarkPlugins={[remarkGfm]}
@@ -191,32 +191,32 @@ export default function TarotChat({
                                             <p className="mb-3 leading-relaxed">{children}</p>
                                         ),
                                         blockquote: ({ children }) => (
-                                            <blockquote className="border-l-4 border-[#9a2b2b] bg-stone-50/50 py-2 pl-4 italic my-4 rounded-r">
+                                            <blockquote className="border-l-4 border-accent-main bg-bg-main/50 py-2 pl-4 italic my-4 rounded-r">
                                                 {children}
                                             </blockquote>
                                         ),
                                         table: ({ children }) => (
-                                            <div className="overflow-x-auto my-4 border border-stone-200 rounded-sm shadow-sm">
-                                                <table className="min-w-full divide-y divide-stone-200">
+                                            <div className="overflow-x-auto my-4 border border-border rounded-sm shadow-sm">
+                                                <table className="min-w-full divide-y divide-border">
                                                     {children}
                                                 </table>
                                             </div>
                                         ),
                                         thead: ({ children }) => (
-                                            <thead className="bg-stone-50">{children}</thead>
+                                            <thead className="bg-bg-main">{children}</thead>
                                         ),
                                         th: ({ children }) => (
-                                            <th className="px-3 py-2 text-left text-xs font-bold text-stone-500 uppercase border-r border-stone-200 last:border-r-0">
+                                            <th className="px-3 py-2 text-left text-xs font-bold text-text-muted uppercase border-r border-border last:border-r-0">
                                                 {children}
                                             </th>
                                         ),
                                         td: ({ children }) => (
-                                            <td className="px-3 py-2 text-xs text-stone-600 border-r border-stone-100 last:border-r-0">
+                                            <td className="px-3 py-2 text-xs text-text-sub border-r border-border last:border-r-0">
                                                 {children}
                                             </td>
                                         ),
                                         tr: ({ children }) => (
-                                            <tr className="divide-x divide-stone-100 even:bg-stone-50/50">
+                                            <tr className="divide-x divide-border even:bg-bg-main/50">
                                                 {children}
                                             </tr>
                                         ),
@@ -232,18 +232,18 @@ export default function TarotChat({
                     (followUpMessages.length === 0 ||
                         followUpMessages[followUpMessages.length - 1]?.content !== '') && (
                         <div className="flex justify-start">
-                            <div className="bg-white border border-stone-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
+                            <div className="bg-card-bg border border-border rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
                                 <div className="flex gap-1">
                                     <div
-                                        className="w-2 h-2 bg-stone-400 rounded-full animate-bounce"
+                                        className="w-2 h-2 bg-text-muted rounded-full animate-bounce"
                                         style={{ animationDelay: '0s' }}
                                     ></div>
                                     <div
-                                        className="w-2 h-2 bg-stone-400 rounded-full animate-bounce"
+                                        className="w-2 h-2 bg-text-muted rounded-full animate-bounce"
                                         style={{ animationDelay: '0.2s' }}
                                     ></div>
                                     <div
-                                        className="w-2 h-2 bg-stone-400 rounded-full animate-bounce"
+                                        className="w-2 h-2 bg-text-muted rounded-full animate-bounce"
                                         style={{ animationDelay: '0.4s' }}
                                     ></div>
                                 </div>
@@ -258,13 +258,13 @@ export default function TarotChat({
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="对此次解读还有疑问？请继续提问..."
-                    className="w-full rounded-sm bg-white border border-stone-300 px-4 py-3 pr-12 text-stone-800 placeholder:text-stone-400 focus:border-[#9a2b2b] focus:outline-none focus:ring-1 focus:ring-[#9a2b2b]/50 transition-all font-serif"
+                    className="w-full rounded-sm bg-card-bg border border-border px-4 py-3 pr-12 text-text-main placeholder:text-text-muted focus:border-accent-main focus:outline-none focus:ring-1 focus:ring-accent-main/50 transition-all font-serif"
                     disabled={isLoading}
                 />
                 <button
                     type="submit"
                     disabled={!input.trim() || isLoading}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-stone-400 hover:text-[#9a2b2b] disabled:opacity-50 transition-colors"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-text-muted hover:text-accent-main disabled:opacity-50 transition-colors"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

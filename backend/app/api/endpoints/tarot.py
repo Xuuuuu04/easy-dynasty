@@ -3,7 +3,7 @@ from datetime import datetime
 
 import httpx
 from fastapi import APIRouter, Depends
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi_limiter.depends import RateLimiter
 
 from app.core.logger import logger
@@ -13,13 +13,20 @@ from app.services.settings_service import SettingsService
 router = APIRouter()
 
 
-@router.post("/analyze", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
+@router.post("/analyze")
 async def analyze_tarot(req: TarotRequest):
     api_key = SettingsService.get("DEFAULT_LLM_API_KEY")
     base_url = SettingsService.get("LLM_BASE_URL", "https://api.siliconflow.cn/v1")
-    model = SettingsService.get("TAROT_MODEL", "moonshotai/Kimi-K2-Instruct-0905")
+    model = SettingsService.get("TAROT_MODEL", "Qwen/Qwen3-Next-80B-A3B-Instruct")
 
-    logger.info(f"Tarot Analysis - Model: {model}, Base URL: {base_url}")
+    logger.info(f"Tarot Analysis Request - Model: {model}, Base URL: {base_url}")
+    if api_key:
+        logger.info(f"API Key used: {api_key[:5]}...{api_key[-5:]}")
+    else:
+        logger.error("API Key is empty")
+
+    if not api_key:
+        return JSONResponse(status_code=500, content={"error": "LLM API Key not configured"})
 
     current_date = datetime.now().strftime("%Y年%m月%d日")
     cards_str = ""
@@ -59,11 +66,11 @@ async def analyze_tarot(req: TarotRequest):
     return StreamingResponse(stream_response(), media_type="text/event-stream")
 
 
-@router.post("/chat", dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+@router.post("/chat")
 async def chat_tarot(req: TarotChatRequest):
     api_key = SettingsService.get("DEFAULT_LLM_API_KEY")
     base_url = SettingsService.get("LLM_BASE_URL", "https://api.siliconflow.cn/v1")
-    model = SettingsService.get("TAROT_MODEL", "moonshotai/Kimi-K2-Instruct-0905")
+    model = SettingsService.get("TAROT_MODEL", "Qwen/Qwen3-Next-80B-A3B-Instruct")
 
     async def stream_response():
         async with httpx.AsyncClient() as client:

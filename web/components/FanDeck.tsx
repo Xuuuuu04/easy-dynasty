@@ -59,7 +59,7 @@ export default function FanDeck({
                                 }
                             }}
                         >
-                            <div className="relative w-full h-full rounded-lg overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.3)] border border-[#4a4a4a]/30 group-hover:border-[#9a2b2b] group-hover:shadow-[0_0_25px_rgba(154,43,43,0.6)] transition-all bg-white">
+                            <div className="relative w-full h-full rounded-lg overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.3)] border border-border group-hover:border-accent-main group-hover:shadow-[0_0_25px_rgba(var(--accent-main-rgb),0.6)] transition-all bg-card-bg">
                                 <Image
                                     src={CARD_BACK_IMAGE}
                                     alt="Card"
@@ -78,7 +78,7 @@ export default function FanDeck({
             </div>
 
             {/* Counter */}
-            <div className="mt-4 pointer-events-none text-stone-500 font-serif text-xs tracking-widest bg-white/50 px-4 py-1 rounded-full backdrop-blur-sm border border-stone-200">
+            <div className="mt-4 pointer-events-none text-text-muted font-serif text-xs tracking-widest bg-bg-main/50 px-4 py-1 rounded-full backdrop-blur-sm border border-border">
                 滑动抽牌 · 剩余 {availableCount} 张
             </div>
 

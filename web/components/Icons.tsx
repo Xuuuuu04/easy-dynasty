@@ -385,3 +385,73 @@ export const VolumeXIcon = ({ className = 'w-5 h-5' }) => (
         <line x1="17" y1="9" x2="23" y2="15"></line>
     </svg>
 );
+
+export const SunIcon = ({ className = 'w-5 h-5' }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+    >
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+);
+
+export const MoonIcon = ({ className = 'w-5 h-5' }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+    >
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+);
+
+export const LogoIcon = ({ className = 'w-10 h-10' }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 100 100"
+        className={className}
+    >
+        <defs>
+            <filter id="ink-texture-icon">
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" />
+                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.4 0" />
+            </filter>
+        </defs>
+
+        {/* Seal Body - Uses current text color */}
+        <rect x="10" y="10" width="80" height="80" rx="12" fill="currentColor" />
+
+        {/* Inner Border - Slightly lighter/transparent */}
+        <rect x="16" y="16" width="68" height="68" rx="8" fill="none" stroke="white" strokeOpacity="0.3" strokeWidth="2" />
+
+        {/* Character 'Yi' */}
+        <g transform="translate(50, 50) scale(0.8) translate(-50, -50)">
+            {/* Top part (Sun) */}
+            <path d="M30 25 H70 V45 H30 Z M30 35 H70" fill="none" stroke="var(--bg-main)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Bottom part (Moon strokes roughly) */}
+            <path d="M30 60 Q40 65 50 60 Q30 75 25 85 M60 55 Q70 65 75 80 M40 70 L60 70" fill="none" stroke="var(--bg-main)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+
+        {/* Texture Overlay */}
+        <rect x="10" y="10" width="80" height="80" rx="12" fill="url(#ink-texture-icon)" style={{ mixBlendMode: 'multiply', opacity: 0.3 }} />
+    </svg>
+);
