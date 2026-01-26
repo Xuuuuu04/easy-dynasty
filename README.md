@@ -36,7 +36,8 @@
 此处记录服务器的关键配置，便于后续 AI 维护和接手。
 
 - **IP**: `8.155.162.119`
-- **用户**: `root` 密码Xsy19507
+- **用户**: `root`
+- **域名**: `https://tarot.oyemoye.top`
 - **项目根目录**: `/root/tarot`
 
 ### 目录结构 (服务器)
@@ -53,10 +54,11 @@
 
 | 服务名称 | 类型 | 端口 | 管理命令 |
 |----------|------|------|----------|
-| **后端 API** | Systemd | 8000 | `systemctl restart tarot-backend` |
+| **后端 API** | Systemd | 8001 | `systemctl restart tarot-backend` |
 | **前端 UI** | PM2 | 3000 | `pm2 restart tarot-frontend` |
 | **Redis** | Systemd | 6379 | `systemctl restart redis-server` |
 | **Nginx** | Systemd | 80/443 | `systemctl reload nginx` |
+| **API 访问** | Nginx 反代 | `/api -> 8001` | Nginx 配置中转发 |
 
 ### 常用命令速查
 
