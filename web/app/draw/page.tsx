@@ -17,7 +17,7 @@ import type { TarotCard, Spread, DrawnCard, ChatMessage, ApiConfig } from '@/typ
 import { analyzeTarotReading } from '@/hooks/useTarotAnalysis';
 import { constructTarotPrompts } from '@/utils/prompts';
 import { preprocessMarkdown } from '@/utils/markdown';
-import { TarotIcon, ChartIcon } from '@/components/Icons';
+import { TarotIcon, ChartIcon, LogoIcon } from '@/components/Icons';
 import CardShowcase from '@/components/CardShowcase';
 import { useSound } from '@/context/SoundContext';
 
@@ -234,14 +234,25 @@ export default function DrawPage() {
                 <div className="relative z-10 w-full max-w-lg bg-card-bg/85 backdrop-blur-xl p-10 md:p-12 rounded-sm shadow-[0_8px_32px_rgba(0,0,0,0.05)] border border-border/60 flex flex-col gap-10">
                     {/* Header */}
                     <div className="text-center space-y-4">
-                        <div className="w-16 h-16 mx-auto bg-accent-main rounded-full flex items-center justify-center shadow-lg mb-6">
-                            <TarotIcon className="w-8 h-8 text-white" />
+                        <div className="flex flex-col items-center justify-center mb-6 gap-3">
+                            <div className="relative w-16 h-16 text-[var(--accent-main)] transition-transform duration-500 hover:rotate-12">
+                                <LogoIcon className="w-full h-full drop-shadow-md" />
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-3xl font-bold font-serif text-[var(--text-main)] tracking-[0.2em] leading-none">
+                                    易朝
+                                </span>
+                                <span className="text-xs text-[var(--accent-main)] uppercase tracking-[0.3em] font-medium leading-none mt-2">
+                                    Dynasty
+                                </span>
+                            </div>
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-serif font-bold text-text-main tracking-[0.2em] mb-2">
+                        <div className="h-px w-16 mx-auto bg-[var(--accent-main)]/30 mb-4"></div>
+                        <h1 className="text-xl md:text-2xl font-serif font-bold text-text-main tracking-[0.2em] mb-2 opacity-90">
                             心诚则灵
                         </h1>
-                        <p className="text-sm font-serif text-text-muted tracking-widest uppercase">
-                            EasyDynasty Tarot Interpretation
+                        <p className="text-xs font-serif text-text-muted tracking-widest uppercase opacity-70">
+                            Tarot Interpretation
                         </p>
                     </div>
 
@@ -452,8 +463,18 @@ export default function DrawPage() {
                                                         {children}
                                                     </p>
                                                 ),
+                                                strong: ({ children }) => (
+                                                    <strong className="font-bold text-accent-main dark:text-accent-light">
+                                                        {children}
+                                                    </strong>
+                                                ),
+                                                em: ({ children }) => (
+                                                    <em className="italic text-text-main">
+                                                        {children}
+                                                    </em>
+                                                ),
                                                 blockquote: ({ children }) => (
-                                                    <blockquote className="my-6 border-l-2 border-accent-main bg-bg-main/50 py-3 pl-5 italic text-text-sub rounded-sm">
+                                                    <blockquote className="my-6 border-l-4 border-accent-main bg-stone-100 dark:bg-[var(--accent-main)]/10 py-4 pl-5 pr-4 italic text-stone-700 dark:text-white rounded-r-sm shadow-sm">
                                                         {children}
                                                     </blockquote>
                                                 ),
