@@ -90,18 +90,19 @@ export default function FlyingCard({
                 </div>
             )}
 
-            {/* 粒子效果 */}
+            {/* 粒子效果 - 增强版 */}
             {phase === 'flying' && (
                 <div className="absolute inset-0 -z-10">
-                    {[...Array(8)].map((_, i) => (
+                    {[...Array(12)].map((_, i) => (
                         <div
                             key={i}
-                            className="absolute w-1 h-1 bg-primary rounded-full animate-particle"
+                            className="absolute w-1 h-1 bg-accent-main rounded-full animate-particle"
                             style={{
                                 left: '50%',
                                 top: '50%',
-                                animationDelay: `${i * 0.1}s`,
-                                transform: `rotate(${i * 45}deg) translateY(-30px)`,
+                                animationDelay: `${i * 0.05}s`,
+                                transform: `rotate(${i * 30}deg) translateY(-40px)`,
+                                boxShadow: '0 0 5px currentColor',
                             }}
                         />
                     ))}

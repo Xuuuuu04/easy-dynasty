@@ -150,13 +150,13 @@ export default function AnalysisPage() {
 
     if (!spread || drawnCards.length === 0) {
         return (
-            <div className="relative min-h-screen overflow-hidden bg-paper flex items-center justify-center">
+            <div className="relative min-h-screen overflow-hidden bg-bg-main flex items-center justify-center">
                 <div className="relative text-center space-y-4 animate-pulse">
                     <div className="relative mx-auto h-20 w-20">
-                        <div className="absolute inset-0 rounded-full border-4 border-stone-200"></div>
-                        <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-[#9a2b2b] border-r-stone-400"></div>
+                        <div className="absolute inset-0 rounded-full border-4 border-border"></div>
+                        <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-accent-main border-r-text-muted"></div>
                     </div>
-                    <div className="text-xl font-semibold text-stone-700 font-display">
+                    <div className="text-xl font-semibold text-text-main font-display">
                         正在汇聚塔罗能量...
                     </div>
                 </div>
@@ -165,7 +165,7 @@ export default function AnalysisPage() {
     }
 
     return (
-        <div className="relative min-h-screen overflow-hidden bg-paper text-ink selection:bg-[#9a2b2b]/10">
+        <div className="relative min-h-screen overflow-hidden bg-bg-main text-text-main selection:bg-accent-main/10">
             <div className="relative z-10 container mx-auto px-4 py-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
@@ -174,23 +174,23 @@ export default function AnalysisPage() {
                             <span className="animate-float">
                                 <CrystalIcon />
                             </span>
-                            <h1 className="text-4xl md:text-5xl font-bold font-display tracking-tight text-ink">
+                            <h1 className="text-4xl md:text-5xl font-bold font-display tracking-tight text-text-main">
                                 塔罗解读
                             </h1>
                         </div>
 
-                        <div className="ink-card px-8 py-6 max-w-3xl mx-auto">
+                        <div className="ink-card px-8 py-6 max-w-3xl mx-auto bg-card-bg border border-border">
                             <div className="space-y-3">
-                                <p className="text-stone-800 text-lg font-serif">
-                                    <span className="text-[#9a2b2b] font-bold uppercase tracking-wider text-xs mr-2">
+                                <p className="text-text-main text-lg font-serif">
+                                    <span className="text-accent-main font-bold uppercase tracking-wider text-xs mr-2">
                                         Question
                                     </span>
                                     {question}
                                 </p>
-                                <div className="h-px w-full bg-stone-200" />
+                                <div className="h-px w-full bg-border" />
                                 <div className="flex justify-between items-center">
-                                    <p className="text-stone-500 text-sm">
-                                        <span className="text-stone-400 font-bold uppercase tracking-wider text-xs mr-2">
+                                    <p className="text-text-sub text-sm">
+                                        <span className="text-text-muted font-bold uppercase tracking-wider text-xs mr-2">
                                             Spread
                                         </span>
                                         {spread.name}
@@ -235,7 +235,7 @@ export default function AnalysisPage() {
                             disabled={!analysis}
                             className={`px-8 py-3 rounded-sm border transition-all font-medium flex items-center gap-2
                     ${!analysis ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
-                    border-stone-300 text-stone-500 bg-stone-100 hover:bg-stone-200
+                    border-border text-text-sub bg-bg-main hover:bg-bg-main/80
                 `}
                         >
                             <ShareIcon />

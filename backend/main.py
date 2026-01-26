@@ -12,6 +12,10 @@ from app.api.api import api_router
 from app.core.config import settings
 from app.core.logger import logger
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
+
 app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json")
 
 # Set all CORS enabled origins
@@ -52,10 +56,34 @@ async def log_requests(request: Request, call_next):
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
+# Get absolute path to html-web directory
+# Assuming main.py is in backend/ and html-web is in project root (../html-web)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+HTML_WEB_DIR = os.path.join(BASE_DIR, "html-web")
 
-@app.get("/")
-def root():
-    return {"message": "Welcome to Tarot API"}
+# Verify directory exists before mounting
+if os.path.exists(HTML_WEB_DIR):
+    # Mount static files
+    app.mount("/css", StaticFiles(directory=os.path.join(HTML_WEB_DIR, "css")), name="css")
+    app.mount("/js", StaticFiles(directory=os.path.join(HTML_WEB_DIR, "js")), name="js")
+    app.mount("/assets", StaticFiles(directory=os.path.join(HTML_WEB_DIR, "assets")), name="assets")
+
+    @app.get("/")
+    async def read_index():
+        return FileResponse(os.path.join(HTML_WEB_DIR, "index.html"))
+
+    @app.get("/{page_name}.html")
+    async def read_html(page_name: str):
+        file_path = os.path.join(HTML_WEB_DIR, f"{page_name}.html")
+        if os.path.exists(file_path):
+            return FileResponse(file_path)
+        return {"error": "Page not found"}, 404
+else:
+    logger.warning(f"HTML directory not found at {HTML_WEB_DIR}")
+
+    @app.get("/")
+    def root():
+        return {"message": "Welcome to Tarot API (HTML frontend not found)"}
 
 
 @app.get("/health")

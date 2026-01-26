@@ -47,7 +47,7 @@ export default function BackgroundPoetry() {
                 zIndex: 0,
                 userSelect: 'none',
                 whiteSpace: 'nowrap',
-                color: Math.random() > 0.7 ? '#9a2b2b' : '#1c1917', // Occasional red ink
+                color: Math.random() > 0.7 ? 'var(--accent-main)' : 'var(--text-main)', // Use CSS variables
                 filter: 'blur(0.5px)',
                 transform: `rotate(${Math.random() * 10 - 5}deg)`,
             };
@@ -59,13 +59,13 @@ export default function BackgroundPoetry() {
     return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
             {elements.map((el, i) => (
-                <div key={i} style={el.style} className="animate-fade-in">
+                <div key={i} style={el.style} className="animate-fade-in transition-colors duration-500">
                     {el.text}
                 </div>
             ))}
-            {/* Texture Overlay */}
+            {/* Texture Overlay - Only for light mode */}
             <div
-                className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                className="absolute inset-0 opacity-[0.03] pointer-events-none dark:hidden"
                 style={{
                     backgroundImage: 'url("/rice-paper-2.png")',
                     backgroundBlendMode: 'multiply',

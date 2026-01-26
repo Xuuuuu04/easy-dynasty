@@ -83,10 +83,10 @@ export default function SpreadLayout({
                     <div
                         className="inline-flex items-center gap-1.5 rounded-sm border-2 backdrop-blur-md px-2 md:px-3 py-1 text-[10px] md:text-xs font-bold uppercase tracking-widest whitespace-nowrap"
                         style={{
-                            backgroundColor: labelBg || 'rgba(255, 255, 255, 0.95)',
-                            borderColor: labelBorder || 'rgba(154, 43, 43, 0.4)',
-                            color: labelText || '#9a2b2b',
-                            boxShadow: `0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px ${labelBorder || 'rgba(154, 43, 43, 0.2)'}`,
+                            backgroundColor: labelBg || 'var(--card-bg)',
+                            borderColor: labelBorder || 'var(--accent-main)',
+                            color: labelText || 'var(--accent-main)',
+                            boxShadow: `0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 1px ${labelBorder || 'var(--accent-main)'}`,
                         }}
                     >
                         <span>{position.name}</span>
@@ -102,12 +102,12 @@ export default function SpreadLayout({
             ${rotateCard ? 'rotate-90' : ''}
             ${!drawnCard ? 'rounded-lg border-2 border-dashed' : ''}
             ${canDraw && !drawnCard
-                            ? 'cursor-pointer border-[#9a2b2b]/50 bg-[#9a2b2b]/5 hover:border-[#9a2b2b] hover:shadow-[0_0_15px_rgba(154,43,43,0.2)]'
+                            ? 'cursor-pointer border-[var(--accent-main)]/50 bg-[var(--accent-main)]/5 hover:border-[var(--accent-main)] hover:shadow-[0_0_15px_rgba(154,43,43,0.2)]'
                             : !drawnCard
-                                ? 'border-stone-300 bg-stone-100/30'
+                                ? 'border-stone-300 dark:border-stone-700 bg-stone-100/30 dark:bg-slate-800/30'
                                 : ''
                         }
-            ${isCurrentlyDrawing ? 'border-[#9a2b2b] animate-pulse shadow-md' : ''}
+            ${isCurrentlyDrawing ? 'border-[var(--accent-main)] animate-pulse shadow-md' : ''}
             ${drawnCard ? 'shadow-2xl' : ''}
           `}
                     onClick={() => canDraw && onPositionClick(position.id)}
@@ -132,7 +132,7 @@ export default function SpreadLayout({
                             className={`text-center p-2 opacity-60 transition-opacity ${canDraw ? 'group-hover:opacity-100' : ''}`}
                         >
                             <span
-                                className={`text-[10px] md:text-xs text-stone-400 font-serif block mb-1 ${rotateCard ? '-rotate-90' : ''}`}
+                                className={`text-[10px] md:text-xs text-stone-400 dark:text-stone-500 font-serif block mb-1 ${rotateCard ? '-rotate-90' : ''}`}
                             >
                                 {isCurrentlyDrawing
                                     ? 'Drawing...'
@@ -153,7 +153,7 @@ export default function SpreadLayout({
               ${labelPosition === 'bottom' ? 'top-[130%]' : 'top-[105%]'}
             `}
                     >
-                        <p className="text-[9px] md:text-[10px] text-stone-400 leading-tight bg-white/80 p-1 rounded backdrop-blur-sm shadow-sm border border-stone-100">
+                        <p className="text-[9px] md:text-[10px] text-stone-400 dark:text-stone-500 leading-tight bg-white/80 dark:bg-slate-900/80 p-1 rounded backdrop-blur-sm shadow-sm border border-stone-100 dark:border-slate-800">
                             {position.description}
                         </p>
                     </div>
@@ -303,7 +303,7 @@ export default function SpreadLayout({
                             {/* Option A Path */}
                             <div className="flex flex-col items-center gap-6 md:gap-12">
                                 <div className="text-center mb-2 md:mb-4">
-                                    <span className="inline-block px-3 py-1 md:px-4 md:py-2 bg-[#9a2b2b]/10 border-2 border-[#9a2b2b]/30 rounded-sm text-xs md:text-sm font-bold text-[#9a2b2b] tracking-widest">选项 A</span>
+                                    <span className="inline-block px-3 py-1 md:px-4 md:py-2 bg-[var(--accent-main)]/10 border-2 border-[var(--accent-main)]/30 rounded-sm text-xs md:text-sm font-bold text-[var(--accent-main)] tracking-widest">选项 A</span>
                                 </div>
                                 {renderSlot(positions[1])}
                                 {renderSlot(positions[2])}
@@ -312,7 +312,7 @@ export default function SpreadLayout({
                             {/* Option B Path */}
                             <div className="flex flex-col items-center gap-6 md:gap-12">
                                 <div className="text-center mb-2 md:mb-4">
-                                    <span className="inline-block px-3 py-1 md:px-4 md:py-2 bg-[#9a2b2b]/10 border-2 border-[#9a2b2b]/30 rounded-sm text-xs md:text-sm font-bold text-[#9a2b2b] tracking-widest">选项 B</span>
+                                    <span className="inline-block px-3 py-1 md:px-4 md:py-2 bg-[var(--accent-main)]/10 border-2 border-[var(--accent-main)]/30 rounded-sm text-xs md:text-sm font-bold text-[var(--accent-main)] tracking-widest">选项 B</span>
                                 </div>
                                 {renderSlot(positions[3])}
                                 {renderSlot(positions[4])}

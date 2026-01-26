@@ -9,13 +9,58 @@
 }
 
 :root {
+    /* Default: Mysterious Star (Dark Mode) */
+    --bg-main: #050508; /* Deep Space Black */
+    --bg-secondary: #0F0B18; /* Deep Purple Black */
+    --text-main: #E2E8F0;
+    --text-secondary: #94A3B8;
+    --accent-main: #9333ea; /* Purple-600 */
+    --accent-secondary: #7e22ce; /* Purple-700 */
+    --accent-light: #d8b4fe; /* Purple-300 */
+    --border-main: #2D2A42;
+    --bg-image: none;
+    --bg-blend: normal;
+
+    /* Semantic Components */
+    --nav-bg: rgba(5, 5, 8, 0.85);
+    --card-bg: rgba(20, 15, 30, 0.6);
+    --card-border: rgba(139, 92, 246, 0.2);
+    
+    /* Legacy Compatibility (Remapped) */
+    --ink-primary: #E2E8F0;
+    --ink-secondary: #94A3B8;
+    --paper-bg: #050508;
+    --seal-red: #9333ea;
+    --gold: #FBBF24;
+
+    /* Explicitly force sRGB color space */
+    color-scheme: dark;
+}
+
+.light {
+    /* Light Mode (Original Paper Theme) */
+    --bg-main: #f5f5f0;
+    --bg-secondary: #e7e5e4;
+    --text-main: #1c1917;
+    --text-secondary: #44403c;
+    --accent-main: #9a2b2b; /* Seal Red */
+    --accent-secondary: #b91c1c;
+    --border-main: #d6d3d1;
+    --bg-image: url('/rice-paper-2.png');
+    --bg-blend: multiply;
+
+    /* Semantic Components */
+    --nav-bg: rgba(245, 245, 240, 0.95);
+    --card-bg: rgba(255, 255, 255, 0.6);
+    --card-border: rgba(231, 229, 228, 0.5);
+
+    /* Legacy Compatibility (Original) */
     --ink-primary: #1c1917;
     --ink-secondary: #44403c;
     --paper-bg: #f5f5f0;
     --seal-red: #9a2b2b;
     --gold: #b4a078;
 
-    /* Explicitly force sRGB color space */
     color-scheme: light;
 }
 
@@ -23,6 +68,18 @@
 @theme {
     /* Disable oklch color generation */
     --color-interpolation-method: in srgb;
+    
+    /* Custom Colors */
+    --color-bg-main: var(--bg-main);
+    --color-bg-secondary: var(--bg-secondary);
+    --color-text-main: var(--text-main);
+    --color-text-secondary: var(--text-secondary);
+    --color-accent-main: var(--accent-main);
+    --color-accent-secondary: var(--accent-secondary);
+    --color-accent-light: var(--accent-light);
+    --color-nav-bg: var(--nav-bg);
+    --color-card-bg: var(--card-bg);
+    
     /* Stone */
     --color-stone-50: #fafaf9;
     --color-stone-100: #f5f5f4;
@@ -156,12 +213,12 @@
 
 /* Base Styles */
 body {
-    background-color: #f5f5f0;
-    color: #1c1917;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
     -webkit-font-smoothing: antialiased;
-    background-image: url('/rice-paper-2.png');
-    background-blend-mode: multiply;
+    background-image: var(--bg-image);
+    background-blend-mode: var(--bg-blend);
 }
 
 h1,
@@ -177,25 +234,38 @@ h6 {
 /* Utilities / Components */
 @layer components {
     .ink-input {
-        @apply w-full bg-transparent border-b-2 border-stone-300 py-3 text-lg focus:outline-none focus:border-stone-800 transition-all duration-500 placeholder:text-stone-300 text-stone-800 font-serif;
+        @apply w-full bg-transparent border-b-2 border-stone-300 py-3 text-lg focus:outline-none focus:border-[var(--accent-main)] transition-all duration-500 placeholder:text-stone-400 text-[var(--text-main)] font-serif;
     }
 
     .ink-card {
-        @apply bg-white/60 backdrop-blur-sm border border-stone-200/50 shadow-sm rounded-sm transition-all duration-500 hover:shadow-md hover:bg-white/80;
+        background-color: var(--card-bg);
+        border-color: var(--card-border);
+        @apply backdrop-blur-sm border shadow-sm rounded-sm transition-all duration-500 hover:shadow-md;
+    }
+    
+    .ink-card:hover {
+        background-color: color-mix(in srgb, var(--card-bg) 80%, white);
+    }
+    
+    :root:not(.light) .ink-card:hover {
+        background-color: color-mix(in srgb, var(--card-bg) 80%, black);
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); /* Glow effect in dark mode */
     }
 
     .btn-seal {
-        @apply relative px-8 py-3 bg-[#9a2b2b] text-[#f5f5f0] font-bold tracking-widest transition-all duration-300 hover:bg-[#852222] hover:scale-105 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 rounded-sm;
+        background-color: var(--accent-main);
+        color: white;
+        @apply relative px-8 py-3 font-bold tracking-widest transition-all duration-300 hover:opacity-90 hover:scale-105 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2 rounded-sm;
     }
 }
 
 /* Custom Utilities */
 .text-ink {
-    color: var(--ink-primary);
+    color: var(--text-main);
 }
 
 .bg-paper {
-    background-color: var(--paper-bg);
+    background-color: var(--bg-main);
 }
 
 .writing-vertical {
@@ -319,8 +389,55 @@ h6 {
     }
 }
 
-@keyframes particleFloat {
+@keyframes pulseSlow {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
 
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes shootingStar {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-45deg);
+        opacity: 1;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(300px) translateY(300px) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+.animate-pulse-slow {
+    animation: pulseSlow 8s ease-in-out infinite;
+}
+
+.animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-shooting-star {
+    animation: shootingStar 4s linear infinite;
+}
+
+@keyframes particleFloat {
     0%,
     100% {
         transform: translate(0, 0);
@@ -343,6 +460,21 @@ h6 {
 
 .animate-fade-in-dropdown {
     animation: fadeInDropdown 0.2s ease-out forwards;
+}
+
+@keyframes particleExplosion {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y)) scale(0);
+        opacity: 0;
+    }
+}
+
+.animate-particle-explosion {
+    animation: particleExplosion 0.6s ease-out forwards;
 }
 
 .animate-mist-flow-1 {
@@ -375,6 +507,14 @@ h6 {
     border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.light ::-webkit-scrollbar-thumb:hover {
     background: #a8a29e;
+}
+
+:root:not(.light) ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+:root:not(.light) ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
 }

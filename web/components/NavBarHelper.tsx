@@ -10,8 +10,8 @@ function DeckSwitcherMobile() {
                     key={deck.id}
                     onClick={() => setDeck(deck.id)}
                     className={`text-sm px-4 py-2 rounded-full border transition-all ${currentDeck === deck.id
-                            ? 'border-[#9a2b2b] text-[#9a2b2b] bg-[#9a2b2b]/5'
-                            : 'border-stone-200 text-stone-500'
+                            ? 'border-accent-main text-accent-main bg-accent-main/5'
+                            : 'border-border text-text-muted hover:text-text-main'
                         }`}
                 >
                     {deck.name}

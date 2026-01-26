@@ -17,7 +17,7 @@ import type { TarotCard, Spread, DrawnCard, ChatMessage, ApiConfig } from '@/typ
 import { analyzeTarotReading } from '@/hooks/useTarotAnalysis';
 import { constructTarotPrompts } from '@/utils/prompts';
 import { preprocessMarkdown } from '@/utils/markdown';
-import { TarotIcon, ChartIcon } from '@/components/Icons';
+import { TarotIcon, ChartIcon, LogoIcon } from '@/components/Icons';
 import CardShowcase from '@/components/CardShowcase';
 import { useSound } from '@/context/SoundContext';
 
@@ -201,19 +201,19 @@ export default function DrawPage() {
     // Setup/Input View
     if (setupMode) {
         return (
-            <div className="min-h-screen pt-20 flex items-center justify-center bg-[#f5f5f0] p-4 relative overflow-hidden">
+            <div className="min-h-screen pt-20 flex items-center justify-center bg-bg-main p-4 relative overflow-hidden">
                 {/* Atmosphere Background */}
                 <AtmosphereBackground />
 
                 {/* Background Texture */}
                 <div
-                    className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20"
+                    className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 dark:opacity-5"
                     style={{ backgroundImage: 'url("/rice-paper-2.png")' }}
                 ></div>
 
                 {/* Tarot Art Overlay */}
                 <div
-                    className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply"
+                    className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply dark:mix-blend-overlay"
                     style={{
                         backgroundImage: 'url("/tarot-art-overlay.png")',
                         backgroundSize: 'cover',
@@ -223,47 +223,58 @@ export default function DrawPage() {
                 ></div>
 
                 {/* Floating Text Decor */}
-                <div className="absolute top-[10%] left-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-5xl text-[#9a2b2b] animate-float">
+                <div className="absolute top-[10%] left-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-5xl text-accent-main animate-float">
                     万物皆有灵 · 心诚则灵
                 </div>
-                <div className="absolute bottom-[15%] right-[10%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-stone-800 animate-float-delayed">
+                <div className="absolute bottom-[15%] right-[10%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-text-main animate-float-delayed">
                     Destiny
                 </div>
 
                 {/* Card */}
-                <div className="relative z-10 w-full max-w-lg bg-[#fffdf9]/85 backdrop-blur-xl p-10 md:p-12 rounded-sm shadow-[0_8px_32px_rgba(0,0,0,0.05)] border border-stone-300/60 flex flex-col gap-10">
+                <div className="relative z-10 w-full max-w-lg bg-card-bg/85 backdrop-blur-xl p-10 md:p-12 rounded-sm shadow-[0_8px_32px_rgba(0,0,0,0.05)] border border-border/60 flex flex-col gap-10">
                     {/* Header */}
                     <div className="text-center space-y-4">
-                        <div className="w-16 h-16 mx-auto bg-[#9a2b2b] rounded-full flex items-center justify-center shadow-lg mb-6">
-                            <TarotIcon className="w-8 h-8 text-[#f5f5f0]" />
+                        <div className="flex flex-col items-center justify-center mb-6 gap-3">
+                            <div className="relative w-16 h-16 text-[var(--accent-main)] transition-transform duration-500 hover:rotate-12">
+                                <LogoIcon className="w-full h-full drop-shadow-md" />
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-3xl font-bold font-serif text-[var(--text-main)] tracking-[0.2em] leading-none">
+                                    易朝
+                                </span>
+                                <span className="text-xs text-[var(--accent-main)] uppercase tracking-[0.3em] font-medium leading-none mt-2">
+                                    Dynasty
+                                </span>
+                            </div>
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-serif font-bold text-ink tracking-[0.2em] mb-2">
+                        <div className="h-px w-16 mx-auto bg-[var(--accent-main)]/30 mb-4"></div>
+                        <h1 className="text-xl md:text-2xl font-serif font-bold text-text-main tracking-[0.2em] mb-2 opacity-90">
                             心诚则灵
                         </h1>
-                        <p className="text-sm font-serif text-stone-500 tracking-widest uppercase">
-                            EasyDynasty Tarot Interpretation
+                        <p className="text-xs font-serif text-text-muted tracking-widest uppercase opacity-70">
+                            Tarot Interpretation
                         </p>
                     </div>
 
                     <div className="space-y-8">
                         {/* Question Input */}
                         <div className="group relative">
-                            <label className="block text-xs font-bold text-[#9a2b2b] uppercase tracking-[0.3em] mb-3 opacity-70 group-focus-within:opacity-100 transition-opacity">
+                            <label className="block text-xs font-bold text-accent-main uppercase tracking-[0.3em] mb-3 opacity-70 group-focus-within:opacity-100 transition-opacity">
                                 你的疑问 / Question
                             </label>
                             <input
                                 type="text"
-                                className="w-full bg-transparent border-b-[1.5px] border-stone-300 py-3 text-lg md:text-xl font-serif text-ink focus:outline-none focus:border-[#9a2b2b] placeholder:text-stone-300 transition-all duration-300"
+                                className="w-full bg-transparent border-b-[1.5px] border-border py-3 text-lg md:text-xl font-serif text-text-main focus:outline-none focus:border-accent-main placeholder:text-text-muted transition-all duration-300"
                                 placeholder="请在此输入心中所惑..."
                                 value={question}
                                 onChange={(e) => setQuestion(e.target.value)}
                             />
-                            <div className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-[#9a2b2b] transition-all duration-500 group-focus-within:w-full"></div>
+                            <div className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-accent-main transition-all duration-500 group-focus-within:w-full"></div>
                         </div>
 
                         {/* Spread Select */}
                         <div className="group relative">
-                            <label className="block text-xs font-bold text-[#9a2b2b] uppercase tracking-[0.3em] mb-3 opacity-70 group-focus-within:opacity-100 transition-opacity">
+                            <label className="block text-xs font-bold text-accent-main uppercase tracking-[0.3em] mb-3 opacity-70 group-focus-within:opacity-100 transition-opacity">
                                 选择牌阵 / Spread
                             </label>
                             <SpreadSelect
@@ -300,8 +311,8 @@ export default function DrawPage() {
 
                     {/* Footer Decor */}
                     <div className="text-center">
-                        <div className="inline-block w-full h-[1px] bg-gradient-to-r from-transparent via-[#9a2b2b]/20 to-transparent mb-4"></div>
-                        <p className="text-[10px] text-stone-400 font-serif tracking-widest">
+                        <div className="inline-block w-full h-[1px] bg-gradient-to-r from-transparent via-accent-main/20 to-transparent mb-4"></div>
+                        <p className="text-[10px] text-text-muted font-serif tracking-widest">
                             命运掌握在自己手中 · 易朝 AI 辅助解读
                         </p>
                     </div>
@@ -313,19 +324,19 @@ export default function DrawPage() {
     if (!spread) return null;
 
     return (
-        <div className="min-h-screen pt-20 md:pt-28 pb-12 px-4 relative overflow-hidden bg-[#f5f5f0]">
+        <div className="min-h-screen pt-20 md:pt-28 pb-12 px-4 relative overflow-hidden bg-bg-main">
             {/* Atmosphere Background */}
             <AtmosphereBackground />
 
             {/* Background Texture */}
             <div
-                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20"
+                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 dark:opacity-5"
                 style={{ backgroundImage: 'url("/rice-paper-2.png")' }}
             ></div>
 
             {/* Tarot Art Overlay */}
             <div
-                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply transition-opacity duration-1000"
+                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply dark:mix-blend-overlay transition-opacity duration-1000"
                 style={{
                     backgroundImage: 'url("/tarot-art-overlay.png")',
                     backgroundSize: 'cover',
@@ -335,22 +346,22 @@ export default function DrawPage() {
             ></div>
 
             {/* Floating Text Decor */}
-            <div className="absolute top-[15%] left-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-4xl text-[#9a2b2b] animate-float">
+            <div className="absolute top-[15%] left-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-4xl text-accent-main animate-float">
                 命运之轮 · 愚者 · 倒吊人
             </div>
-            <div className="absolute bottom-[20%] right-[8%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-stone-800 animate-float-delayed">
+            <div className="absolute bottom-[20%] right-[8%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-text-main animate-float-delayed">
                 Arcana
             </div>
 
             <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-8 md:gap-12">
                 {/* Header Question */}
                 <div className="text-center space-y-3 md:space-y-4 animate-fade-in">
-                    <div className="inline-block border-b border-[#9a2b2b]/30 pb-2 px-4 md:px-8">
-                        <h2 className="text-lg md:text-2xl font-serif font-bold text-ink tracking-widest">
+                    <div className="inline-block border-b border-accent-main/30 pb-2 px-4 md:px-8">
+                        <h2 className="text-lg md:text-2xl font-serif font-bold text-text-main tracking-widest">
                             {question}
                         </h2>
                     </div>
-                    <p className="text-stone-500 text-xs md:text-sm font-serif uppercase tracking-widest">
+                    <p className="text-text-muted text-xs md:text-sm font-serif uppercase tracking-widest">
                         {spread.name} ·{' '}
                         {isDrawingComplete
                             ? '启示呈现'
@@ -385,18 +396,18 @@ export default function DrawPage() {
 
                     {isDrawingComplete && (
                         <div className="w-full max-w-4xl animate-slide-up space-y-8 px-2">
-                            <div className="ink-card p-6 md:p-12 bg-[#fffdf9]/85 backdrop-blur-xl relative min-h-[300px] border-stone-300/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
-                                <div className="flex items-center justify-between mb-6 md:mb-8 border-b border-stone-100 pb-4">
+                            <div className="ink-card p-6 md:p-12 bg-card-bg/85 backdrop-blur-xl relative min-h-[300px] border-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                                <div className="flex items-center justify-between mb-6 md:mb-8 border-b border-border pb-4">
                                     <div className="flex items-center gap-3">
-                                        <ChartIcon className="w-5 h-5 text-[#9a2b2b]" />
-                                        <h3 className="text-lg md:text-xl font-serif font-bold text-ink tracking-widest">
+                                        <ChartIcon className="w-5 h-5 text-accent-main" />
+                                        <h3 className="text-lg md:text-xl font-serif font-bold text-text-main tracking-widest">
                                             易朝 · 启示录
                                         </h3>
                                     </div>
                                     {analysis && (
                                         <button
                                             onClick={handleExportClick}
-                                            className="px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition-all bg-stone-100 border-stone-200 text-stone-600 hover:bg-stone-200"
+                                            className="px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 transition-all bg-bg-main border-border text-text-sub hover:bg-bg-main/80"
                                         >
                                             {/* Fixed SVG - using Standard Feather Download Icon */}
                                             <svg
@@ -421,11 +432,11 @@ export default function DrawPage() {
 
                                 <div
                                     ref={analysisContainerRef}
-                                    className="prose prose-stone max-w-none font-serif text-base md:text-lg leading-loose text-stone-800 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar"
+                                    className="prose dark:prose-invert prose-stone max-w-none font-serif text-base md:text-lg leading-loose text-text-main max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar"
                                 >
                                     {!analysis && isAnalysing ? (
-                                        <div className="flex items-center justify-center h-32 gap-3 text-stone-400 tracking-[0.2em]">
-                                            <div className="w-1.5 h-1.5 bg-[#9a2b2b] rounded-full animate-ping"></div>
+                                        <div className="flex items-center justify-center h-32 gap-3 text-text-muted tracking-[0.2em]">
+                                            <div className="w-1.5 h-1.5 bg-accent-main rounded-full animate-ping"></div>
                                             <span>推演中...</span>
                                         </div>
                                     ) : (
@@ -433,27 +444,37 @@ export default function DrawPage() {
                                             remarkPlugins={[remarkGfm]} // Enable GFM for tables
                                             components={{
                                                 h1: ({ children }) => (
-                                                    <h1 className="mb-6 text-xl md:text-2xl font-bold text-ink border-b-2 border-[#9a2b2b] pb-1 inline-block">
+                                                    <h1 className="mb-6 text-xl md:text-2xl font-bold text-text-main border-b-2 border-accent-main pb-1 inline-block">
                                                         {children}
                                                     </h1>
                                                 ),
                                                 h2: ({ children }) => (
-                                                    <h2 className="mb-4 mt-8 text-lg md:text-xl font-bold text-ink border-b border-stone-200 pb-1">
+                                                    <h2 className="mb-4 mt-8 text-lg md:text-xl font-bold text-text-main border-b border-border pb-1">
                                                         {children}
                                                     </h2>
                                                 ),
                                                 h3: ({ children }) => (
-                                                    <h3 className="mb-2 mt-6 text-base md:text-lg font-bold text-[#9a2b2b]">
+                                                    <h3 className="mb-2 mt-6 text-base md:text-lg font-bold text-accent-main">
                                                         {children}
                                                     </h3>
                                                 ),
                                                 p: ({ children }) => (
-                                                    <p className="mb-4 leading-relaxed text-stone-700 text-sm md:text-base">
+                                                    <p className="mb-4 leading-relaxed text-text-sub text-sm md:text-base">
                                                         {children}
                                                     </p>
                                                 ),
+                                                strong: ({ children }) => (
+                                                    <strong className="font-bold text-accent-main dark:text-accent-light">
+                                                        {children}
+                                                    </strong>
+                                                ),
+                                                em: ({ children }) => (
+                                                    <em className="italic text-text-main">
+                                                        {children}
+                                                    </em>
+                                                ),
                                                 blockquote: ({ children }) => (
-                                                    <blockquote className="my-6 border-l-2 border-[#9a2b2b] bg-stone-50 py-3 pl-5 italic text-stone-600 rounded-sm">
+                                                    <blockquote className="my-6 border-l-4 border-accent-main bg-stone-100 dark:bg-[var(--accent-main)]/10 py-4 pl-5 pr-4 italic text-stone-700 dark:text-white rounded-r-sm shadow-sm">
                                                         {children}
                                                     </blockquote>
                                                 ),
@@ -466,12 +487,12 @@ export default function DrawPage() {
                                                     </div>
                                                 ),
                                                 th: ({ children }) => (
-                                                    <th className="font-bold border-b border-stone-300 p-2 text-[#9a2b2b]">
+                                                    <th className="font-bold border-b border-border p-2 text-accent-main">
                                                         {children}
                                                     </th>
                                                 ),
                                                 td: ({ children }) => (
-                                                    <td className="border-b border-stone-100 p-2">
+                                                    <td className="border-b border-border p-2 text-text-sub">
                                                         {children}
                                                     </td>
                                                 ),

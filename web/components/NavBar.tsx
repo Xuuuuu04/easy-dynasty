@@ -3,16 +3,17 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
-import { MenuIcon, CloseIcon, BookIcon, TarotIcon, Volume2Icon, VolumeXIcon } from '@/components/Icons';
+import { MenuIcon, CloseIcon, BookIcon, TarotIcon, Volume2Icon, VolumeXIcon, LogoIcon } from '@/components/Icons';
 import { useDeck } from '@/context/DeckContext';
 import { useSound } from '@/context/SoundContext';
+import ThemeToggle from './ThemeToggle';
 
 function SoundToggle() {
     const { isMuted, toggleMute } = useSound();
     return (
         <button
             onClick={toggleMute}
-            className="p-1.5 rounded-sm text-stone-600 hover:bg-stone-200/50 hover:text-[#9a2b2b] transition-all"
+            className="p-1.5 rounded-sm text-stone-600 dark:text-stone-300 hover:bg-stone-200/50 dark:hover:bg-stone-700/50 hover:text-[var(--accent-main)] transition-all"
             title={isMuted ? "开启音效" : "静音"}
         >
             {isMuted ? <VolumeXIcon className="w-4 h-4" /> : <Volume2Icon className="w-4 h-4" />}
@@ -41,14 +42,14 @@ function DeckSwitcher() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="px-3 py-1.5 rounded-sm text-sm tracking-wide text-stone-600 hover:bg-stone-200/50 flex items-center gap-1.5 transition-all border border-transparent hover:border-stone-200"
+                className="px-3 py-1.5 rounded-sm text-sm tracking-wide text-stone-600 dark:text-stone-300 hover:bg-stone-200/50 dark:hover:bg-stone-700/50 flex items-center gap-1.5 transition-all border border-transparent hover:border-stone-200 dark:hover:border-stone-700"
             >
-                <span className="w-2 h-2 rounded-full bg-[#9a2b2b]"></span>
+                <span className="w-2 h-2 rounded-full bg-[var(--accent-main)]"></span>
                 {currentDeckName}
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-md shadow-lg overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-900 border border-stone-200 dark:border-slate-800 rounded-md shadow-lg overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200">
                     {availableDecks.map((deck) => (
                         <button
                             key={deck.id}
@@ -56,10 +57,10 @@ function DeckSwitcher() {
                                 setDeck(deck.id);
                                 setIsOpen(false);
                             }}
-                            className={`w-full text-left px-4 py-2 text-sm hover:bg-stone-50 transition-colors flex flex-col ${currentDeck === deck.id ? 'bg-stone-100 text-[#9a2b2b]' : 'text-stone-600'}`}
+                            className={`w-full text-left px-4 py-2 text-sm hover:bg-stone-50 dark:hover:bg-slate-800 transition-colors flex flex-col ${currentDeck === deck.id ? 'bg-stone-100 dark:bg-slate-800 text-[var(--accent-main)]' : 'text-stone-600 dark:text-stone-400'}`}
                         >
                             <span className="font-medium">{deck.name}</span>
-                            <span className="text-[10px] text-stone-400">{deck.description}</span>
+                            <span className="text-[10px] text-stone-400 dark:text-stone-500">{deck.description}</span>
                         </button>
                     ))}
                 </div>
@@ -78,8 +79,8 @@ function DeckSwitcherMobile() {
                     key={deck.id}
                     onClick={() => setDeck(deck.id)}
                     className={`text-sm px-4 py-2 rounded-full border transition-all ${currentDeck === deck.id
-                        ? 'border-[#9a2b2b] text-[#9a2b2b] bg-[#9a2b2b]/5'
-                        : 'border-stone-200 text-stone-500'
+                        ? 'border-[var(--accent-main)] text-[var(--accent-main)] bg-[var(--accent-main)]/5'
+                        : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400'
                         }`}
                 >
                     {deck.name}
@@ -120,22 +121,18 @@ export default function NavBar() {
 
     return (
         <>
-            <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#f5f5f0]/95 backdrop-blur-md border-b border-stone-200 shadow-sm font-serif">
+            <nav className="fixed top-0 left-0 right-0 z-[100] bg-[var(--nav-bg)] backdrop-blur-md border-b border-stone-200 dark:border-white/5 shadow-sm font-serif transition-colors duration-500">
                 <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3 group z-50">
-                        <div className="relative w-10 h-10 transition-transform duration-500 group-hover:rotate-12">
-                            <img
-                                src="/favicon.svg"
-                                alt="易朝"
-                                className="w-full h-full drop-shadow-md"
-                            />
+                        <div className="relative w-10 h-10 transition-transform duration-500 group-hover:rotate-12 text-[var(--accent-main)]">
+                            <LogoIcon className="w-full h-full drop-shadow-md" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-2xl font-bold font-serif text-ink tracking-[0.2em] leading-none">
+                            <span className="text-2xl font-bold font-serif text-[var(--text-main)] tracking-[0.2em] leading-none">
                                 易朝
                             </span>
-                            <span className="text-[9px] text-[#9a2b2b] uppercase tracking-[0.3em] font-medium leading-none mt-1">
+                            <span className="text-[9px] text-[var(--accent-main)] uppercase tracking-[0.3em] font-medium leading-none mt-1">
                                 Dynasty
                             </span>
                         </div>
@@ -145,35 +142,37 @@ export default function NavBar() {
                     <div className="hidden md:flex items-center gap-1 lg:gap-2">
                         <Link
                             href="/draw"
-                            className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/draw') ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-200/50'}`}
+                            className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/draw') ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-200/50 dark:hover:bg-stone-700/50'}`}
                         >
                             <TarotIcon className="w-4 h-4" /> 塔罗占卜
                         </Link>
                         <Link
                             href="/wiki"
-                            className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/wiki') ? 'bg-stone-800 text-white' : 'text-stone-600 hover:bg-stone-200/50'}`}
+                            className={`px-3 lg:px-4 py-1.5 rounded-sm text-sm tracking-wide transition-all flex items-center gap-1.5 ${isActive('/wiki') ? 'bg-stone-800 dark:bg-stone-100 text-white dark:text-stone-900' : 'text-stone-600 dark:text-stone-300 hover:bg-stone-200/50 dark:hover:bg-stone-700/50'}`}
                         >
                             <BookIcon className="w-4 h-4" /> 牌灵图鉴
                         </Link>
-                        <div className="h-4 w-px bg-stone-300 mx-1"></div>
+                        <div className="h-4 w-px bg-stone-300 dark:bg-stone-700 mx-1"></div>
+                        <ThemeToggle />
                         <SoundToggle />
-                        <div className="h-4 w-px bg-stone-300 mx-1"></div>
+                        <div className="h-4 w-px bg-stone-300 dark:bg-stone-700 mx-1"></div>
                         <DeckSwitcher />
                     </div>
 
                     {/* Mobile Menu Button */}
                     <div className="md:hidden flex items-center gap-3">
                         {/* Current Deck Indicator (Mobile) */}
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-stone-100 rounded-sm">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#9a2b2b]"></span>
-                            <span className="text-xs font-medium text-stone-600 truncate max-w-[80px]">
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-stone-100 dark:bg-stone-800 rounded-sm">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-main)]"></span>
+                            <span className="text-xs font-medium text-stone-600 dark:text-stone-300 truncate max-w-[80px]">
                                 <DeckNameDisplay />
                             </span>
                         </div>
-
+                        
+                        <ThemeToggle />
                         <SoundToggle />
                         <button
-                            className="text-stone-600 focus:outline-none p-1"
+                            className="text-stone-600 dark:text-stone-300 focus:outline-none p-1"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
                             {isMenuOpen ? (
@@ -195,16 +194,16 @@ export default function NavBar() {
 
             {/* Drawer Panel */}
             <div
-                className={`md:hidden fixed top-0 right-0 z-[9999] h-full w-[75%] max-w-[300px] bg-[#fdfdfc] shadow-2xl transition-transform duration-300 ease-in-out transform flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                className={`md:hidden fixed top-0 right-0 z-[9999] h-full w-[75%] max-w-[300px] bg-[#fdfdfc] dark:bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out transform flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
                 {/* Drawer Header */}
-                <div className="h-16 flex items-center justify-between px-6 border-b border-stone-200/50">
+                <div className="h-16 flex items-center justify-between px-6 border-b border-stone-200/50 dark:border-stone-800">
                     <span className="text-sm font-bold text-stone-400 uppercase tracking-widest">
                         MENU
                     </span>
                     <button
                         onClick={() => setIsMenuOpen(false)}
-                        className="text-stone-500 hover:text-[#9a2b2b] transition-colors"
+                        className="text-stone-500 hover:text-[var(--accent-main)] transition-colors"
                     >
                         <CloseIcon className="w-6 h-6" />
                     </button>
@@ -223,11 +222,11 @@ export default function NavBar() {
                                 href={link.path}
                                 onClick={() => setIsMenuOpen(false)}
                                 className={`flex items-center gap-4 px-4 py-3 rounded-lg text-base font-medium transition-all ${isActive(link.path)
-                                    ? 'bg-[#9a2b2b]/5 text-[#9a2b2b]'
-                                    : 'text-stone-600 hover:bg-stone-100'
+                                    ? 'bg-[var(--accent-main)]/5 text-[var(--accent-main)]'
+                                    : 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
                                     }`}
                             >
-                                <span className={`${isActive(link.path) ? 'text-[#9a2b2b]' : 'text-stone-400'}`}>
+                                <span className={`${isActive(link.path) ? 'text-[var(--accent-main)]' : 'text-stone-400'}`}>
                                     {link.icon}
                                 </span>
                                 {link.label}
@@ -235,7 +234,7 @@ export default function NavBar() {
                         ))}
                     </div>
 
-                    <div className="h-px w-full bg-stone-200/50"></div>
+                    <div className="h-px w-full bg-stone-200/50 dark:bg-stone-800"></div>
 
                     {/* Deck Switcher Section */}
                     <div className="flex flex-col gap-4">
@@ -247,7 +246,7 @@ export default function NavBar() {
                 </div>
 
                 {/* Drawer Footer */}
-                <div className="p-6 border-t border-stone-200/50 bg-stone-50/50">
+                <div className="p-6 border-t border-stone-200/50 dark:border-stone-800 bg-stone-50/50 dark:bg-slate-950/50">
                     <div className="flex items-center justify-center gap-2 text-[10px] text-stone-400 uppercase tracking-widest">
                         <span>EasyDynasty</span>
                         <span>•</span>

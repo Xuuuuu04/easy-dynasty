@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-01-24T21:12:04",
+  "modules": [
+    {
+      "name": "web",
+      "path": "I:/easydynasty/web",
+      "entry": "app/page.tsx",
+      "description": "Next.js 16 前端应用，包含 3D 塔罗交互与 AI 流式响应",
+      "tags": ["typescript", "nextjs", "react", "tailwindcss"],
+      "coverage": "high"
+    },
+    {
+      "name": "backend",
+      "path": "I:/easydynasty/backend",
+      "entry": "main.py",
+      "description": "FastAPI 后端服务，处理业务逻辑与第三方集成",
+      "tags": ["python", "fastapi", "redis", "langchain"],
+      "coverage": "medium"
+    }
+  ],
+  "stats": {
+    "total_files": 45,
+    "scanned_files": 12,
+    "coverage_percent": 26
+  },
+  "scan_status": {
+    "truncated": false,
+    "next_steps": [
+      "补充 backend 模块的单元测试 (tests/)",
+      "完善 web 模块的 E2E 测试"
+    ]
+  }
+}

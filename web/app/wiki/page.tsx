@@ -65,19 +65,19 @@ export default function WikiPage() {
     const hasMore = displayCount < filteredCards.length;
 
     return (
-        <div className="min-h-screen bg-[#f5f5f0] pt-24 pb-12 px-4 font-serif text-stone-800 relative overflow-hidden">
+        <div className="min-h-screen bg-bg-main pt-24 pb-12 px-4 font-serif text-text-main relative overflow-hidden">
             {/* Atmosphere Background */}
             <AtmosphereBackground />
 
-            {/* Background Texture */}
+            {/* Background Texture - Light mode only or adapted */}
             <div
-                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20"
+                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 dark:opacity-5"
                 style={{ backgroundImage: 'url("/rice-paper-2.png")' }}
             ></div>
 
             {/* Tarot Art Overlay */}
             <div
-                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply transition-opacity duration-1000"
+                className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-[0.08] mix-blend-multiply dark:mix-blend-overlay transition-opacity duration-1000"
                 style={{
                     backgroundImage: 'url("/tarot-art-overlay.png")',
                     backgroundSize: 'cover',
@@ -87,17 +87,17 @@ export default function WikiPage() {
             ></div>
 
             {/* Floating Text Decor */}
-            <div className="absolute top-[10%] right-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-5xl text-[#9a2b2b] animate-float">
+            <div className="absolute top-[10%] right-[5%] pointer-events-none select-none opacity-[0.06] writing-vertical font-serif text-5xl text-accent-main animate-float">
                 宇宙万象 · 智慧之书
             </div>
-            <div className="absolute bottom-[10%] left-[5%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-stone-800 animate-float-delayed">
+            <div className="absolute bottom-[10%] left-[5%] pointer-events-none select-none opacity-[0.06] font-serif text-6xl text-text-main animate-float-delayed">
                 Gallery
             </div>
 
             <div className="max-w-6xl mx-auto relative z-10">
                 <div className="text-center mb-12 animate-fade-in">
-                    <h1 className="text-4xl font-bold text-ink mb-4 tracking-[0.2em]">万象图鉴</h1>
-                    <p className="text-stone-500 text-sm tracking-widest">探索塔罗的符号世界</p>
+                    <h1 className="text-4xl font-bold text-text-main mb-4 tracking-[0.2em]">万象图鉴</h1>
+                    <p className="text-text-muted text-sm tracking-widest">探索塔罗的符号世界</p>
                 </div>
 
                 <div className="animate-fade-in">
@@ -110,12 +110,12 @@ export default function WikiPage() {
                                 setSearch(e.target.value);
                                 setDisplayCount(CARDS_PER_PAGE); // Reset display count on search
                             }}
-                            className="ink-input w-full text-center"
+                            className="ink-input w-full text-center bg-card-bg border-border text-text-main placeholder:text-text-muted focus:border-accent-main"
                         />
                     </div>
 
                     {/* Card Count Info */}
-                    <div className="text-center mb-6 text-sm text-stone-500">
+                    <div className="text-center mb-6 text-sm text-text-muted">
                         显示 {displayedCards.length} / {filteredCards.length} 张牌
                     </div>
 
