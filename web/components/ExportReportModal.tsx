@@ -297,7 +297,7 @@ export default function ExportReportModal({
             <div className="text-[10px]" style={{ color: colors.textMuted }}>
                 体验更多神秘学探索，请访问{' '}
                 <span className="underline decoration-1 underline-offset-2">
-                    https://easydynasty.oyemoye.top
+                    https://tarot.oyemoye.top
                 </span>
             </div>
             <div className="text-[9px] px-8 scale-90" style={{ color: colors.textFaint }}>
