@@ -18,3 +18,7 @@ Backend: cd backend && uvicorn main:app --reload --port 8000; Frontend: cd web &
 ## Development Status
 - This repository is maintained for open-source collaboration.
 - Progress is tracked via commits and issues.
+
+## Migration Note
+- Core folders were moved under `src/`.
+- Root-level legacy paths are kept as compatibility symlinks.
