@@ -1,7 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { DeckId, AVAILABLE_DECKS } from '../utils/cardImages';
+import { useIsClient } from '@/hooks/useIsClient';
 
 interface DeckContextType {
     currentDeck: DeckId;
@@ -12,24 +13,22 @@ interface DeckContextType {
 const DeckContext = createContext<DeckContextType | undefined>(undefined);
 
 export function DeckProvider({ children }: { children: ReactNode }) {
-    const [currentDeck, setCurrentDeck] = useState<DeckId>('rws');
-    const [isLoaded, setIsLoaded] = useState(false);
-
-    useEffect(() => {
-        // Load preference from localStorage
+    const isClient = useIsClient();
+    const [currentDeck, setCurrentDeck] = useState<DeckId>(() => {
+        if (typeof window === 'undefined') return 'rws';
         const savedDeck = localStorage.getItem('tarot_deck_preference');
         if (savedDeck && AVAILABLE_DECKS.some((d) => d.id === savedDeck)) {
-            setCurrentDeck(savedDeck as DeckId);
+            return savedDeck as DeckId;
         }
-        setIsLoaded(true);
-    }, []);
+        return 'rws';
+    });
 
     const setDeck = (deck: DeckId) => {
         setCurrentDeck(deck);
         localStorage.setItem('tarot_deck_preference', deck);
     };
 
-    if (!isLoaded) {
+    if (!isClient) {
         return null; // Or a loading spinner
     }
 

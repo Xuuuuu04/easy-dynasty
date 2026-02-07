@@ -1,25 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { CloseIcon } from '@/components/Icons';
+import { useState } from 'react';
+import { useIsClient } from '@/hooks/useIsClient';
 
 export default function DisclaimerModal() {
-    const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-        // Check if user has agreed before
-        const hasAgreed = localStorage.getItem('disclaimer_agreed');
-        if (!hasAgreed) {
-            setIsOpen(true);
-        }
-    }, []);
+    const isClient = useIsClient();
+    const [isOpen, setIsOpen] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return !localStorage.getItem('disclaimer_agreed');
+    });
 
     const handleAgree = () => {
         localStorage.setItem('disclaimer_agreed', 'true');
         setIsOpen(false);
     };
 
-    if (!isOpen) return null;
+    if (!isClient || !isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">

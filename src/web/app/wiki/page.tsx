@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import tarotCardsData from '../../data/tarot-cards.json';
-import { TarotIcon } from '@/components/Icons';
 import AtmosphereBackground from '@/components/AtmosphereBackground';
 import CardDetailModal from '@/components/CardDetailModal';
 import WikiCard from '@/components/WikiCard';

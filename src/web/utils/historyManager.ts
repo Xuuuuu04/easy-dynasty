@@ -6,6 +6,12 @@ const HISTORY_STORAGE_KEY = 'tarot_reading_history';
 const MAX_HISTORY_ITEMS = 50;
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
+interface CloudHistoryRecord {
+    id: string | number;
+    created_at: string;
+    data: Omit<ReadingHistory, 'id' | 'timestamp'>;
+}
+
 export const historyManager = {
     // Local Storage Methods (Legacy/Guest)
     getLocalHistory(): ReadingHistory[] {
@@ -33,8 +39,8 @@ export const historyManager = {
             });
             if (!res.ok) throw new Error('Failed to fetch history');
 
-            const records = await res.json();
-            return records.map((r: any) => ({
+            const records = (await res.json()) as CloudHistoryRecord[];
+            return records.map((r) => ({
                 id: r.id.toString(),
                 timestamp: new Date(r.created_at).getTime(),
                 ...r.data,
@@ -74,7 +80,7 @@ export const historyManager = {
         drawnCards: DrawnCard[] = [],
         analysis: string,
         type: 'tarot' | 'bazi' = 'tarot',
-        extraData: any = {}
+        extraData: Record<string, unknown> = {}
     ): Promise<ReadingHistory> {
         const timestamp = Date.now();
         const newReading: ReadingHistory = {
@@ -118,13 +124,15 @@ export const historyManager = {
                         },
                     };
 
-                    fetch(`${API_URL}/api/v1/history/`, {
+                    void fetch(`${API_URL}/api/v1/history/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
                         body: JSON.stringify(payload),
+                    }).catch((error) => {
+                        console.error('Cloud save request failed', error);
                     });
                 } catch (e) {
                     console.error('Cloud save failed', e);

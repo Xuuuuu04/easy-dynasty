@@ -1,43 +1,13 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { apiRequest, assertOk } from '@/utils/apiClient';
 import { getDefaultLlmConfig, isDefaultLlmUsable } from '@/utils/llmConfig';
 import { historyManager } from '@/utils/historyManager';
 import { constructTarotPrompts } from '@/utils/prompts';
-import { parseSSEStream } from '@/utils/sseParser';
+import { getSSEErrorMessage, parseSSEStream } from '@/utils/sseParser';
+import { createStreamBatcher } from '@/utils/streamBatcher';
 import type { DrawnCard, Spread, ChatMessage } from '@/types/tarot';
-
-// Helper function to batch rapid state updates using RAF
-function createStreamBatcher(updateFn: (text: string) => void) {
-    let pendingText = '';
-    let rafId: number | null = null;
-    let isComplete = false;
-
-    const flush = () => {
-        if (pendingText) {
-            updateFn(pendingText);
-        }
-        rafId = null;
-    };
-
-    const update = (text: string) => {
-        pendingText = text;
-        if (!rafId && !isComplete) {
-            rafId = requestAnimationFrame(flush);
-        }
-    };
-
-    const complete = () => {
-        isComplete = true;
-        if (rafId) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
-        }
-        flush();
-    };
-
-    return { update, complete };
-}
 
 interface ApiConfigState {
     hasCustomApiConfig: boolean;
@@ -155,36 +125,24 @@ export function useTarotAnalysis() {
                     cards
                 );
 
-                const token = localStorage.getItem('token');
-                const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL || ''}/api/v1/tarot/analyze`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`,
-                        },
-                        body: JSON.stringify({
-                            question,
-                            spreadName: spread.name,
-                            spreadId: spread.id,
-                            drawnCards: cards.map((c) => ({
-                                card: {
-                                    id: String(c.card.id),
-                                    name: c.card.name,
-                                    englishName: c.card.englishName,
-                                },
-                                isReversed: c.isReversed,
-                                position: c.position,
-                            })),
-                        }),
-                    }
-                );
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.detail || `API 请求失败: ${response.status}`);
-                }
+                const response = await apiRequest('/api/v1/tarot/analyze', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        question,
+                        spreadName: spread.name,
+                        spreadId: spread.id,
+                        drawnCards: cards.map((c) => ({
+                            card: {
+                                id: String(c.card.id),
+                                name: c.card.name,
+                                englishName: c.card.englishName,
+                            },
+                            isReversed: c.isReversed,
+                            position: c.position,
+                        })),
+                    }),
+                });
+                await assertOk(response, 'API 请求失败');
 
                 const reader = response.body?.getReader();
                 if (!reader) {
@@ -199,6 +157,10 @@ export function useTarotAnalysis() {
                 });
 
                 for await (const chunk of parseSSEStream(reader)) {
+                    const streamError = getSSEErrorMessage(chunk);
+                    if (streamError) {
+                        throw new Error(streamError);
+                    }
                     const content = chunk.choices?.[0]?.delta?.content || chunk.content;
                     if (content) {
                         analysisText += content;
@@ -238,7 +200,12 @@ export function useTarotAnalysis() {
                 console.error('分析失败:', error);
                 setAnalysisState((prev) => ({
                     ...prev,
-                    error: error instanceof Error ? error.message : '分析过程中出现未知错误',
+                    error:
+                        error instanceof DOMException && error.name === 'AbortError'
+                            ? '请求超时，请稍后重试'
+                            : error instanceof Error
+                              ? error.message
+                              : '分析过程中出现未知错误',
                 }));
                 success = false;
             } finally {
@@ -266,36 +233,24 @@ export async function analyzeTarotReading(
     cards: DrawnCard[],
     onStream?: (chunk: string) => void
 ): Promise<string> {
-    const token = localStorage.getItem('token');
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || ''}/api/v1/tarot/analyze`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-                question,
-                spreadName: spread.name,
-                spreadId: spread.id,
-                drawnCards: cards.map((c) => ({
-                    card: {
-                        id: String(c.card.id),
-                        name: c.card.name,
-                        englishName: c.card.englishName,
-                    },
-                    isReversed: c.isReversed,
-                    position: c.position,
-                })),
-            }),
-        }
-    );
-
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `API 请求失败: ${response.status}`);
-    }
+    const response = await apiRequest('/api/v1/tarot/analyze', {
+        method: 'POST',
+        body: JSON.stringify({
+            question,
+            spreadName: spread.name,
+            spreadId: spread.id,
+            drawnCards: cards.map((c) => ({
+                card: {
+                    id: String(c.card.id),
+                    name: c.card.name,
+                    englishName: c.card.englishName,
+                },
+                isReversed: c.isReversed,
+                position: c.position,
+            })),
+        }),
+    });
+    await assertOk(response, 'API 请求失败');
 
     const reader = response.body?.getReader();
     if (!reader) {
@@ -308,9 +263,9 @@ export async function analyzeTarotReading(
     const batcher = onStream ? createStreamBatcher(onStream) : null;
 
     for await (const chunk of parseSSEStream(reader)) {
-        // Check for error in chunk
-        if (chunk.error) {
-             throw new Error(chunk.error);
+        const streamError = getSSEErrorMessage(chunk);
+        if (streamError) {
+             throw new Error(streamError);
         }
 
         // Robustly handle both standard OpenAI and custom content fields

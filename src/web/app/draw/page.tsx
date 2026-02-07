@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import FanDeck from '@/components/FanDeck';
@@ -24,7 +23,6 @@ import { useSound } from '@/context/SoundContext';
 // Clean AI response markdown code blocks
 
 export default function DrawPage() {
-    const router = useRouter();
     const { showToast } = useToast();
     const { play, playBGM } = useSound();
 

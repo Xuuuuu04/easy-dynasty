@@ -110,7 +110,7 @@ function processTableBuffer(tableLines: string[]): string[] {
         ...allRows.map((row) => row.split('|').filter((c) => c.trim()).length)
     );
 
-    const normalizedRows = allRows.map((row, idx) => {
+    const normalizedRows = allRows.map((row) => {
         const cells = row.split('|').filter((_, i, arr) => i > 0 && i < arr.length - 1);
 
         // Check if this is a separator row

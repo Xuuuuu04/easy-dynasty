@@ -148,6 +148,7 @@ export function getCardImage(cardId: string | number, deckId: DeckId = 'rws'): s
 
 // 牌背图片 - 建议也根据 deck 区分，这里先返回一个通用的或默认的
 export function getCardBackImage(deckId: DeckId = 'rws'): string {
+    void deckId;
     return '/cards/back-new.png';
 }
 

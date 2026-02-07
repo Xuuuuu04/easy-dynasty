@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import spreadsData from '../../data/spreads.json';
 import DrawnCardsDisplay from '../../components/DrawnCardsDisplay';
@@ -9,8 +9,6 @@ import { useTarotAnalysis } from '@/hooks/useTarotAnalysis';
 import type { DrawnCard, Spread } from '@/types/tarot';
 
 import ExportReportModal from '../../components/ExportReportModal';
-import { useToast } from '@/components/Toast';
-import { preprocessMarkdown } from '@/utils/markdown';
 
 // Clean AI response markdown code blocks
 const cleanAiResponse = (text: string) =>
@@ -74,12 +72,33 @@ const ShareIcon = () => (
 );
 
 export default function AnalysisPage() {
-    const [question, setQuestion] = useState('');
-    const [spread, setSpread] = useState<Spread | null>(null);
-    const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([]);
     const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+    const [sessionPayload] = useState<{
+        question: string;
+        spread: Spread;
+        drawnCards: DrawnCard[];
+    } | null>(() => {
+        if (typeof window === 'undefined') return null;
+        const savedQuestion = sessionStorage.getItem('tarot_question');
+        const savedSpreadId = sessionStorage.getItem('tarot_spread');
+        const savedDrawnCards = sessionStorage.getItem('tarot_drawn_cards');
+        if (!savedQuestion || !savedSpreadId || !savedDrawnCards) return null;
+
+        const selectedSpread = spreadsData.spreads.find((s) => s.id === savedSpreadId);
+        if (!selectedSpread) return null;
+
+        try {
+            return {
+                question: savedQuestion,
+                spread: selectedSpread as Spread,
+                drawnCards: JSON.parse(savedDrawnCards) as DrawnCard[],
+            };
+        } catch (error) {
+            console.error('Parse Error:', error);
+            return null;
+        }
+    });
     const router = useRouter();
-    const { showToast } = useToast();
 
     const {
         analysis,
@@ -95,42 +114,21 @@ export default function AnalysisPage() {
         performAnalysis,
     } = useTarotAnalysis();
 
+    const question = sessionPayload?.question;
+    const spread = sessionPayload?.spread;
+    const drawnCards = sessionPayload?.drawnCards;
+
     useEffect(() => {
-        // Get from sessionStorage
-        const savedQuestion = sessionStorage.getItem('tarot_question');
-        const savedSpreadId = sessionStorage.getItem('tarot_spread');
-        const savedDrawnCards = sessionStorage.getItem('tarot_drawn_cards');
-
-        if (!savedQuestion || !savedSpreadId || !savedDrawnCards) {
+        if (!sessionPayload) {
             router.push('/');
             return;
         }
-
-        setQuestion(savedQuestion);
-
-        // Find Spread
-        const selectedSpread = spreadsData.spreads.find((s) => s.id === savedSpreadId);
-        if (!selectedSpread) {
-            router.push('/');
-            return;
-        }
-        setSpread(selectedSpread);
-
-        try {
-            const cards = JSON.parse(savedDrawnCards) as DrawnCard[];
-            setDrawnCards(cards);
-
-            // Auto start analysis
-            performAnalysis(savedQuestion, selectedSpread, cards);
-        } catch (parseError) {
-            console.error('Parse Error:', parseError);
-            router.push('/');
-        }
-    }, [router, performAnalysis]);
+        void performAnalysis(sessionPayload.question, sessionPayload.spread, sessionPayload.drawnCards);
+    }, [router, performAnalysis, sessionPayload]);
 
     const handleReinterpret = useCallback(
         async (model: string): Promise<boolean> => {
-            if (!spread || drawnCards.length === 0) return false;
+            if (!question || !spread || !drawnCards || drawnCards.length === 0) return false;
             const success = await performAnalysis(question, spread, drawnCards, model);
             return success;
         },
@@ -148,7 +146,7 @@ export default function AnalysisPage() {
         setIsExportModalOpen(true);
     };
 
-    if (!spread || drawnCards.length === 0) {
+    if (!question || !spread || !drawnCards || drawnCards.length === 0) {
         return (
             <div className="relative min-h-screen overflow-hidden bg-bg-main flex items-center justify-center">
                 <div className="relative text-center space-y-4 animate-pulse">
@@ -250,9 +248,9 @@ export default function AnalysisPage() {
                 onClose={() => setIsExportModalOpen(false)}
                 type="tarot"
                 data={{
-                    question,
+                    question: question || '',
                     spreadName: spread?.name || '',
-                    drawnCards,
+                    drawnCards: drawnCards || [],
                     analysis: cleanAiResponse(analysis),
                 }}
                 userName={'Seeker'}

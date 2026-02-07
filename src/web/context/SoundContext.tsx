@@ -40,26 +40,25 @@ const VOLUMES: Record<SoundType, number> = {
 };
 
 export function SoundProvider({ children }: { children: React.ReactNode }) {
-    const [isMuted, setIsMuted] = useState(false);
+    const [isMuted, setIsMuted] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return localStorage.getItem('tarot_sound_muted') === 'true';
+    });
     const sounds = useRef<Record<string, Howl | null>>({});
-    const [isInitialized, setIsInitialized] = useState(false);
+    const initializedRef = useRef(false);
 
-    // Initialize state from local storage on mount
+    // Apply muted state to Howler after mount.
     useEffect(() => {
-        const storedMute = localStorage.getItem('tarot_sound_muted');
-        if (storedMute !== null) {
-            const muted = storedMute === 'true';
-            setIsMuted(muted);
-            Howler.mute(muted);
-        }
-    }, []);
+        Howler.mute(isMuted);
+    }, [isMuted]);
 
     // Initialize sounds state
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
         // Prevent multiple initializations if already done
-        if (isInitialized || Object.keys(sounds.current).length > 0) return;
+        if (initializedRef.current || Object.keys(sounds.current).length > 0) return;
+        initializedRef.current = true;
 
         (Object.keys(SOUND_PATHS) as SoundType[]).forEach((key) => {
             try {
@@ -91,8 +90,6 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
                 console.error(`Error initializing sound ${key}:`, e);
             }
         });
-        setIsInitialized(true);
-
         // Cleanup function
         return () => {
             // Stop and unload all sounds
@@ -103,7 +100,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
                 }
             });
             sounds.current = {};
-            setIsInitialized(false);
+            initializedRef.current = false;
             // Global unload as safety net
             Howler.unload();
         };

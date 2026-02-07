@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 const poetryCollection = [
     '天行健 君子以自强不息',
@@ -21,40 +21,34 @@ const poetryCollection = [
 
 export default function BackgroundPoetry() {
     const pathname = usePathname();
-    const [elements, setElements] = useState<Array<{ text: string; style: React.CSSProperties }>>(
-        []
-    );
+    const elements = useMemo<Array<{ text: string; style: React.CSSProperties }>>(() => {
+        const seed = (pathname || '/').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+        const pseudo = (idx: number, salt: number) => {
+            const x = Math.sin(seed * (idx + 1) * (salt + 3) * 12.9898) * 43758.5453;
+            return x - Math.floor(x);
+        };
 
-    useEffect(() => {
-        // Generate deterministic decorative elements based on pathname to avoid hydration mismatch
-        // but for client-side visual flair, random is okay if we suppress hydration warning or render only on client
-        // Let's render consistent set per page load
-
-        const count = 6; // Number of decorative elements
-        const newElements = [];
-
-        for (let i = 0; i < count; i++) {
-            const text = poetryCollection[Math.floor(Math.random() * poetryCollection.length)];
+        return Array.from({ length: 6 }).map((_, i) => {
+            const text = poetryCollection[Math.floor(pseudo(i, 1) * poetryCollection.length)];
             const style: React.CSSProperties = {
                 position: 'fixed',
-                left: `${Math.random() * 90}%`,
-                top: `${Math.random() * 80 + 10}%`,
+                left: `${pseudo(i, 2) * 90}%`,
+                top: `${pseudo(i, 3) * 80 + 10}%`,
                 writingMode: 'vertical-rl',
-                opacity: 0.03 + Math.random() * 0.05, // Very subtle opacity
-                fontSize: `${Math.floor(Math.random() * 40 + 20)}px`,
+                opacity: 0.03 + pseudo(i, 4) * 0.05,
+                fontSize: `${Math.floor(pseudo(i, 5) * 40 + 20)}px`,
                 fontFamily: '"Noto Serif SC", serif',
                 pointerEvents: 'none',
                 zIndex: 0,
                 userSelect: 'none',
                 whiteSpace: 'nowrap',
-                color: Math.random() > 0.7 ? 'var(--accent-main)' : 'var(--text-main)', // Use CSS variables
+                color: pseudo(i, 6) > 0.7 ? 'var(--accent-main)' : 'var(--text-main)',
                 filter: 'blur(0.5px)',
-                transform: `rotate(${Math.random() * 10 - 5}deg)`,
+                transform: `rotate(${pseudo(i, 7) * 10 - 5}deg)`,
             };
-            newElements.push({ text, style });
-        }
-        setElements(newElements);
-    }, [pathname]); // Refresh when page changes
+            return { text, style };
+        });
+    }, [pathname]);
 
     return (
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">

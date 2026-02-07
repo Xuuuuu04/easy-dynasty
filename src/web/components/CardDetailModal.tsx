@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { getCardImage, AVAILABLE_DECKS } from '@/utils/cardImages';
 import { useDeck } from '@/context/DeckContext';
@@ -33,21 +33,11 @@ type TabType = 'overview' | 'love' | 'career' | 'finance' | 'advice';
 
 export default function CardDetailModal({ card, onClose }: CardDetailModalProps) {
     const { currentDeck } = useDeck();
-    const [isVisible, setIsVisible] = useState(false);
     const [activeTab, setActiveTab] = useState<TabType>('overview');
     const [selectedDeckVariant, setSelectedDeckVariant] = useState(currentDeck);
 
-    useEffect(() => {
-        setIsVisible(true);
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, []);
-
     const handleClose = () => {
-        setIsVisible(false);
-        setTimeout(onClose, 300);
+        onClose();
     };
 
     // Helper function to generate placeholder content
@@ -65,14 +55,14 @@ export default function CardDetailModal({ card, onClose }: CardDetailModalProps)
 
     return (
         <div
-            className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+            className="fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 opacity-100"
         >
             {/* Backdrop */}
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose} />
 
             {/* Modal Content */}
             <div
-                className={`relative bg-card-bg w-full md:max-w-5xl h-full md:h-[92vh] md:rounded-xl shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 md:mx-4 border border-border ${isVisible ? 'scale-100 translate-y-0' : 'scale-95 translate-y-8'}`}
+                className="relative bg-card-bg w-full md:max-w-5xl h-full md:h-[92vh] md:rounded-xl shadow-2xl overflow-hidden flex flex-col transform transition-all duration-500 md:mx-4 border border-border scale-100 translate-y-0"
             >
                 {/* Header */}
                 <div className="relative bg-gradient-to-r from-text-main to-text-sub dark:from-slate-900 dark:to-slate-800 text-bg-main dark:text-text-main p-4 md:p-6 flex items-center justify-between shrink-0 z-20 border-b border-border/50">

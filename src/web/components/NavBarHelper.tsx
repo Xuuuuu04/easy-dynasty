@@ -1,6 +1,6 @@
 import { useDeck } from '@/context/DeckContext';
 
-function DeckSwitcherMobile() {
+export default function DeckSwitcherMobile() {
     const { currentDeck, setDeck, availableDecks } = useDeck();
 
     return (

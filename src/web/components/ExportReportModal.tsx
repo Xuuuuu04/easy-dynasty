@@ -1,27 +1,55 @@
-import { useState, useRef, useEffect, ReactNode } from 'react';
+import { useState, useRef } from 'react';
 import { domToPng } from 'modern-screenshot';
 import jsPDF from 'jspdf';
 import { useToast } from '@/components/Toast';
 import { preprocessMarkdown } from '@/utils/markdown';
 import SpreadLayout from './SpreadLayout';
-// type DrawnCard is imported but not explicitly used in new layout as SpreadLayout handles it,
-// but we keep it for type safety if needed.
-import type { DrawnCard } from '@/types/tarot';
+import type { DrawnCard, Position } from '@/types/tarot';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-// Helper type for ReactMarkdown components
-interface ComponentProps {
-    children?: ReactNode;
-    [key: string]: any;
+interface Pillar {
+    gan: string;
+    zhi: string;
+    gan_wuxing: string;
+    zhi_wuxing: string;
+    shensha: string[];
 }
 
-interface ExportReportModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    type: 'tarot' | 'bazi';
-    data: any; // Flexible data based on type
-    userName?: string;
+interface BaziChart {
+    year_pillar: Pillar;
+    month_pillar: Pillar;
+    day_pillar: Pillar;
+    hour_pillar: Pillar;
+}
+
+interface TarotExportData {
+    question: string;
+    spreadName: string;
+    spreadId?: string;
+    positions?: Position[];
+    drawnCards: DrawnCard[];
+    analysis: string;
+}
+
+interface BaziExportData {
+    analysis: string;
+    gender: 'male' | 'female';
+    solarDate: string;
+    chart: BaziChart;
+}
+
+type ExportReportModalProps =
+    | { isOpen: boolean; onClose: () => void; type: 'tarot'; data: TarotExportData; userName?: string }
+    | { isOpen: boolean; onClose: () => void; type: 'bazi'; data: BaziExportData; userName?: string };
+
+type TemplateId = 'ink' | 'mystic' | 'royal' | 'minimal' | 'starry' | 'cyber';
+
+function isTarotData(
+    type: ExportReportModalProps['type'],
+    data: TarotExportData | BaziExportData
+): data is TarotExportData {
+    return type === 'tarot';
 }
 
 // Explicit HEX palettes to avoid oklch issues in html2canvas + Tailwind v4
@@ -174,12 +202,9 @@ export default function ExportReportModal({
     onClose,
     type,
     data,
-    userName,
 }: ExportReportModalProps) {
     const [isGenerating, setIsGenerating] = useState(false);
-    const [template, setTemplate] = useState<
-        'ink' | 'mystic' | 'royal' | 'minimal' | 'starry' | 'cyber'
-    >('ink');
+    const [template, setTemplate] = useState<TemplateId>('ink');
     const [hidePrivateInfo, setHidePrivateInfo] = useState(false);
     const reportRef = useRef<HTMLDivElement>(null);
     const { showToast } = useToast();
@@ -187,6 +212,8 @@ export default function ExportReportModal({
     if (!isOpen) return null;
 
     const colors = PALETTE[template];
+    const tarotData = isTarotData(type, data) ? data : null;
+    const baziData = type === 'bazi' ? data : null;
 
     const handleExport = async (format: 'image' | 'pdf') => {
         if (!reportRef.current) return;
@@ -348,7 +375,7 @@ export default function ExportReportModal({
                     塔罗启示录
                 </h2>
                 <div className="text-xs" style={{ color: colors.textMuted }}>
-                    {new Date().toLocaleDateString('zh-CN')} · {data.spreadName}
+                    {new Date().toLocaleDateString('zh-CN')} · {tarotData?.spreadName}
                 </div>
             </div>
 
@@ -364,7 +391,7 @@ export default function ExportReportModal({
                     Question
                 </div>
                 <div className="text-lg font-serif" style={{ color: colors.textMain }}>
-                    “{data.question}”
+                    “{tarotData?.question}”
                 </div>
             </div>
 
@@ -373,11 +400,11 @@ export default function ExportReportModal({
                 <div className="pointer-events-none">
                     {' '}
                     {/* Disable interaction */}
-                    {data.spreadId && data.positions ? (
+                    {tarotData?.spreadId && tarotData.positions ? (
                         <SpreadLayout
-                            spreadId={data.spreadId}
-                            positions={data.positions}
-                            drawnCards={data.drawnCards}
+                            spreadId={tarotData.spreadId}
+                            positions={tarotData.positions}
+                            drawnCards={tarotData.drawnCards}
                             onPositionClick={() => { }}
                             canDrawAtPosition={() => false}
                             isDrawing={false}
@@ -486,7 +513,7 @@ export default function ExportReportModal({
                             ),
                         }}
                     >
-                        {preprocessMarkdown(data.analysis)}
+                        {preprocessMarkdown(tarotData?.analysis || '')}
                     </ReactMarkdown>
                 </div>
             </div>
@@ -547,12 +574,13 @@ export default function ExportReportModal({
                 >
                     {['年柱', '月柱', '日柱', '时柱'].map((title, i) => {
                         const pillars = [
-                            data.chart.year_pillar,
-                            data.chart.month_pillar,
-                            data.chart.day_pillar,
-                            data.chart.hour_pillar,
+                            baziData?.chart.year_pillar,
+                            baziData?.chart.month_pillar,
+                            baziData?.chart.day_pillar,
+                            baziData?.chart.hour_pillar,
                         ];
                         const p = pillars[i];
+                        if (!p) return null;
                         // Helper for wuxing colors
                         const getWuXingColor = (w: string) => {
                             if (w === '火') return '#b91c1c';
@@ -603,8 +631,8 @@ export default function ExportReportModal({
                 className="flex justify-center gap-8 text-xs border-b pb-4"
                 style={{ borderColor: colors.border, color: colors.textSub }}
             >
-                <span>性别: {data.gender === 'male' ? '乾造 (男)' : '坤造 (女)'}</span>
-                {!hidePrivateInfo && <span>生辰: {data.solarDate}</span>}
+                <span>性别: {baziData?.gender === 'male' ? '乾造 (男)' : '坤造 (女)'}</span>
+                {!hidePrivateInfo && <span>生辰: {baziData?.solarDate}</span>}
                 {hidePrivateInfo && <span>生辰: [已隐藏]</span>}
             </div>
 
@@ -700,7 +728,7 @@ export default function ExportReportModal({
                             ),
                         }}
                     >
-                        {preprocessMarkdown(data.analysis)}
+                        {preprocessMarkdown(baziData?.analysis || '')}
                     </ReactMarkdown>
                 </div>
             </div>
@@ -733,7 +761,7 @@ export default function ExportReportModal({
                                 {STYLE_OPTIONS.map((opt) => (
                                     <button
                                         key={opt.id}
-                                        onClick={() => setTemplate(opt.id as any)}
+                                        onClick={() => setTemplate(opt.id as TemplateId)}
                                         className="px-3 py-2 md:px-4 md:py-3.5 text-xs md:text-sm border-2 rounded-lg md:rounded-xl text-left transition-all flex items-center justify-between group hover:shadow-md"
                                         style={{
                                             borderColor:

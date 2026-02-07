@@ -54,9 +54,9 @@ export interface ReadingHistory {
     drawnCards: DrawnCard[];
     analysis: string;
     type?: 'tarot' | 'bazi';
-    baziData?: any;
-    chart?: any;
-    wuxing?: any;
+    baziData?: Record<string, unknown>;
+    chart?: Record<string, unknown>;
+    wuxing?: Record<string, unknown>;
 }
 
 /**

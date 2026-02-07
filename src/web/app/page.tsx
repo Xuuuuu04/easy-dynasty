@@ -1,15 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useIsClient } from '@/hooks/useIsClient';
 
 export default function Home() {
     const router = useRouter();
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const mounted = useIsClient();
 
     return (
         <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden bg-bg-main text-text-main font-serif">

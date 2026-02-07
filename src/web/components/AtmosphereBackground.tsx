@@ -1,6 +1,49 @@
 'use client';
 
+import { useMemo } from 'react';
+
 export default function AtmosphereBackground() {
+    const rand = (i: number, salt: number) => {
+        const x = Math.sin((i + 1) * (salt + 1) * 12.9898) * 43758.5453;
+        return x - Math.floor(x);
+    };
+
+    const stars = useMemo(
+        () =>
+            Array.from({ length: 100 }).map((_, i) => ({
+                key: `star-${i}`,
+                sizeClass: rand(i, 11) < 0.1 ? 'w-0.5 h-0.5' : 'w-[1px] h-[1px]',
+                left: `${rand(i, 12) * 100}%`,
+                top: `${rand(i, 13) * 100}%`,
+                opacity: rand(i, 14) * 0.7 + 0.3,
+                duration: `${rand(i, 15) * 3 + 2}s`,
+                delay: `${rand(i, 16) * 5}s`,
+                boxShadow: rand(i, 17) < 0.2 ? '0 0 2px rgba(255, 255, 255, 0.8)' : 'none',
+            })),
+        []
+    );
+    const shootingStars = useMemo(
+        () =>
+            Array.from({ length: 3 }).map((_, i) => ({
+                key: `shooting-star-${i}`,
+                top: `${rand(i, 18) * 50}%`,
+                left: `${rand(i, 19) * 50}%`,
+                delay: `${rand(i, 20) * 15 + 5}s`,
+            })),
+        []
+    );
+    const particles = useMemo(
+        () =>
+            Array.from({ length: 20 }).map((_, i) => ({
+                key: `particle-${i}`,
+                left: `${rand(i, 21) * 100}%`,
+                top: `${rand(i, 22) * 100}%`,
+                delay: `${rand(i, 23) * 8}s`,
+                duration: `${10 + rand(i, 24) * 10}s`,
+            })),
+        []
+    );
+
     return (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {/* Vignette Effect */}
@@ -34,34 +77,30 @@ export default function AtmosphereBackground() {
                 <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[100px] rounded-full animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
 
                 {/* Stars - Increased count and variety */}
-                {[...Array(100)].map((_, i) => {
-                    const size = Math.random() < 0.1 ? 'w-0.5 h-0.5' : 'w-[1px] h-[1px]';
-                    const opacity = Math.random() * 0.7 + 0.3;
-                    return (
-                        <div
-                            key={`star-${i}`}
-                            className={`absolute ${size} bg-white rounded-full animate-twinkle`}
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                opacity: opacity,
-                                animationDuration: `${Math.random() * 3 + 2}s`,
-                                animationDelay: `${Math.random() * 5}s`,
-                                boxShadow: Math.random() < 0.2 ? '0 0 2px rgba(255, 255, 255, 0.8)' : 'none',
-                            }}
-                        ></div>
-                    );
-                })}
+                {stars.map((star) => (
+                    <div
+                        key={star.key}
+                        className={`absolute ${star.sizeClass} bg-white rounded-full animate-twinkle`}
+                        style={{
+                            left: star.left,
+                            top: star.top,
+                            opacity: star.opacity,
+                            animationDuration: star.duration,
+                            animationDelay: star.delay,
+                            boxShadow: star.boxShadow,
+                        }}
+                    ></div>
+                ))}
 
                 {/* Shooting Stars */}
-                {[...Array(3)].map((_, i) => (
+                {shootingStars.map((item) => (
                     <div
-                        key={`shooting-star-${i}`}
+                        key={item.key}
                         className="absolute w-[100px] h-[1px] bg-gradient-to-r from-transparent via-white to-transparent animate-shooting-star opacity-0"
                         style={{
-                            top: `${Math.random() * 50}%`,
-                            left: `${Math.random() * 50}%`,
-                            animationDelay: `${Math.random() * 15 + 5}s`,
+                            top: item.top,
+                            left: item.left,
+                            animationDelay: item.delay,
                             animationDuration: '4s',
                             transform: 'rotate(-45deg)',
                         }}
@@ -71,15 +110,15 @@ export default function AtmosphereBackground() {
 
             {/* Floating Particles - Universal */}
             <div className="absolute inset-0">
-                {[...Array(20)].map((_, i) => (
+                {particles.map((item) => (
                     <div
-                        key={i}
+                        key={item.key}
                         className="absolute w-1 h-1 bg-accent-main/20 dark:bg-white/10 rounded-full animate-particle-float"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 8}s`,
-                            animationDuration: `${10 + Math.random() * 10}s`,
+                            left: item.left,
+                            top: item.top,
+                            animationDelay: item.delay,
+                            animationDuration: item.duration,
                         }}
                     ></div>
                 ))}

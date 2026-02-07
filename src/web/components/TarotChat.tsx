@@ -1,43 +1,13 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { apiRequest, assertOk } from '@/utils/apiClient';
 import { preprocessMarkdown } from '@/utils/markdown';
-import { parseSSEStream } from '@/utils/sseParser';
+import { getSSEErrorMessage, parseSSEStream } from '@/utils/sseParser';
+import { createStreamBatcher } from '@/utils/streamBatcher';
 import type { ChatMessage, ApiConfig } from '@/types/tarot';
-
-// Helper to batch rapid updates using RAF
-function createStreamBatcher(updateFn: (text: string) => void) {
-    let pendingText = '';
-    let rafId: number | null = null;
-    let isComplete = false;
-
-    const flush = () => {
-        if (pendingText) {
-            updateFn(pendingText);
-        }
-        rafId = null;
-    };
-
-    const update = (text: string) => {
-        pendingText = text;
-        if (!rafId && !isComplete) {
-            rafId = requestAnimationFrame(flush);
-        }
-    };
-
-    const complete = () => {
-        isComplete = true;
-        if (rafId) {
-            cancelAnimationFrame(rafId);
-            rafId = null;
-        }
-        flush();
-    };
-
-    return { update, complete };
-}
 
 interface TarotChatProps {
     initialHistory: ChatMessage[];
@@ -65,10 +35,11 @@ const ChatIcon = () => (
 
 export default function TarotChat({
     initialHistory,
-    apiConfig,
+    apiConfig: _apiConfig,
     endpoint = '/api/v1/tarot/chat',
     title = '塔罗师对话',
 }: TarotChatProps) {
+    void _apiConfig;
     const [history, setHistory] = useState<ChatMessage[]>(initialHistory);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -90,23 +61,11 @@ export default function TarotChat({
         setIsLoading(true);
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || ''}${endpoint}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({ messages: newHistory }),
-                }
-            );
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.detail || `API 错误: ${response.status}`);
-            }
+            const response = await apiRequest(endpoint, {
+                method: 'POST',
+                body: JSON.stringify({ messages: newHistory }),
+            });
+            await assertOk(response, 'API 错误');
 
             const reader = response.body?.getReader();
             if (!reader) throw new Error('No reader');
@@ -125,6 +84,10 @@ export default function TarotChat({
             });
 
             for await (const chunk of parseSSEStream(reader)) {
+                const streamError = getSSEErrorMessage(chunk);
+                if (streamError) {
+                    throw new Error(streamError);
+                }
                 const content = chunk.choices?.[0]?.delta?.content || chunk.content;
                 if (content) {
                     assistantMsgContent += content;
@@ -138,7 +101,13 @@ export default function TarotChat({
             console.error('Chat error:', error);
             setHistory((prev) => [
                 ...prev,
-                { role: 'assistant', content: '[!] 连接断开，请重试。' },
+                {
+                    role: 'assistant',
+                    content:
+                        error instanceof DOMException && error.name === 'AbortError'
+                            ? '[!] 请求超时，请稍后重试。'
+                            : '[!] 连接断开，请重试。',
+                },
             ]);
         } finally {
             setIsLoading(false);

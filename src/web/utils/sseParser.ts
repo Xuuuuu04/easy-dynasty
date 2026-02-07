@@ -18,12 +18,33 @@ export interface SSEChunk {
     }>;
     content?: string; // Added for custom backend streams
     type?: 'thought' | 'action' | 'content'; // Added for Agentic workflow
-    error?: string;
+    error?:
+        | string
+        | {
+              message: string;
+              code?: string;
+              status?: number;
+              detail?: string;
+          };
     id?: string;
     object?: string;
     created?: number;
     model?: string;
 }
+
+const DATA_PREFIX = 'data:';
+
+const extractDataPayload = (line: string): string | null => {
+    const trimmedLine = line.trim();
+    if (!trimmedLine || trimmedLine.startsWith(':')) {
+        return null;
+    }
+    if (!trimmedLine.startsWith(DATA_PREFIX)) {
+        return null;
+    }
+
+    return trimmedLine.slice(DATA_PREFIX.length).trimStart();
+};
 
 /**
  * 解析 SSE 流的异步生成器
@@ -70,9 +91,8 @@ export async function* parseSSEStream(
                     continue;
                 }
 
-                // 处理 data: 前缀的行
-                if (trimmedLine.startsWith('data: ')) {
-                    const data = trimmedLine.slice(6); // 移除 'data: ' 前缀
+                const data = extractDataPayload(trimmedLine);
+                if (data) {
 
                     // 跳过 [DONE] 标记
                     if (data === '[DONE]') {
@@ -92,9 +112,8 @@ export async function* parseSSEStream(
 
         // 处理缓冲区中剩余的数据
         if (buffer.trim()) {
-            const trimmedBuffer = buffer.trim();
-            if (trimmedBuffer.startsWith('data: ')) {
-                const data = trimmedBuffer.slice(6);
+            const data = extractDataPayload(buffer);
+            if (data) {
                 if (data !== '[DONE]') {
                     try {
                         const parsed = JSON.parse(data) as SSEChunk;
@@ -150,3 +169,9 @@ export async function extractSSEContent(
 
     return fullContent;
 }
+
+export const getSSEErrorMessage = (chunk: SSEChunk): string | null => {
+    if (!chunk.error) return null;
+    if (typeof chunk.error === 'string') return chunk.error;
+    return chunk.error.message || chunk.error.detail || '请求失败';
+};
