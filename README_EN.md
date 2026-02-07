@@ -1,12 +1,20 @@
-# easy-dynasty
+# EasyDynasty
+
+Fortune and tarot assistant application built with Next.js and FastAPI.
 
 ## Language
-- 中文: [README](./README.md)
+- Chinese: [README](./README.md)
 - English: [README_EN](./README_EN.md)
+
+## Project Structure
+Backend: backend/; Frontend: web/; Docs: docs/
+
+## Quick Start
+Backend: cd backend && uvicorn main:app --reload --port 8000; Frontend: cd web && pnpm install && pnpm dev
 
 ## Source Directory
 - Unified source entry: [src](./src)
 
-## Structure Guide
-- Put executable/business code under `src/`.
-- Keep docs under `docs/` (or `doc/`).
+## Development Status
+- This repository is maintained for open-source collaboration.
+- Progress is tracked via commits and issues.
