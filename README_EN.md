@@ -7,7 +7,7 @@ Fortune and tarot assistant application built with Next.js and FastAPI.
 - English: [README_EN](./README_EN.md)
 
 ## Project Structure
-Backend: backend/; Frontend: web/; Docs: docs/
+Backend: src/backend/; Frontend: src/web/; Docs: docs/
 
 ## Quick Start
 Backend: cd backend && uvicorn main:app --reload --port 8000; Frontend: cd web && pnpm install && pnpm dev
